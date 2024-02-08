@@ -16,7 +16,7 @@ app.use('/socket.io' ,express.static('client')); // Serve the client files
 console.log(http);
 io.on('connection', (socket) => {
 
-  console.log("connecting");
+  console.log("connecting");  
 
   socket.on('draw', (data) => {
 

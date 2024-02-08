@@ -17,9 +17,6 @@ canvas.addEventListener('mouseup', stopDrawing);
 canvas.addEventListener('mouseout', stopDrawing);
 
 (function() {
-  var
-    // Obtain a graphics context on the canvas element for drawing.
-    context = htmlCanvas.getContext('2d');
 
   // Start listening to resize events and draw canvas.
   initialize();
@@ -36,8 +33,8 @@ canvas.addEventListener('mouseout', stopDrawing);
   // Resets the canvas dimensions to match window,
   // then draws the new borders accordingly.
   function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    ctx.width = window.innerWidth;
+    ctx.height = window.innerHeight;
   }
 })();
 
