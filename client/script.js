@@ -54,6 +54,7 @@ function draw(e) {
   ctx.beginPath();
   ctx.moveTo(lastX, lastY);
   ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.strokeStyle = '#000000'; // MAKE THIS A STRING OR SOMETHING LATER SO WE CAN CHANGE IT Doesn't need to be hex, it can be RGB formatted as well.
   ctx.stroke();
 
   // Emit drawing data to the server
