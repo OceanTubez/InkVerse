@@ -1,6 +1,9 @@
 const canvas = document.getElementById('drawCanvas');
 const ctx = canvas.getContext('2d');
-const socket = io('http://localhost:3000') // Connect to server
+
+ctx.fillStyle = "#FF0000";
+ctx.fillRect(0, 0, 150, 75);
+const socket = io('http://localhost:3000'); // Connect to server
 
 // Track mouse state
 let isDrawing = false;
@@ -12,6 +15,31 @@ canvas.addEventListener('mousedown', startDrawing);
 canvas.addEventListener('mousemove', draw);
 canvas.addEventListener('mouseup', stopDrawing);
 canvas.addEventListener('mouseout', stopDrawing);
+
+(function() {
+  var
+    // Obtain a graphics context on the canvas element for drawing.
+    context = htmlCanvas.getContext('2d');
+
+  // Start listening to resize events and draw canvas.
+  initialize();
+
+  function initialize() {
+    // Register an event listener to call the resizeCanvas() function 
+    // each time the window is resized.
+    window.addEventListener('resize', resizeCanvas, false);
+    // Draw canvas border for the first time.
+    resizeCanvas();
+  }
+
+  // Runs each time the DOM window resize event fires.
+  // Resets the canvas dimensions to match window,
+  // then draws the new borders accordingly.
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+})();
 
 // Drawing functions
 
