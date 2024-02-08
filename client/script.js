@@ -46,7 +46,7 @@ function startDrawing(e) {
   isDrawing = true;
   lastX = e.offsetX;
   lastY= e.offsetY;
-  ctx.strokeStyle = '#000000'; // MAKE THIS A STRING OR SOMETHING LATER SO WE CAN CHANGE IT Doesn't need to be hex, it can be RGB formatted as well.
+  
 }
 
 function draw(e) {
@@ -61,8 +61,8 @@ function draw(e) {
 
   socket.emit('draw', { lastX, lastY, x: e.offsetX, y: e.offsetY });
 
-  lastX = e.offset.X;
-  lastY = e.offset.Y;
+  lastX = e.offsetX;
+  lastY = e.offsetY;
 
 }
 
