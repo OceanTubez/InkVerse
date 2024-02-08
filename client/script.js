@@ -61,8 +61,8 @@ function draw(e) {
 
   socket.emit('draw', { lastX, lastY, x: e.offsetX, y: e.offsetY });
 
-  lastX = e.offsetX;
-  lastY = e.offsetY;
+  lastX = e.offset.X;
+  lastY = e.offset.Y;
 
 }
 
