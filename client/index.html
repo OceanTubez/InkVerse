@@ -7,32 +7,9 @@
   <body>
     <canvas id="drawCanvas" width="2800" height="2400"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="script.js"></script>
-    <button id="changeColor">Change Color</button>\
-    <button id="changeSize">Change Size</button>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const button = document.getElementById('changeColor');
-        button.addEventListener('click', function() {
-          let red = Math.floor(Math.random()*256);
-          let green = Math.floor(Math.random()*256);
-          let blue = Math.floor(Math.random()*256);
-
-          ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-        });
-      });
-
-      document.addEventListener('DOMContentLoaded', function() {
-        const button = document.getElementById('changeSize');
-        button.addEventListener('click', function() {
-          let lineSize = Math.floor(Math.random()*24+1);
-          
-          ctx.lineWidth = lineSize;
-          
-        });
-      });
-    </script>
+    <script type = "text/javascript" src="script.js"></script>
+    <button id="changeColor" onclick="changeColor()">Change Color </button>\
+    <button id="changeSize" onclick = "changeSize()">Change Size</button>
 
   </body>
 </html>

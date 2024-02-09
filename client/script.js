@@ -11,6 +11,12 @@ let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
 
+//Track pen colors and size
+let red = 0;
+let green = 0;
+let blue = 0;
+let lineSize = 1;
+
 // Handle drawing events
 canvas.addEventListener('mousedown', startDrawing);
 canvas.addEventListener('mousemove', draw);
@@ -59,7 +65,7 @@ function draw(e) {
 
   // Emit drawing data to the server
 
-  socket.emit('draw', { lastX, lastY, x: e.offsetX, y: e.offsetY });
+  socket.emit('draw', { lastX, lastY, x: e.offsetX, y: e.offsetY, red, green, blue, lineSize});
 
   lastX = e.offsetX;
   lastY = e.offsetY;
@@ -69,13 +75,39 @@ function draw(e) {
 function stopDrawing() {
   isDrawing = false;
 }
+//Buttons
 
+function changeColor() {
+  //Gets random number from 0-255
+  red = Math.floor(Math.random()*256);
+  green = Math.floor(Math.random()*256);
+  blue = Math.floor(Math.random()*256);
+  //Inputs random numbers
+  ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
+
+}
+function changeSize() {
+  //Random linesize between 1-25
+  lineSize = Math.floor(Math.random()*24+1);
+  //Applies the change
+  ctx.lineWidth = lineSize;
+          
+}
+
+          
 // Recieve drawing data from the server
 socket.on('draw', (data) => {
-
+  let savedLineSize = lineSize;
+  let savedRed = red;
+  let savedBlue = blue;
+  let savedGreen = green;
+  ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
+  ctx.lineWidth = data.lineSize;
   ctx.beginPath();
   ctx.moveTo(data.lastX, data.lastY);
   ctx.lineTo(data.x, data.y);
   ctx.stroke();
+  ctx.strokeStyle = "rgb(" + savedRed + "," + savedGreen + "," + savedBlue + ")";
+  ctx.lineWidth = savedLineSize;
 
 });
