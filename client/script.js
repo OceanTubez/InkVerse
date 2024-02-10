@@ -75,18 +75,33 @@ function draw(e) {
 function stopDrawing() {
   isDrawing = false;
 }
-//Buttons
+
+// Base Functions
+
+function playClick1() {
+
+  var clickSound = document.getElementById('clickSound');
+  clickSound.play();
+
+}
+
+// Buttons
 
 function changeColor() {
+
+  playClick1()
+
   //Gets random number from 0-255
   red = Math.floor(Math.random()*256);
   green = Math.floor(Math.random()*256);
   blue = Math.floor(Math.random()*256);
   //Inputs random numbers
   ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-
 }
 function changeSize() {
+
+  playClick1()
+
   //Random linesize between 1-25
   lineSize = Math.floor(Math.random()*24+1);
   //Applies the change

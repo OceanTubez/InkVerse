@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Collaborative  Drawing App (B A R D)</title>
+    <title>InkVerse: Client V1.12</title>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+
+    <audio id="clickSound" src="https://dl.sndup.net/tdtq/UI%20Click.mp3"></audio>
+
     <canvas id="drawCanvas" width="2800" height="2400"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type = "text/javascript" src="script.js"></script>
-    <button id="changeColor" onclick="changeColor()">Change Color </button>\
-    <button id="changeSize" onclick = "changeSize()">Change Size</button>
+    <button id="changeColor" onClick="changeColor()">Change Color</button>
+    <button id="changeSize" onClick = "changeSize()">Change Size</button>
+
+    <div class="ribbon" id="ribbon">
+      
+    </div>
+
+    <div id="footer-text">
+      InkVerse: Local Server
+    </div>
 
   </body>
 </html>
