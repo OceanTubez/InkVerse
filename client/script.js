@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d');
 
 //ctx.fillStyle = "#FF0000";
 //ctx.fillRect(0, 0, 150, 75);
-const socket = io('http://localhost:3000'); // Connect to server
+const socket = io('localhost:3000'); // Connect to server
 
 // Track mouse state
 let isDrawing = false;

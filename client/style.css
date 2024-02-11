@@ -8,18 +8,32 @@ body {
 #changeColor {
 
     position: fixed;
-    bottom: 620px; /* Adjust as needed */
-    left: 50%; /* Position horizontally at the middle */
+    bottom: 150px; /* Adjust as needed */
+    left: 90%; /* Position horizontally at the middle */
     transform: translateX(-50%);
+    background-color: #0d8797;
+    color: #fff;
+    border-radius: 20px;
+    width: 12%;
+    height: 17%;
+    border: none;
+    cursor: pointer;
 
 }
 
 #changeSize {
 
     position: fixed;
-    bottom: 560px; /* Adjust as needed */
-    left: 50%; /* Position horizontally at the middle */
+    bottom: 110px; /* Adjust as needed */
+    left: 90%; /* Position horizontally at the middle */
     transform: translateX(-50%);
+    background-color: #0d8797;
+    color: #fff;
+    width: 12%;
+    height: 17%;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
 
 }
 
