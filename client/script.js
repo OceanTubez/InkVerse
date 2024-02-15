@@ -20,8 +20,8 @@ canvas.addEventListener('mousedown', startDrawing);
 canvas.addEventListener('mousemove', draw);
 canvas.addEventListener('mouseup', stopDrawing);
 canvas.addEventListener('mouseout', stopDrawing);
-canvas.addEventListener('touchstart', startDrawing);
-canvas.addEventListener('touchmove', draw);
+canvas.addEventListener('touchstart', startTouchDrawing);
+canvas.addEventListener('touchmove', touchDraw);
 canvas.addEventListener('touchend', stopDrawing);
 canvas.addEventListener('touchcancel', stopDrawing);
 
@@ -67,6 +67,33 @@ function draw(e) {
 
 function stopDrawing() {
   isDrawing = false;
+}
+
+//Handle touch
+function startTouchDrawing(e) {
+  if (e.targetTouches.length == 1)
+  {
+    var data = e.targetTouches[0];
+    isDrawing = true;
+    lastX = data.offsetX;
+    lastY = data.offsetY;
+  }
+}
+
+function touchDraw(e) {
+  if (!isDrawing) return;
+  if (e.targetTouches.length == 1)
+  {
+    var data = e.targetTouches[0];
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(data.offsetX, data.offsetY);
+    ctx.stroke();
+    // Emit drawing data to the server
+    socket.emit('draw', { lastX, lastY, x: data.offsetX, y: data.offsetY, red, green, blue, lineSize});
+    lastX = data.offsetX;
+    lastY = data.offsetY;
+  }
 }
 
 // Base Functions
