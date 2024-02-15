@@ -21,7 +21,6 @@ io.on('connection', (socket) => {
   socket.on('draw', (data) => {
 
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
-
   });
 });
 

@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 const socket = io('localhost:3000'); // Connect to server
 
 // Track mouse state
+ctx.lineCap = "round";
 let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
@@ -49,7 +50,7 @@ canvas.addEventListener('touchcancel', stopDrawing);
 function startDrawing(e) {
   isDrawing = true;
   lastX = e.offsetX;
-  lastY= e.offsetY;
+  lastY = e.offsetY;
 }
 
 function draw(e) {
