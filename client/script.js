@@ -16,12 +16,28 @@ let blue = 0;
 let lineSize = 1;
 // Handle drawing events
 
-canvas.addEventListener('mousedown', startDrawing);
-canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mousedown', function(e){
+  startDrawing(e.offsetX, e.offsetY);
+});
+canvas.addEventListener('mousemove', function(e){
+  draw(e.offsetX, e.offsetY);
+});
 canvas.addEventListener('mouseup', stopDrawing);
 canvas.addEventListener('mouseout', stopDrawing);
-canvas.addEventListener('touchstart', startTouchDrawing);
-canvas.addEventListener('touchmove', touchDraw);
+canvas.addEventListener('touchstart', function(e) {
+  if (e.targetTouches.length == 1)
+  {
+    var data = e.targetTouches[0];
+    startDrawing(data.pageX, data.pageY)
+  }
+   });
+canvas.addEventListener('touchmove', function(e) {
+  if (e.targetTouches.length == 1)
+  {
+    var data = e.targetTouches[0];
+    draw(data.pageX, data.pageY)
+  }
+});
 canvas.addEventListener('touchend', stopDrawing);
 canvas.addEventListener('touchcancel', stopDrawing);
 
@@ -47,53 +63,26 @@ canvas.addEventListener('touchcancel', stopDrawing);
 
 
 // Drawing functions
-function startDrawing(e) {
+function startDrawing(x, y) {
   isDrawing = true;
-  lastX = e.offsetX;
-  lastY = e.offsetY;
+  lastX = x;
+  lastY = y;
 }
 
-function draw(e) {
+function draw(x, y) {
   if (!isDrawing) return;
   ctx.beginPath();
   ctx.moveTo(lastX, lastY);
-  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.lineTo(x, y);
   ctx.stroke();
   // Emit drawing data to the server
-  socket.emit('draw', { lastX, lastY, x: e.offsetX, y: e.offsetY, red, green, blue, lineSize});
-  lastX = e.offsetX;
-  lastY = e.offsetY;
+  socket.emit('draw', {lastX, lastY, x, y, red, green, blue, lineSize});
+  lastX = x;
+  lastY = y;
 }
 
 function stopDrawing() {
   isDrawing = false;
-}
-
-//Handle touch
-function startTouchDrawing(e) {
-  if (e.targetTouches.length == 1)
-  {
-    var data = e.targetTouches[0];
-    isDrawing = true;
-    lastX = data.offsetX;
-    lastY = data.offsetY;
-  }
-}
-
-function touchDraw(e) {
-  if (!isDrawing) return;
-  if (e.targetTouches.length == 1)
-  {
-    var data = e.targetTouches[0];
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(data.offsetX, data.offsetY);
-    ctx.stroke();
-    // Emit drawing data to the server
-    socket.emit('draw', { lastX, lastY, x: data.offsetX, y: data.offsetY, red, green, blue, lineSize});
-    lastX = data.offsetX;
-    lastY = data.offsetY;
-  }
 }
 
 // Base Functions
