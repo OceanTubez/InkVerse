@@ -114,16 +114,19 @@ function changeSize() {
           
 // Recieve drawing data from the server
 socket.on('draw', (data) => {
+  //save data
   let savedLineSize = lineSize;
   let savedRed = red;
   let savedBlue = blue;
   let savedGreen = green;
+  //apply drawing data
   ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
   ctx.lineWidth = data.lineSize;
   ctx.beginPath();
   ctx.moveTo(data.lastX, data.lastY);
   ctx.lineTo(data.x, data.y);
   ctx.stroke();
+  //Reset to original
   ctx.strokeStyle = "rgb(" + savedRed + "," + savedGreen + "," + savedBlue + ")";
   ctx.lineWidth = savedLineSize;
 });
