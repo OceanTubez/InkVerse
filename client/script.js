@@ -162,7 +162,7 @@ function bigBlack() {
 };
 
 
-//SOCKETS
+//SOCKETS ONLY NOTHING ELSE
 // Recieve drawing data from the server
 socket.on('draw', (data) => {
   //save data
@@ -187,3 +187,15 @@ socket.on('mouse', (data) => {
   console.log("empty");
 
 })
+
+socket.on('loadCanvas', (data) => {
+
+  let img = new Image;
+  img.onload = function(){
+    ctx.drawImage(img,0,0); // Or at whatever offset you like
+  };
+  img.src = data;
+
+})
+
+//ONLY SOCKETS HERE

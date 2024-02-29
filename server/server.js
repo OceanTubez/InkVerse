@@ -25,8 +25,7 @@ io.on('connection', (socket) => {
 
 
   console.log("connecting");  
-  socket.broadcast.emit('loadCanvas', canvas.toDataURL());
-  
+  io.emit('loadCanvas', canvas.toDataURL())
 
   socket.on('draw', (data) => {
 
