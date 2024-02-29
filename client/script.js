@@ -100,6 +100,28 @@ function playClick1() {
 function toggleDropdown() {
   var dropdown = document.getElementById("dropdownContainer");
   dropdown.classList.toggle("active");
+
+  saveName();
+
+}
+
+function saveName() {
+
+  var inputValue = document.getElementById("nameInput").value;
+  var usernameDisplay = document.getElementById("username");
+
+  if (inputValue == "") {
+
+    return;
+
+  }
+
+  socket.emit('sentName', inputValue);
+
+  // You can store the input value in a variable or do other processing here
+  console.log("Input value:", inputValue);
+  usernameDisplay.textContent = inputValue;
+
 }
 
 
@@ -165,30 +187,3 @@ socket.on('mouse', (data) => {
   console.log("empty");
 
 })
-
-function toggleDropdown() {
-  var dropdown = document.getElementById("dropdownContainer");
-  dropdown.classList.toggle("active");
-
-  saveName();
-
-}
-
-function saveName() {
-
-  var inputValue = document.getElementById("nameInput").value;
-  var usernameDisplay = document.getElementById("username");
-
-  if (inputValue == "") {
-
-    return;
-
-  }
-
-  socket.emit('sentName', inputValue);
-
-  // You can store the input value in a variable or do other processing here
-  console.log("Input value:", inputValue);
-  usernameDisplay.textContent = inputValue;
-
-}
