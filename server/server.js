@@ -3,6 +3,11 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+//Server canvas (:
+const {createCanvas} = require('canvas');
+const canvas = createCanvas(2800, 2400);
+const ctx = canvas.getContext('2d');
+
 
 app.use(express.static(path.join(__dirname, '../client')));
 
@@ -14,14 +19,23 @@ app.get('/', (req, res) => {
 app.use('/socket.io' ,express.static('client')); // Serve the client files
 // console.log(app);
 console.log(http);
-//Going to do some stuff with server
-//socket.broadcast.emit('printCur', data);
+
+
 io.on('connection', (socket) => {
 
+
   console.log("connecting");  
+  socket.broadcast.emit('loadCanvas', canvas.toDataURL());
+  
 
   socket.on('draw', (data) => {
-    console.log(data.lastX);
+
+    ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
+    ctx.lineWidth = data.lineSize;
+    ctx.beginPath();
+    ctx.moveTo(data.lastX, data.lastY);
+    ctx.lineTo(data.x, data.y);
+    ctx.stroke();
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
 
   });

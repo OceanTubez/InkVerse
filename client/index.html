@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>InkVerse: Client V1.12</title>
+    <title>InkVerse: Client V1.13</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,20 +15,24 @@
 
     
     <div class="dropdown-container" id="dropdownContainer">
-      <img src="https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/5X/c/3/2/5/c325b8f46fd0b3c5b418b005b66c7af661539d44.png" alt="Logo">
+      <img src="https://i.pinimg.com/originals/7e/6a/4a/7e6a4aa291bbeff854a7326b943889c5.png" alt="Logo" id="dropimage">
       <input type="text" id="nameInput" placeholder="Enter your name">
       <button id="nameButton" onClick="toggleDropdown()">Draw!</button>
     </div>
 
     <div class="ribbon" id="ribbon">
               <!-- BLACK - y-->
-              <img id="bigblack" class="hover-image" src="https://i.ibb.co/hWK4c0f/black.png" alt="brushes" onClick="bigBlack()">
+              <img class="hover-image" src="https://i.ibb.co/hWK4c0f/black.png" alt="brushes">
         <button id="changeColor" onClick="changeColor()">Change Color</button>
         <button id="changeSize" onClick="changeSize()">Change Size</button>
     </div>
 
     <div id="footer-text">
         InkVerse: Local Server
+    </div>
+
+    <div id="username">
+      
     </div>
 
   </body>
