@@ -103,7 +103,7 @@ function toggleDropdown() {
 }
 //change black brush function
 document.querySelector('#ribbon .hover-image[src="https://i.ibb.co/hWK4c0f/black.png"]').addEventListener('click', function() {
-    function playClick1()
+    playClick1()
     //configs
     function changeBlackBrush() {
         lineSize = 25
