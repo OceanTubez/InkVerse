@@ -23,6 +23,12 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
 
   });
+
+  socket.on('mouse', (data) => {
+
+    socket.broadcast.emit('mouse', data); // Broadcast mouse movement (I MADE THIS ZELLA WATT)
+
+  });
 });
 
 http.listen(3000, () => console.log('Server listening on port 3000'));

@@ -1,47 +1,56 @@
-const canvas = document.getElementById('drawCanvas');
-const changecolorbutton = document.getElementById('changeColor');
-const ctx = canvas.getContext('2d');
-const socket = io('localhost:3000'); // Connect to server
+document.addEventListener("DOMContentLoaded", (event) => {
 
-// Track mouse state
-ctx.lineCap = "round";
-let isDrawing = false;
-let lastX = 0;
-let lastY = 0;
+  const canvas = document.getElementById('drawCanvas');
+  const nameInput = document.getElementById('nameButton');
+  const changecolorbutton = document.getElementById('changeColor');
+  const ctx = canvas.getContext('2d');
+  const socket = io('localhost:3000'); // Connect to server
 
-//Track pen colors and size
-let red = 0;
-let green = 0;
-let blue = 0;
-let lineSize = 1;
-// Handle drawing events
+  // Track mouse state
+  ctx.lineCap = "round";
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
 
-canvas.addEventListener('mousedown', function(e){
-  startDrawing(e.offsetX, e.offsetY);
-});
-canvas.addEventListener('mousemove', function(e){
-  draw(e.offsetX, e.offsetY);
-});
-canvas.addEventListener('mouseup', stopDrawing);
-canvas.addEventListener('mouseout', stopDrawing);
-canvas.addEventListener('touchstart', function(e) {
-  if (e.targetTouches.length == 1)
-  {
-    var data = e.targetTouches[0];
-    startDrawing(data.pageX, data.pageY)
-  }
-   });
-canvas.addEventListener('touchmove', function(e) {
+  //Track pen colors and size
+  let red = 0;
+  let green = 0;
+  let blue = 0;
+  let lineSize = 1;
+  // Handle drawing events
+
+  canvas.addEventListener('mousedown', function(e){
+    startDrawing(e.offsetX, e.offsetY);
+  });
+
+  canvas.addEventListener('mousemove', function(e){
+    draw(e.offsetX, e.offsetY);
+    socket.emit('mouse', (mouse.x, mouse.y))
+  });
+
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+
+  canvas.addEventListener('touchstart', function(e) {
+    if (e.targetTouches.length == 1)
+    { 
+      var data = e.targetTouches[0];
+      startDrawing(data.pageX, data.pageY)
+    }
+  });
+
+  canvas.addEventListener('touchmove', function(e) {
   if (e.targetTouches.length == 1)
   {
     var data = e.targetTouches[0];
     draw(data.pageX, data.pageY)
   }
-});
-canvas.addEventListener('touchend', stopDrawing);
-canvas.addEventListener('touchcancel', stopDrawing);
+  });
 
-(function() {
+  canvas.addEventListener('touchend', stopDrawing);
+  canvas.addEventListener('touchcancel', stopDrawing);
+
+  toggleDropdown();
 
   // Start listening to resize events and draw canvas.
   initialize();
@@ -59,8 +68,12 @@ canvas.addEventListener('touchcancel', stopDrawing);
     ctx.width = window.innerWidth;
     ctx.height = window.innerHeight;
   }
-})();
+});
 
+function toggleDropdown() {
+  var dropdown = document.getElementById("dropdownContainer");
+  dropdown.classList.toggle("active");
+}
 
 // Drawing functions
 function startDrawing(x, y) {
@@ -130,3 +143,9 @@ socket.on('draw', (data) => {
   ctx.strokeStyle = "rgb(" + savedRed + "," + savedGreen + "," + savedBlue + ")";
   ctx.lineWidth = savedLineSize;
 });
+
+socket.on('mouse', (data) => {
+
+  l
+
+}
