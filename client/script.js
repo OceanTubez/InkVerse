@@ -102,20 +102,8 @@ function toggleDropdown() {
   var dropdown = document.getElementById("dropdownContainer");
   dropdown.classList.toggle("active");
 }
-//change black brush function
-document.querySelector('#ribbon .hover-image[src="https://i.ibb.co/hWK4c0f/black.png"]').addEventListener('click', function() {
-    function playClick1()
-    //configs
-    function changeBlackBrush() {
-        lineSize = 25
-        lineWidth = 25
-        red = 0
-        blue = 0
-        green = 0
-        ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
 
-    }
-});
+
 // Buttons
 function changeColor() {
   playClick1()
@@ -135,6 +123,23 @@ function changeSize() {
   ctx.lineWidth = lineSize;
           
 }
+
+
+//change black brush function
+function bigBlack() {
+    playClick1();
+
+    console.log("click")
+
+    lineSize = 24;
+    red = 0;
+    blue = 0;
+    green = 0;
+        
+    ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
+    ctx.lineWidth = lineSize;
+};
+
 
 //SOCKETS
 // Recieve drawing data from the server
