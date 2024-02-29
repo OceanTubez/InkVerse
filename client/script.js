@@ -1,33 +1,36 @@
+
+////ON INITIALIZE
 document.addEventListener("DOMContentLoaded", (event) => {
   toggleDropdown();
   initialize();
 });
 
+//INIT VARIABLES
 const canvas = document.getElementById('drawCanvas');
 const nameInput = document.getElementById('nameButton');
 const changecolorbutton = document.getElementById('changeColor');
 const ctx = canvas.getContext('2d');
 const socket = io('localhost:3000'); // Connect to server
-
-// Track mouse state
 ctx.lineCap = "round";
-let isDrawing = false;
+
+//Track mouse 
 let lastX = 0;
 let lastY = 0;
 
-//Track pen colors and size
+//Track pen data
+let isDrawing = false;
 let red = 0;
 let green = 0;
 let blue = 0;
 let lineSize = 1;
+
 // Handle drawing events
-
-
 canvas.addEventListener('mousedown', function(e){
   startDrawing(e.offsetX, e.offsetY);
 });
 canvas.addEventListener('mousemove', function(e){
   draw(e.offsetX, e.offsetY);
+  //Below is currently not working. MOUSEX and MOUSEY do not exist btw FIX THAT
   //socket.emit('mouse', {mouseX, mouseY})
 });
 canvas.addEventListener('mouseup', stopDrawing);
@@ -50,7 +53,6 @@ canvas.addEventListener('touchend', stopDrawing);
 canvas.addEventListener('touchcancel', stopDrawing);
 
 // Start listening to resize events and draw canvas.
-
 function initialize() {
   // Register an event listener to call the resizeCanvas() function 
   // each time the window is resized.
@@ -58,6 +60,7 @@ function initialize() {
   // Draw canvas border for the first time.
   resizeCanvas();
 }
+
 // Runs each time the DOM window resize event fires.
 // Resets the canvas dimensions to match window,
 // then draws the new borders accordingly.
@@ -65,8 +68,6 @@ function resizeCanvas() {
   ctx.width = window.innerWidth;
   ctx.height = window.innerHeight;
 }
-
-
 
 // Drawing functions
 function startDrawing(x, y) {
@@ -97,6 +98,10 @@ function playClick1() {
   clickSound.play();
 }
 
+function toggleDropdown() {
+  var dropdown = document.getElementById("dropdownContainer");
+  dropdown.classList.toggle("active");
+}
 
 // Buttons
 function changeColor() {
@@ -117,7 +122,8 @@ function changeSize() {
   ctx.lineWidth = lineSize;
           
 }
-          
+
+//SOCKETS
 // Recieve drawing data from the server
 socket.on('draw', (data) => {
   //save data
@@ -138,11 +144,7 @@ socket.on('draw', (data) => {
 });
 
 socket.on('mouse', (data) => {
-
+//Make this work lol
   console.log("empty");
 
 })
-function toggleDropdown() {
-  var dropdown = document.getElementById("dropdownContainer");
-  dropdown.classList.toggle("active");
-}

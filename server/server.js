@@ -14,12 +14,14 @@ app.get('/', (req, res) => {
 app.use('/socket.io' ,express.static('client')); // Serve the client files
 // console.log(app);
 console.log(http);
+//Going to do some stuff with server
+//socket.broadcast.emit('printCur', data);
 io.on('connection', (socket) => {
 
   console.log("connecting");  
 
   socket.on('draw', (data) => {
-
+    console.log(data.lastX);
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
 
   });
