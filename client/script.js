@@ -97,7 +97,24 @@ function playClick1() {
   clickSound.play();
 }
 
+function toggleDropdown() {
+  var dropdown = document.getElementById("dropdownContainer");
+  dropdown.classList.toggle("active");
+}
+//change black brush function
+document.querySelector('#ribbon .hover-image[src="https://i.ibb.co/hWK4c0f/black.png"]').addEventListener('click', function() {
+    function playClick1()
+    //configs
+    function changeBlackBrush() {
+        lineSize = 25
+        lineWidth = 25
+        red = 0
+        blue = 0
+        green = 0
+        ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
 
+    }
+});
 // Buttons
 function changeColor() {
   playClick1()
