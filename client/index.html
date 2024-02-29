@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< Updated upstream
   <head>
     <title>InkVerse: Client V1.13</title>
+=======
+<head>
+    <title>InkVerse: Client V1.12</title>
+
+>>>>>>> Stashed changes
     <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
+</head>
+<body>
 
     <audio id="clickSound" src="https://dl.sndup.net/tdtq/UI%20Click.mp3"></audio>
 
     <canvas id="drawCanvas" width="2800" height="2400"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<<<<<<< Updated upstream
     <script type = "text/javascript" src="script.js"></script>
 
     
@@ -18,16 +25,29 @@
       <input type="text" id="nameInput" placeholder="Enter your name">
       <button id="nameButton" onClick="toggleDropdown()">Draw!</button>
     </div>
+=======
+    <script type="text/javascript" src="script.js"></script>
+
+>>>>>>> Stashed changes
 
     <div class="ribbon" id="ribbon">
-      <button id="changeColor" onClick="changeColor()">Change Color</button>
-      <button id="changeSize" onClick = "changeSize()">Change Size</button>
+        <img class="hover-image" src="assets/black.png" alt="brushes">
+        <button class =" button"id="assets/blackbrush" onClick="changeBrush()">Change brush</button>
+        <img class="hover-image" src="assets/brown.png" alt="brushes">
+        <button class =" button"id="assets/brown" onClick="brownbrush()">Change brush</button>
+        <button id="changeColor" onClick="changeColor()">Change Color</button>
+        <button id="changeSize" onClick="changeSize()">Change Size</button>
     </div>
 
     <div id="footer-text">
-      InkVerse: Local Server
+        InkVerse: Local Server
     </div>
 
+<<<<<<< Updated upstream
   </body>
 
+=======
+</body>
+>>>>>>> Stashed changes
 </html>
+
