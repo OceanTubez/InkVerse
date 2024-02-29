@@ -62,6 +62,7 @@ body {
   z-index: 9999; /* Ensure the text is above other content */
 }
 
+<<<<<<< Updated upstream
 .dropdown-container {
   position: fixed;
   top: 0;
@@ -93,3 +94,32 @@ body {
   margin-bottom: 10px;
   box-sizing: border-box;
 }
+=======
+#brushes
+
+hover-image {
+    transition: transform 1s ease;
+    display: flex;
+    justify-content: space-between; /* Distribute items equally */
+}
+
+.hover-image:hover {
+    transform: translateY(-50px);
+    cursor: pointer;
+}
+#changeBrush {
+    position: fixed;
+    bottom: 10px; /* Adjust as needed */
+    left: 90%; /* Position horizontally at the middle */
+    transform: translateX(-50%);
+    background-color: #4cff00;
+    color: #fff;
+    border-radius: 20px;
+    width: 12%;
+    height: 17%;
+    border: none;
+    cursor: pointer;
+}
+
+
+>>>>>>> Stashed changes
