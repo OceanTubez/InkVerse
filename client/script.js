@@ -142,15 +142,30 @@ socket.on('mouse', (data) => {
   console.log("empty");
 
 })
+
 function toggleDropdown() {
   var dropdown = document.getElementById("dropdownContainer");
   dropdown.classList.toggle("active");
+
+  saveName();
+
 }
 
-function saveInput() {
-  // Get the value from the input box
-  var inputValue = document.getElementById("inputBox").value;
+function saveName() {
+
+  var inputValue = document.getElementById("nameInput").value;
+  var usernameDisplay = document.getElementById("username");
+
+  if (inputValue == "") {
+
+    return;
+
+  }
+
+  socket.emit('sentName', inputValue);
 
   // You can store the input value in a variable or do other processing here
   console.log("Input value:", inputValue);
+  usernameDisplay.textContent = inputValue;
+
 }
