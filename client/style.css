@@ -3,6 +3,7 @@ body {
   margin: 0;
   border: 0;
   overflow: hidden;
+  touch-action: none;
 }
 
 #changeColor {
