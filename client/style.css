@@ -3,6 +3,7 @@ body {
   margin: 0;
   border: 0;
   overflow: hidden;
+  touch-action: pinch-zoom;
 }
 
 #changeColor {
@@ -42,7 +43,7 @@ body {
   bottom: 150px; /* Adjust as needed */
   left: 78%; /* Position horizontally at the middle */
   transform: translateX(-50%);
-  background-color: #0d8797;
+  background-color: #dc7e7e;
   color: #fff;
   width: 6%;
   height: 17%;
@@ -56,7 +57,7 @@ body {
   bottom: 110px; /* Adjust as needed */
   left: 78%; /* Position horizontally at the middle */
   transform: translateX(-50%);
-  background-color: #0d8797;
+  background-color: #a3a9ea;
   color: #fff;
   width: 6%;
   height: 17%;
