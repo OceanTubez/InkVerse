@@ -22,7 +22,7 @@ console.log(http);
 
 
 io.on('connection', (socket) => {
-
+  ctx.lineCap = "round";
 
   console.log("connecting");  
   io.emit('loadCanvas', canvas.toDataURL())
