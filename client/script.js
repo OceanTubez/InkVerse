@@ -125,22 +125,8 @@ function saveName() {
   usernameDisplay.textContent = inputValue;
 
 }
-//change black brush function
-/*document.querySelector('#ribbon .hover-image[src="https://i.ibb.co/hWK4c0f/black.png"]').addEventListener('click', function() {
-    playClick1()
-    //configs
-    function changeBlackBrush() {
-        lineSize = 25
-        lineWidth = 25
-        red = 0
-        blue = 0
-        green = 0
-        ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
 
-    }
-});*/
-
-// HEADING: Buttons
+// Buttons
 function changeColor() {
   playClick1();
   //Gets random number from 0-255
@@ -160,7 +146,7 @@ function changeSize() {
           
 }
 
-//SUB-Heading: ZoomInButton
+
 function zoomInButton() {
   playClick1();
   scale *= 2.25;
@@ -179,21 +165,17 @@ function applyzoom() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.restore();
 }
-//change black brush function
-function bigBlack() {
+
+//Brush functions
+function changeBrush(size, r, b, g) {
     playClick1()
-
-    console.log("click")
-
-    lineSize = 24;
-    red = 0;
-    blue = 0;
-    green = 0;
-        
-    ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-    ctx.lineWidth = lineSize;
+    red = r;
+    blue = b;
+    green = g;
+    lineSize = size;
+    ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")";
+    ctx.lineWidth = size;
 };
-
 
 //SOCKETS ONLY NOTHING ELSE
 // Recieve drawing data from the server

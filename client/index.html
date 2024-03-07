@@ -12,6 +12,7 @@
     <canvas id="drawCanvas" width="2800" height="2400"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type = "text/javascript" src="script.js"></script>
+    <script type = "text/javascript" src="common.js"></script>
 
     
     <div class="dropdown-container" id="dropdownContainer">
@@ -21,14 +22,35 @@
     </div>
 
     <div class="ribbon" id="ribbon">
-              <!-- BLACK - y-->
-              <img class="hover-image" src="https://i.ibb.co/hWK4c0f/black.png" alt="brushes">
+        <!-- BLACK - y-->
+
+        <button class="button" id="bigBlack" onClick="changeBrush(24,0,0,0)">
+            <img class="hover-image" src="https://i.ibb.co/hWK4c0f/black.png" alt="brushes">
+        </button>
+        <!-- green -->
+        <button class="button" id="bigGreen" onClick="changeBrush(24,0,0,255)">
+            <img class="hover-image" src="https://i.ibb.co/nsqYzc8/green.png" alt="brushes">
+        </button>
+
+        <!-- blue-->
+        <button class="button" id="bigLIGHTBLUE" onClick="changeBrush(15,173,216,230)">
+            <img class="hover-image" src="https://i.ibb.co/QdXG5MP/lightblue.png" alt="brushes">
+        </button>
+
+        <!-- orange -->
+        <button class="button" id="bigORANG" onClick="changeBrush(18,255,0,177)">
+            <img class="hover-image" src="https://i.ibb.co/ThMyj66/yelloworange.png" alt="brushes">
+        </button>
+
+
+
+
         <button id="changeColor" onClick="changeColor()">Change Color</button>
         <button id="changeSize" onClick="changeSize()">Change Size</button>
         <!--ZOOM Buttons_-->
         <button id="zoomInButton" onClick="zoomInButton()">+</button>
         <button id="zoomOutButton" onClick="zoomOutButton()">-</button>
-      </div>
+    </div>
 
     <div id="footer-text">
         InkVerse: Local Server
