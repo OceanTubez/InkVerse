@@ -8,7 +8,9 @@ const nameInput = document.getElementById('nameButton');
 const changecolorbutton = document.getElementById('changeColor');
 const ctx = canvas.getContext('2d');
 const socket = io('localhost:3000'); // Connect to server
-
+const zoomInButton = document.getElementById('zoomInButton');
+const zoomOutButton = document.getElementById('zoomOutButton');   
+let scale = 1.0;
 // Track mouse state
 ctx.lineCap = "round";
 let isDrawing = false;
@@ -145,10 +147,19 @@ function changeSize() {
           
 }
 
-
+/*
+//ZoomInButton
+function zoomInButton() {
+  playClick1()
+}
+//ZoomOutButton
+function zoomOutButton() {
+  playClick1()
+}
+*/
 //change black brush function
 function bigBlack() {
-    playClick1();
+    playClick1()
 
     console.log("click")
 

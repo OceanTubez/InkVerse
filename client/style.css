@@ -37,6 +37,34 @@ body {
 
 }
 
+#zoomInButton {
+  position: fixed;
+  bottom: 150px; /* Adjust as needed */
+  left: 78%; /* Position horizontally at the middle */
+  transform: translateX(-50%);
+  background-color: #0d8797;
+  color: #fff;
+  width: 6%;
+  height: 17%;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#zoomOutButton {
+  position: fixed;
+  bottom: 110px; /* Adjust as needed */
+  left: 78%; /* Position horizontally at the middle */
+  transform: translateX(-50%);
+  background-color: #0d8797;
+  color: #fff;
+  width: 6%;
+  height: 17%;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
 #ribbon {
   position: fixed;
   bottom: -10%; /* Adjust position as needed */
@@ -52,6 +80,7 @@ body {
   height: 20%; /* Adjust height automatically */
   z-index: 9999; /* Ensure the ribbon is above other content */
 }
+
 
 #footer-text {
   position: fixed;
@@ -127,5 +156,4 @@ hover-image {
     border: none;
     cursor: pointer;
 }
-
 
