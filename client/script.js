@@ -125,20 +125,6 @@ function saveName() {
   usernameDisplay.textContent = inputValue;
 
 }
-//change black brush function
-/*document.querySelector('#ribbon .hover-image[src="https://i.ibb.co/hWK4c0f/black.png"]').addEventListener('click', function() {
-    playClick1()
-    //configs
-    function changeBlackBrush() {
-        lineSize = 25
-        lineWidth = 25
-        red = 0
-        blue = 0
-        green = 0
-        ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-
-    }
-});*/
 
 // Buttons
 function changeColor() {
@@ -170,63 +156,15 @@ function zoomOutButton() {
   playClick1();
 }
 
-//change black brush function
-function bigBlack() {
+//Brush functions
+function changeBrush(size, r, b, g) {
     playClick1()
-
-    console.log("click")
-
-    lineSize = 24;
-    red = 0;
-    blue = 0;
-    green = 0;
-        
-    ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-    ctx.lineWidth = lineSize;
-};
-
-//change black brush function
-function bigGreen() {
-    playClick1()
-
-    console.log("click")
-
-    lineSize = 24;
-    red = 0;
-    blue = 0;
-    green = 255;
-        
-    ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-    ctx.lineWidth = lineSize;
-};
-
-
-function bigLIGHTBLUE() {
-    playClick1()
-
-    console.log("click")
-
-    lineSize = 15;
-    red = 173;
-    blue = 216;
-    green = 230;
-        
-    ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-    ctx.lineWidth = lineSize;
-};
-
-function bigORANG() {
-    playClick1()
-
-    console.log("click")
-
-    lineSize = 18;
-    red = 255;
-    blue = 0;
-    green = 177;
-        
-    ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-    ctx.lineWidth = lineSize;
+    red = r;
+    blue = b;
+    green = g;
+    lineSize = size;
+    ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")";
+    ctx.lineWidth = size;
 };
 
 //SOCKETS ONLY NOTHING ELSE
