@@ -5,12 +5,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 const canvas = document.getElementById('drawCanvas');
 const nameInput = document.getElementById('nameButton');
-const changecolorbutton = document.getElementById('changeColor');
 const ctx = canvas.getContext('2d');
 const socket = io('localhost:3000'); // Connect to server
-const zoomInButton = document.getElementById('zoomInButton');
-const zoomOutButton = document.getElementById('zoomOutButton');   
-let scale = 1.0;
+
 // Track mouse state
 ctx.lineCap = "round";
 let isDrawing = false;
@@ -22,8 +19,11 @@ let red = 0;
 let green = 0;
 let blue = 0;
 let lineSize = 1;
-// Handle drawing events
 
+//Other variables
+let scale = 1.0;
+
+// Handle drawing events
 
 canvas.addEventListener('mousedown', function(e){
   startDrawing(e.offsetX, e.offsetY);
@@ -129,7 +129,7 @@ function saveName() {
 
 // Buttons
 function changeColor() {
-  playClick1()
+  playClick1();
   //Gets random number from 0-255
   red = Math.floor(Math.random()*256);
   green = Math.floor(Math.random()*256);
@@ -139,7 +139,7 @@ function changeColor() {
 }
 
 function changeSize() {
-  playClick1()
+  playClick1();
   //Random linesize between 1-25
   lineSize = Math.floor(Math.random()*24+1);
   //Applies the change
@@ -147,16 +147,16 @@ function changeSize() {
           
 }
 
-/*
+
 //ZoomInButton
 function zoomInButton() {
-  playClick1()
+  playClick1();
 }
 //ZoomOutButton
 function zoomOutButton() {
-  playClick1()
+  playClick1();
 }
-*/
+
 //change black brush function
 function bigBlack() {
     playClick1()
