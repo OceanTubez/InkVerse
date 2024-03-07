@@ -140,7 +140,7 @@ function saveName() {
     }
 });*/
 
-// Buttons
+// HEADING: Buttons
 function changeColor() {
   playClick1();
   //Gets random number from 0-255
@@ -160,16 +160,25 @@ function changeSize() {
           
 }
 
-
-//ZoomInButton
+//SUB-Heading: ZoomInButton
 function zoomInButton() {
   playClick1();
+  scale *= 2.25;
+  applyzoom();
 }
-//ZoomOutButton
+//SUB-Heading: ZoomOutButton
 function zoomOutButton() {
   playClick1();
+  scale /= 2.25;
+  applyzoom();
 }
-
+//SUB-Heading: Apply zoom for the buttons
+function applyzoom() {
+  ctx.save();
+  ctx.scale(scale, scale);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.restore();
+}
 //change black brush function
 function bigBlack() {
     playClick1()
