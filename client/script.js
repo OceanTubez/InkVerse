@@ -172,6 +172,49 @@ function bigBlack() {
     ctx.lineWidth = lineSize;
 };
 
+//change black brush function
+function bigGreen() {
+    playClick1()
+
+    console.log("click")
+
+    lineSize = 24;
+    red = 0;
+    blue = 0;
+    green = 255;
+        
+    ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
+    ctx.lineWidth = lineSize;
+};
+
+
+function bigLIGHTBLUE() {
+    playClick1()
+
+    console.log("click")
+
+    lineSize = 15;
+    red = 173;
+    blue = 216;
+    green = 230;
+        
+    ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
+    ctx.lineWidth = lineSize;
+};
+
+function bigORANG() {
+    playClick1()
+
+    console.log("click")
+
+    lineSize = 18;
+    red = 255;
+    blue = 0;
+    green = 177;
+        
+    ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
+    ctx.lineWidth = lineSize;
+};
 
 //SOCKETS ONLY NOTHING ELSE
 // Recieve drawing data from the server
