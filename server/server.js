@@ -71,6 +71,11 @@ io.on('connection', (socket) => {
     {
       clientUsernames.splice(deleteAt, 1);
     }
+  socket.on('mouse', (data) => {
+
+    socket.broadcast.emit('mouse', data); // Broadcast mouse movement (I MADE THIS ZELLA WATT)
+
+
   });
 });
 
