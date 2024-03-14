@@ -5,9 +5,12 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 //Server canvas (:
 const {createCanvas} = require('canvas');
+const { Client } = require('socket.io/dist/client');
 const canvas = createCanvas(2800, 2400);
 const ctx = canvas.getContext('2d');
 
+//const currentConnectedClients = [];
+//const ClientUsernames = [];
 
 app.use(express.static(path.join(__dirname, '../client')));
 
@@ -39,11 +42,32 @@ io.on('connection', (socket) => {
 
   });
 
-  socket.on('mouse', (data) => {
+  /*socket.on('sentNameData', (data) => {
 
-    socket.broadcast.emit('mouse', data); // Broadcast mouse movement (I MADE THIS ZELLA WATT)
+    if (ClientUsernames.includes(data)) {
+      
+      console.log(ClientUsernames);
 
-  });
+      socket.emit('nameConfirmed', {b: false, name: data});
+
+    } else {
+
+      socket.emit('nameConfirmed', {b: true, name: data});
+
+      ClientUsernames.push(data);
+      //currentConnectedClients.push(socket.id);
+
+    }
+
+  }); */
+
+  // MY REPO IS BROKEN, UH GOTTA FIX MY NODE MODULE.
+
+ /* socket.on('disconnect', (data) => {
+
+    //console.log(socket.id);
+
+  });*/
 });
 
 http.listen(3000, () => console.log('Server listening on port 3000'));

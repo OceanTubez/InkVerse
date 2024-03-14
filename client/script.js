@@ -118,11 +118,10 @@ function saveName() {
 
   }
 
-  socket.emit('sentName', inputValue);
+  socket.emit('sentNameData', inputValue);
 
   // You can store the input value in a variable or do other processing here
   console.log("Input value:", inputValue);
-  usernameDisplay.textContent = inputValue;
 
 }
 
@@ -211,6 +210,24 @@ socket.on('loadCanvas', (data) => {
   };
   img.src = data;
 
+})
+
+socket.on('nameConfirmed', (data) => {
+
+  var usernameDisplay = document.getElementById("username");
+
+  if (data.b == true) {
+
+    //alert("Name successfully set!");
+    usernameDisplay.textContent = data.name;
+
+  } else {
+     
+    document.getElementById("nameInput").value = "";
+    alert("Name is already in use.");
+    toggleDropdown();
+
+  }
 })
 
 //ONLY SOCKETS HERE
