@@ -19,6 +19,7 @@ body {
     height: 17%;
     border: none;
     cursor: pointer;
+    user-select: none;
 
 }
 
@@ -35,6 +36,7 @@ body {
     border-radius: 20px;
     border: none;
     cursor: pointer;
+    user-select: none;
 
 }
 
@@ -50,6 +52,7 @@ body {
   border-radius: 20px;
   border: none;
   cursor: pointer;
+  user-select: none;
 }
 
 #zoomOutButton {
@@ -64,6 +67,7 @@ body {
   border-radius: 20px;
   border: none;
   cursor: pointer;
+  user-select: none;
 }
 
 #ribbon {
@@ -148,4 +152,5 @@ hover-image {
 .button {
     border: none;
     background: none;
+    user-select: none;
 }
