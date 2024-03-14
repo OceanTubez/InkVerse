@@ -44,13 +44,10 @@ io.on('connection', (socket) => {
   socket.on('sentNameData', (data) => {
 
     if (clientUsernames.includes(data)) {
-      
-      console.log(clientUsernames);
 
       socket.emit('nameConfirmed', {b: false, name: data});
 
     } else {
-      console.log(clientUsernames);
       socket.emit('nameConfirmed', {b: true, name: data});
 
       clientUsernames.push(data);
