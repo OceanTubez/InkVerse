@@ -8,7 +8,7 @@ const {createCanvas} = require('canvas');
 const canvas = createCanvas(2800, 2400);
 const ctx = canvas.getContext('2d');
 
-let userName;
+const connectedClientIDs = [];
 const clientUsernames = [];
 
 app.use(express.static(path.join(__dirname, '../client')));
@@ -51,6 +51,7 @@ io.on('connection', (socket) => {
       socket.emit('nameConfirmed', {b: true, name: data});
 
       clientUsernames.push(data);
+      connectedClientIDs.push(socket.id);
       userName = data;
       //currentConnectedClients.push(socket.id);
 
@@ -61,18 +62,17 @@ io.on('connection', (socket) => {
   // MY REPO IS BROKEN, UH GOTTA FIX MY NODE MODULE.
 
 
-  socket.on('disconnect', (data) => {
-    let deleteAt = clientUsernames.indexOf(userName);
-
-    if (deleteAt != 0)
+  socket.on('disconnect', (notUsed) => {
+    let deleteAt = connectedClientIDs.indexOf(socket.id)
+    if (deleteAt != -1)
     {
       clientUsernames.splice(deleteAt, 1);
+      connectedClientIDs.splice(deleteAt, 1);
     }
   });
   socket.on('mouse', (data) => {
 
     socket.broadcast.emit('mouse', data); // Broadcast mouse movement (I MADE THIS ZELLA WATT)
-
 
   });
 });
