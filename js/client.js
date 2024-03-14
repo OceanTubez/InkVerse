@@ -3,10 +3,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   initialize();
 });
 
+//import {draw} from "../Common/common";
+
+
 const canvas = document.getElementById('drawCanvas');
 const nameInput = document.getElementById('nameButton');
 const ctx = canvas.getContext('2d');
 const socket = io('localhost:3000'); // Connect to server
+
 
 // Track mouse state
 ctx.lineCap = "round";
@@ -158,8 +162,10 @@ function zoomOutButton() {
 }
 //SUB-Heading: Apply zoom for the buttons
 function applyzoom() {
+  //document.getElementById('drawCanvas').width*=scale;
+  //document.getElementById('drawCanvas').height*=scale;
   //ctx.save();
-  canvas.scale(scale, scale);
+  //canvas.scale(canvas.width*scale, canvas.height*scale);
   //ctx.clearRect(0, 0, canvas.width, canvas.height);
   //ctx.restore();
 }
@@ -181,12 +187,7 @@ socket.on('draw', (data) => {
   //save data
   ctx.save();
   //apply drawing data
-  ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
-  ctx.lineWidth = data.lineSize;
-  ctx.beginPath();
-  ctx.moveTo(data.lastX, data.lastY);
-  ctx.lineTo(data.x, data.y);
-  ctx.stroke();
+  common.draw(ctx, data.LastX, data.LastY, data.x, data.y, data.red, data.green, data.blue, data.linesize);
   //Reset to original
   ctx.restore();
 

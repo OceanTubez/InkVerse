@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+const common = require("./common/canvas");
 //Server canvas (:
 const {createCanvas} = require('canvas');
 const canvas = createCanvas(2800, 2400);
@@ -15,7 +16,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 // Define a route handler for the root URL
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/index.html'));
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 app.use('/socket.io' ,express.static('client')); // Serve the client files
@@ -31,12 +32,7 @@ io.on('connection', (socket) => {
 
   socket.on('draw', (data) => {
 
-    ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
-    ctx.lineWidth = data.lineSize;
-    ctx.beginPath();
-    ctx.moveTo(data.lastX, data.lastY);
-    ctx.lineTo(data.x, data.y);
-    ctx.stroke();
+    common.draw(ctx, data.LastX, data.LastY, data.x, data.y, data.red, data.green, data.blue, data.linesize)
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
 
   });
