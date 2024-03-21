@@ -120,7 +120,7 @@ function saveName() {
   socket.emit('sentNameData', inputValue);
 
   // You can store the input value in a variable or do other processing here
-  console.log("Input value:", inputValue);
+  // console.log("Input value:", inputValue);
 
 }
 
