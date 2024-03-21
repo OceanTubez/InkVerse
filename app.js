@@ -25,9 +25,7 @@ const connectedClientIDs = [];
 const clientUsernames = [];
 
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+
 //Probaly website stuff? Not sure lol
 app.use(logger('dev'));
 app.use(express.json());
@@ -35,12 +33,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //Routers
-app.use('/', indexRouter);
+//app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 
-/*app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/index.pug'));
-});*/
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '/views/index.html'));
+});
 
 app.use('/socket.io', express.static('public'));
 app.use('/socket.io', express.static('views'));
