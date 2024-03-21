@@ -1,4 +1,4 @@
-html,
+
 body {
   margin: 0;
   border: 0;
@@ -9,7 +9,7 @@ body {
 #changeColor {
 
     position: fixed;
-    bottom: 150px; /* Adjust as needed */
+    bottom: 130px; /* Adjust as needed */
     left: 90%; /* Position horizontally at the middle */
     transform: translateX(-50%);
     background-color: #0d8797;
@@ -26,7 +26,7 @@ body {
 #changeSize {
 
     position: fixed;
-    bottom: 110px; /* Adjust as needed */
+    bottom: 90px; /* Adjust as needed */
     left: 90%; /* Position horizontally at the middle */
     transform: translateX(-50%);
     background-color: #0d8797;
@@ -42,7 +42,7 @@ body {
 
 #zoomInButton {
   position: fixed;
-  bottom: 150px; /* Adjust as needed */
+  bottom: 130px; /* Adjust as needed */
   left: 78%; /* Position horizontally at the middle */
   transform: translateX(-50%);
   background-color: #dc7e7e;
@@ -57,7 +57,7 @@ body {
 
 #zoomOutButton {
   position: fixed;
-  bottom: 110px; /* Adjust as needed */
+  bottom: 90px; /* Adjust as needed */
   left: 78%; /* Position horizontally at the middle */
   transform: translateX(-50%);
   background-color: #a3a9ea;
