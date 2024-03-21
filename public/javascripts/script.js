@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", (event) => {
   toggleDropdown();
   initialize();
@@ -79,10 +81,7 @@ function startDrawing(x, y) {
 
 function draw(x, y) {
   if (!isDrawing) return;
-  ctx.beginPath();
-  ctx.moveTo(lastX, lastY);
-  ctx.lineTo(x, y);
-  ctx.stroke();
+  drawLine(ctx, x, y, lastX, lastY);
   // Emit drawing data to the server
   socket.emit('draw', {lastX, lastY, x, y, red, green, blue, lineSize});
   lastX = x;
@@ -183,10 +182,7 @@ socket.on('draw', (data) => {
   //apply drawing data
   ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
   ctx.lineWidth = data.lineSize;
-  ctx.beginPath();
-  ctx.moveTo(data.lastX, data.lastY);
-  ctx.lineTo(data.x, data.y);
-  ctx.stroke();
+  drawLine(ctx, data.x, data.y, data.lastX, data.lastY);
   //Reset to original
   ctx.restore();
 

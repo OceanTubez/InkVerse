@@ -9,6 +9,7 @@ var logger = require('morgan');
 const {createCanvas} = require('canvas');
 const canvas = createCanvas(2800, 2400);
 const ctx = canvas.getContext('2d');
+const draw = require('./public/javascripts/common/canvas.js')
 //NOT CURRENTLY UsING - IGNORE
 var indexRouter = require('./routes/index');
 //var usersRouter = require('./routes/users');
@@ -81,10 +82,7 @@ io.on('connection', (socket) => {
 
     ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
     ctx.lineWidth = data.lineSize;
-    ctx.beginPath();
-    ctx.moveTo(data.lastX, data.lastY);
-    ctx.lineTo(data.x, data.y);
-    ctx.stroke();
+    draw.drawLine(ctx, data.x, data.y, data.lastX, data.lastY);
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
 
   });
