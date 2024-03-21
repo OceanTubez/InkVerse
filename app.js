@@ -6,11 +6,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 //Creates server canvas
-const {createCanvas} = require('canvas');
-const canvas = createCanvas(2800, 2400);
-const ctx = canvas.getContext('2d');
 const draw = require('./public/javascripts/common/canvas.js')
-//NOT CURRENTLY UsING - IGNORE
+const {createCanvas} = require('canvas');
+const canvas = createCanvas(draw.canvasWidth, draw.canvasHeight);
+const ctx = canvas.getContext('2d');
+//NOT CURRENTLY UsING - IGNOREs
 var indexRouter = require('./routes/index');
 //var usersRouter = require('./routes/users');
 

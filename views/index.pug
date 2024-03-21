@@ -2,13 +2,12 @@ extend layout
 
 block content
 
-  audio(id="clickSound" href="/audio/UiClick.mp3")
+  canvas(id="drawCanvas")
 
-  canvas(id="drawCanvas" width="2800" height="2400")
+  audio(id="clickSound" href="/audio/UiClick.mp3")
   script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer")
   script(type = "text/javascript" src="/javascripts/common/canvas.js")
   script(type = "text/javascript" src="/javascripts/script.js")
-  
 
   div(class="dropdown-container" id="dropdownContainer")
     img(src="/images/logo.png" alt="Logo" id="dropimage")
