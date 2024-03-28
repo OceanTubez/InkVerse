@@ -156,3 +156,28 @@ hover-image {
     background: none;
     user-select: none;
 }
+
+#timer {
+    position: fixed;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+.container {
+    text-align: center; /* Center align content */
+}
+
+#points {
+    position: fixed;
+    top: 40px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    border: 1px solid #ccc; /* Add border */
+    padding: 10px; /* Add padding */
+    border-radius: 5px; /* Add border radius */
+}

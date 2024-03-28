@@ -16,6 +16,12 @@
             <input type="text" id="nameInput" placeholder="Enter your name">
             <button id="nameButton" onClick="toggleDropdown()">Draw!</button>
         </div>
+
+        <div id="timer">00:00:00</div>
+        <script src="script.js"></script>
+        <div id="points">0 Points</div> <!-- Element to display points -->
+        <script src="script.js"></script>
+
         <div class="ribbon" id="ribbon">
             <!--BLACK -->
             <button class="button" id="bigBlack" onClick="changeBrush(24,0,0,0)">
@@ -44,18 +50,18 @@
                 <img class="hover-image" src="/images/brown.png" alt="brushes">
             </button>
 
-               <!-- Dark Blue -->
-               <button class="button" id="bigdarkblue" onClick="changeBrush(25,0,139,0)">
+            <!-- Dark Blue -->
+            <button class="button" id="bigdarkblue" onClick="changeBrush(25,0,139,0)">
                 <img class="hover-image" src="/images/darkblue.png" alt="brushes">
             </button>
 
 
 
-           
 
 
 
-            <!-- Color and Size changers--> 
+
+            <!-- Color and Size changers-->
             <button id="changeColor" onClick="changeColor()">Change Color</button>
             <button id="changeSize" onClick="changeSize()">Change Size</button>
 
