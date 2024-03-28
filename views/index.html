@@ -7,6 +7,7 @@
     </head>
     <body>
         <canvas id="drawCanvas"></canvas>
+        <canvas id="showcase", height="50", width="50"></canvas>
         <audio id="clickSound" href="/audio/UiClick.mp3"></audio>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script type="text/javascript" src="/javascripts/common/canvas.js"></script>
@@ -27,14 +28,17 @@
             <button class="button" id="bigBlack" onClick="changeBrush(24,0,0,0)">
                 <img class="hover-image" src="/images/black.png" alt="brushes">
             </button>
+
             <!-- green-->
             <button class="button" id="bigGreen" onClick="changeBrush(24,0,0,255)">
                 <img class="hover-image" src="/images/green.png" alt="brushes">
             </button>
+
             <!-- blue-->
             <button class="button" id="bigLightBlue" onClick="changeBrush(15,173,216,230)">
                 <img class="hover-image" src="/images/lightblue.png" alt="brushes">
             </button>
+
             <!-- orange-->
             <button class="button" id="bigOrange" onClick="changeBrush(18,255,0,177)">
                 <img class="hover-image" src="/images/red.png" alt="brushes">
@@ -46,7 +50,7 @@
             </button>
 
             <!-- brown-->
-            <button class="button" id="bigBrown" onClick="changeBrush(47,78,34,34)">
+            <button class="button" id="bigBrown" onClick="changeBrush(25,78,34,34)">
                 <img class="hover-image" src="/images/brown.png" alt="brushes">
             </button>
 
@@ -56,15 +60,9 @@
             </button>
 
 
-
-
-
-
-
-            <!-- Color and Size changers-->
+            <!-- Color and Size changers--> 
             <button id="changeColor" onClick="changeColor()">Change Color</button>
             <button id="changeSize" onClick="changeSize()">Change Size</button>
-
 
             <!-- ZOOM Buttons-->
             <button id="zoomInButton" onClick="zoomInButton()">+</button>
@@ -72,5 +70,6 @@
         </div>
         <div id="footer-text">InkVerse: Local Server</div>
         <div id="username"></div>
+        <div id="pen-text">Pen: </div>
     </body>
 </html>
