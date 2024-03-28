@@ -72,19 +72,20 @@ body {
 
 
 #ribbon {
-  position: fixed;
-  bottom: -10%; /* Adjust position as needed */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #cc3030;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 55px; /* Ensure rounded edges */
-  width: 50%; /* Adjust width automatically */
-  height: 20%; /* Adjust height automa=\tically */
-  z-index: 9999; /* Ensure the ribbon is above other content */
+    position: fixed;
+    bottom: -10%; /* Adjust position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background-image: url("/images/long tray.png"); /* Set the image as background */
+    background-repeat: no-repeat;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 55px; /* Ensure rounded edges */
+    width: 49%; /* Adjust width automatically */
+    height: 20%; /* Adjust height automa=\tically */
+    z-index: 9999; /* Ensure the ribbon is above other content */
 }
 
 
