@@ -181,6 +181,7 @@ function changeBrush(size, r, b, g) {
     redrawShowcase();
 };
 
+
 function redrawShowcase() {
   showcaseCTX.clearRect(0, 0, showcase.width, showcase.height);
   showcaseCTX.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")"; 
@@ -189,6 +190,71 @@ function redrawShowcase() {
   showcaseCTX.arc(25, 25, lineSize/2, 0, 2 * Math.PI);
   showcaseCTX.fill();
 }
+
+
+//points
+
+function updatePointsDisplay(points) {
+    document.getElementById('points').textContent = points + " Points";
+}
+
+// Function to update the timer display
+function updateTimerDisplay(hours, minutes, seconds) {
+    // Format the time with leading zeros
+    const formattedTime = 
+        (hours < 10 ? '0' : '') + hours + ':' +
+        (minutes < 10 ? '0' : '') + minutes + ':' +
+        (seconds < 10 ? '0' : '') + seconds;
+
+    // Update the HTML element with the formatted time
+    document.getElementById('timer').textContent = formattedTime;
+}
+
+//Time and Poitns
+
+function startTimerAndPoints() {
+    let hours = 0;
+    let minutes = 0;
+    let seconds = 0;
+    let points = 0;
+
+    setInterval(function() {
+        // Increment seconds
+        seconds++;
+        // If seconds reach 60, reset seconds and increment minutes
+        if (seconds >= 60) {
+            seconds = 0;
+            minutes++;
+            // If minutes reach 60, reset minutes and increment hours
+            if (minutes >= 60) {
+                minutes = 0;
+                hours++;
+            }
+            // Add points every 60 seconds
+            if (minutes % 1 === 0 && seconds === 0) {
+                points += 50;
+                updatePointsDisplay(points);
+            }
+        }
+        // Update the timer display
+        updateTimerDisplay(hours, minutes, seconds);
+    }, 1000); // Update every second
+}
+
+// Function to update the timer display
+function updateTimerDisplay(hours, minutes, seconds) {
+    // Format the time with leading zeros
+    const formattedTime = 
+        (hours < 10 ? '0' : '') + hours + ':' +
+        (minutes < 10 ? '0' : '') + minutes + ':' +
+        (seconds < 10 ? '0' : '') + seconds;
+
+    // Update the HTML element with the formatted time
+    document.getElementById('timer').textContent = formattedTime;
+}
+ 
+// Start the timer and point system when the page loads
+startTimerAndPoints();
 
 //SOCKETS ONLY NOTHING ELSE
 // Recieve drawing data from the server
