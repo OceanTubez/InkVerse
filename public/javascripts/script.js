@@ -107,21 +107,21 @@ function startDrawingOrPanning(x, y, ctrl) {
 }
 
 function fixPanning() {
+  if(screenOffsetX + screenWidth/scale > canvasWidth)
+  {
+    screenOffsetX = canvasWidth - screenWidth/scale;
+  }
+  if(screenOffsetY + screenHeight/scale > canvasHeight)
+  {
+    screenOffsetY = canvasHeight - screenHeight/scale;
+  }
   if(screenOffsetX < 0)
   {
     screenOffsetX = 0;
   }
-  if(screenOffsetX + screenWidth > canvasWidth)
-  {
-    screenOffsetX = canvasWidth - screenWidth;
-  }
   if(screenOffsetY < 0)
   {
     screenOffsetY = 0;
-  }
-  if(screenOffsetY + screenHeight > canvasHeight)
-  {
-    screenOffsetY = canvasHeight - screenHeight;
   }
 }
 function pan(x, y) {
