@@ -6,6 +6,20 @@ body {
   touch-action: pinch-zoom;
 }
 
+#drawCanvas {
+  opacity: 0;
+  z-index: 1;
+  left: 0;
+  top: 0;
+}
+
+#displayCanvas {
+  opacity: 100;
+  z-index: 100;
+  left: 0;
+  top: 0;
+}
+
 #changeColor {
 
     position: fixed;

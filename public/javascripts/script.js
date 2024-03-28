@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", (event) => {
   toggleDropdown();
   initialize();
@@ -17,6 +15,7 @@ const showcaseCTX = showcase.getContext('2d');
 // Track mouse state
 ctx.lineCap = "round";
 let isDrawing = false;
+let isPanning = false;
 let lastX = 0;
 let lastY = 0;
 
@@ -27,35 +26,46 @@ let blue = 0;
 let lineSize = 1;
 
 //Other variables
-let scale = 1.0;
 
 // Handle drawing events
 
-canvas.addEventListener('mousedown', function(e){
-  startDrawing(e.offsetX, e.offsetY);
+displayCanvas.addEventListener('mousedown', function(e){
+  startDrawingOrPanning(e.offsetX/scale, e.offsetY/scale, e.ctrlKey);
 });
-canvas.addEventListener('mousemove', function(e){
-  draw(e.offsetX, e.offsetY);
+displayCanvas.addEventListener('mousemove', function(e){
+  if (isDrawing)
+  {
+  draw(e.offsetX/scale + screenOffsetX, e.offsetY/scale + screenOffsetY);
+  }
+  if (isPanning)
+  {
+  pan(e.offsetX/scale, e.offsetY/scale);
+  }
   //socket.emit('mouse', {mouseX, mouseY})
 });
-canvas.addEventListener('mouseup', stopDrawing);
-canvas.addEventListener('mouseout', stopDrawing);
-canvas.addEventListener('touchstart', function(e) {
+displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
+displayCanvas.addEventListener('mouseout', stopDrawingOrPanning);
+displayCanvas.addEventListener('touchstart', function(e) {
   if (e.targetTouches.length == 1)
   {
-    var data = e.targetTouches[0];
-    startDrawing(data.pageX, data.pageY)
+    startDrawingOrPanning(e.targetTouches[0].pageX/scale, e.targetTouches[0].pageY/scale, false)
+  } else if (e.targetTouches.length == 2) {
+    startDrawingOrPanning(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale, true)
   }
    });
-canvas.addEventListener('touchmove', function(e) {
-  if (e.targetTouches.length == 1)
+displayCanvas.addEventListener('touchmove', function(e) {
+  if (isDrawing)
   {
-    var data = e.targetTouches[0];
-    draw(data.pageX, data.pageY)
+    draw(e.targetTouches[0].pageX/scale + screenOffsetX, e.targetTouches[0].pageY/scale + screenOffsetY)
+  }
+  if (isPanning)
+  {
+    pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale);
   }
 });
-canvas.addEventListener('touchend', stopDrawing);
-canvas.addEventListener('touchcancel', stopDrawing);
+displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
+displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
+
 
 // Start listening to resize events and draw canvas.
 
@@ -70,30 +80,71 @@ function initialize() {
 // Resets the canvas dimensions to match window,
 // then draws the new borders accordingly.
 function resizeCanvas() {
-  ctx.width = window.innerWidth;
-  ctx.height = window.innerHeight;
+  screenWidth = window.innerWidth;
+  screenHeight = window.innerHeight;
+  document.getElementById('displayCanvas').width = screenWidth;
+  document.getElementById('displayCanvas').height = screenHeight;
+  fixPanning();
+  displayContent();
 }
 
 
 
 // Drawing functions
-function startDrawing(x, y) {
-  isDrawing = true;
-  lastX = x;
-  lastY = y;
+function startDrawingOrPanning(x, y, ctrl) {
+  if (ctrl) {
+    isPanning = true;
+    isDrawing = false;
+    lastX = x;
+    lastY = y;
+  }
+  else {
+    isDrawing = true;
+    isPanning = false;
+    lastX = x + screenOffsetX;
+    lastY = y + screenOffsetY;
+  }
+}
+
+function fixPanning() {
+  if(screenOffsetX < 0)
+  {
+    screenOffsetX = 0;
+  }
+  if(screenOffsetX + screenWidth > canvasWidth)
+  {
+    screenOffsetX = canvasWidth - screenWidth;
+  }
+  if(screenOffsetY < 0)
+  {
+    screenOffsetY = 0;
+  }
+  if(screenOffsetY + screenHeight > canvasHeight)
+  {
+    screenOffsetY = canvasHeight - screenHeight;
+  }
+}
+function pan(x, y) {
+screenOffsetX += lastX - x;
+screenOffsetY += lastY - y;
+lastX = x;
+lastY = y;
+fixPanning();
+displayContent();
 }
 
 function draw(x, y) {
-  if (!isDrawing) return;
   drawLine(ctx, x, y, lastX, lastY);
+  displayContent();
   // Emit drawing data to the server
   socket.emit('draw', {lastX, lastY, x, y, red, green, blue, lineSize});
   lastX = x;
   lastY = y;
 }
 
-function stopDrawing() {
+function stopDrawingOrPanning() {
   isDrawing = false;
+  isPanning = false;
 }
 
 // Base Functions
@@ -152,21 +203,18 @@ function changeSize() {
 
 function zoomInButton() {
   playClick1();
-  scale *= 2.25;
+  scale *= 1.5;
   applyzoom();
 }
 //SUB-Heading: ZoomOutButton
 function zoomOutButton() {
   playClick1();
-  scale /= 2.25;
+  scale /= 1.5;
   applyzoom();
 }
 //SUB-Heading: Apply zoom for the buttons
 function applyzoom() {
-  //ctx.save();
-  canvas.scale(scale, scale);
-  //ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //ctx.restore();
+  displayContent()
 }
 
 //Brush functions
@@ -265,6 +313,7 @@ socket.on('draw', (data) => {
   ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
   ctx.lineWidth = data.lineSize;
   drawLine(ctx, data.x, data.y, data.lastX, data.lastY);
+  displayContent();
   //Reset to original
   ctx.restore();
 
@@ -280,9 +329,11 @@ socket.on('loadCanvas', (data) => {
 
   let img = new Image;
   img.onload = function(){
-    ctx.drawImage(img,0,0); // Or at whatever offset you like
+    ctx.drawImage(img,0,0);
+    displayContent(); // Or at whatever offset you like
   };
   img.src = data;
+
 
 })
 

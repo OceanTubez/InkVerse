@@ -6,24 +6,28 @@
         <link rel="stylesheet" href="/stylesheets/style.css">
     </head>
     <body>
+        
+        <canvas id="displayCanvas"></canvas>
         <canvas id="drawCanvas"></canvas>
         <canvas id="showcase", height="50", width="50"></canvas>
         <audio id="clickSound" href="/audio/UiClick.mp3"></audio>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript" src="/javascripts/common/browserDisplay.js"></script>
         <script type="text/javascript" src="/javascripts/common/canvas.js"></script>
         <script type="text/javascript" src="/javascripts/script.js"></script>
         <div class="dropdown-container" id="dropdownContainer">
+
             <img src="/images/logo.png" alt="Logo" id="dropimage">
             <input type="text" id="nameInput" placeholder="Enter your name">
             <button id="nameButton" onClick="toggleDropdown()">Draw!</button>
+
         </div>
 
         <div id="timer">00:00:00</div>
-        <script src="script.js"></script>
         <div id="points">0 Points</div> <!-- Element to display points -->
-        <script src="script.js"></script>
 
         <div class="ribbon" id="ribbon">
+
             <!--BLACK -->
             <button class="button" id="bigBlack" onClick="changeBrush(24,0,0,0)">
                 <img class="hover-image" src="/images/black.png" alt="brushes">
@@ -59,8 +63,7 @@
                 <img class="hover-image" src="/images/darkblue.png" alt="brushes">
             </button>
 
-
-            <!-- Color and Size changers--> 
+            <!-- Color and Size changers-->
             <button id="changeColor" onClick="changeColor()">Change Color</button>
             <button id="changeSize" onClick="changeSize()">Change Size</button>
 

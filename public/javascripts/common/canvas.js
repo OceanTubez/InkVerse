@@ -1,3 +1,6 @@
+
+
+
 const canvasWidth = 2800;
 const canvasHeight = 2400;
 
@@ -11,6 +14,7 @@ function drawLine(ctx, x, y, lastX, lastY) {
     ctx.moveTo(lastX, lastY);
     ctx.lineTo(x, y);
     ctx.stroke();
+    //displayContent();
 }
 
 module.exports = {drawLine, canvasWidth, canvasHeight};
