@@ -11,7 +11,7 @@ const {createCanvas} = require('canvas');
 const canvas = createCanvas(draw.canvasWidth, draw.canvasHeight);
 const ctx = canvas.getContext('2d');
 //NOT CURRENTLY UsING - IGNOREs
-var indexRouter = require('./routes/index');
+//var indexRouter = require('./routes/index');
 //var usersRouter = require('./routes/users');
 
 var app = express();
