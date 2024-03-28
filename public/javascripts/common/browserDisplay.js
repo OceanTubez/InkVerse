@@ -1,4 +1,4 @@
-
+let scale = 1;
 
 let screenWidth = window.innerWidth;
 let screenHeight = window.innerHeight;
@@ -15,7 +15,7 @@ if (typeof document !== 'undefined') {
 
 function displayContent() {
     displayctx.clearRect(0, 0, displayCanvas.width, displayCanvas.height)
-    displayctx.drawImage(canvas, screenOffsetX, screenOffsetY, screenWidth, screenHeight, 0, 0, screenWidth, screenHeight);
+    displayctx.drawImage(canvas, screenOffsetX, screenOffsetY, screenWidth/scale, screenHeight/scale, 0, 0, screenWidth, screenHeight);
 }
 
 module.exports = {displayContent};
