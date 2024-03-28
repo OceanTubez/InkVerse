@@ -1,5 +1,4 @@
 
-
 document.addEventListener("DOMContentLoaded", (event) => {
   toggleDropdown();
   initialize();
@@ -27,31 +26,49 @@ let scale = 1.0;
 
 // Handle drawing events
 
-canvas.addEventListener('mousedown', function(e){
-  startDrawing(e.offsetX, e.offsetY);
+displayCanvas.addEventListener('mousedown', function(e){
+  startDrawing(e.offsetX + screenOffsetX, e.offsetY + screenOffsetY);
 });
-canvas.addEventListener('mousemove', function(e){
-  draw(e.offsetX, e.offsetY);
+displayCanvas.addEventListener('mousemove', function(e){
+  draw(e.offsetX + screenOffsetX, e.offsetY + screenOffsetY);
   //socket.emit('mouse', {mouseX, mouseY})
 });
-canvas.addEventListener('mouseup', stopDrawing);
-canvas.addEventListener('mouseout', stopDrawing);
-canvas.addEventListener('touchstart', function(e) {
+displayCanvas.addEventListener('mouseup', stopDrawing);
+displayCanvas.addEventListener('mouseout', stopDrawing);
+displayCanvas.addEventListener('touchstart', function(e) {
   if (e.targetTouches.length == 1)
   {
     var data = e.targetTouches[0];
-    startDrawing(data.pageX, data.pageY)
+    startDrawing(data.pageX + screenOffsetX, data.pageY + screenOffsetY)
   }
    });
-canvas.addEventListener('touchmove', function(e) {
+displayCanvas.addEventListener('touchmove', function(e) {
   if (e.targetTouches.length == 1)
   {
     var data = e.targetTouches[0];
-    draw(data.pageX, data.pageY)
+    draw(data.pageX + screenOffsetX, data.pageY + screenOffsetY)
   }
 });
-canvas.addEventListener('touchend', stopDrawing);
-canvas.addEventListener('touchcancel', stopDrawing);
+displayCanvas.addEventListener('touchend', stopDrawing);
+displayCanvas.addEventListener('touchcancel', stopDrawing);
+document.addEventListener('keydown', function(e) {
+  switch (KeyboardEvent.key)
+  {
+    case ('leftArrow'):
+      screenOffsetX-=10;
+      return;
+    case ('rightArrow'):
+      screenOffsetX+=10;
+      return;
+    case ('downArrow'):
+      screenOffsetY-=10;
+      return;
+    case ('upArrow'):
+      screenOffsetY+=10;
+      return;
+  }
+  displayContent();
+})
 
 // Start listening to resize events and draw canvas.
 
@@ -66,8 +83,11 @@ function initialize() {
 // Resets the canvas dimensions to match window,
 // then draws the new borders accordingly.
 function resizeCanvas() {
-  ctx.width = window.innerWidth;
-  ctx.height = window.innerHeight;
+  screenWidth = window.innerWidth;
+  screenHeight = window.innerHeight;
+  document.getElementById('displayCanvas').width = screenWidth;
+  document.getElementById('displayCanvas').height = screenHeight;
+  displayContent();
 }
 
 
@@ -82,6 +102,7 @@ function startDrawing(x, y) {
 function draw(x, y) {
   if (!isDrawing) return;
   drawLine(ctx, x, y, lastX, lastY);
+  displayContent();
   // Emit drawing data to the server
   socket.emit('draw', {lastX, lastY, x, y, red, green, blue, lineSize});
   lastX = x;
@@ -183,6 +204,7 @@ socket.on('draw', (data) => {
   ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
   ctx.lineWidth = data.lineSize;
   drawLine(ctx, data.x, data.y, data.lastX, data.lastY);
+  displayContent();
   //Reset to original
   ctx.restore();
 
@@ -198,9 +220,11 @@ socket.on('loadCanvas', (data) => {
 
   let img = new Image;
   img.onload = function(){
-    ctx.drawImage(img,0,0); // Or at whatever offset you like
+    ctx.drawImage(img,0,0);
+    displayContent(); // Or at whatever offset you like
   };
   img.src = data;
+
 
 })
 
