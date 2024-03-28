@@ -94,11 +94,13 @@ function resizeCanvas() {
 function startDrawingOrPanning(x, y, ctrl) {
   if (ctrl) {
     isPanning = true;
+    isDrawing = false;
     lastX = x;
     lastY = y;
   }
   else {
     isDrawing = true;
+    isPanning = false;
     lastX = x + screenOffsetX;
     lastY = y + screenOffsetY;
   }
