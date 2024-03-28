@@ -121,7 +121,8 @@ io.on('connection', (socket) => {
   });
 });
 
-http.listen(3000, () => console.log('Server listening on port 3000'));
+//CHANGE THIS FOR FULL RELEASE!!!!!!
+http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
 
 
 module.exports = app;
