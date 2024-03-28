@@ -13,7 +13,6 @@ const socket = io('localhost:3000'); // Connect to server
 ctx.lineCap = "round";
 let isDrawing = false;
 let isPanning = false;
-let control = false;
 let lastX = 0;
 let lastY = 0;
 
@@ -28,7 +27,7 @@ let lineSize = 1;
 // Handle drawing events
 
 displayCanvas.addEventListener('mousedown', function(e){
-  startDrawing(e.offsetX/scale, e.offsetY/scale);
+  startDrawingOrPanning(e.offsetX/scale, e.offsetY/scale, e.ctrlKey);
 });
 displayCanvas.addEventListener('mousemove', function(e){
   if (isDrawing)
@@ -41,34 +40,28 @@ displayCanvas.addEventListener('mousemove', function(e){
   }
   //socket.emit('mouse', {mouseX, mouseY})
 });
-displayCanvas.addEventListener('mouseup', stopDrawing);
-displayCanvas.addEventListener('mouseout', stopDrawing);
+displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
+displayCanvas.addEventListener('mouseout', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchstart', function(e) {
   if (e.targetTouches.length == 1)
   {
-    var data = e.targetTouches[0];
-    startDrawing(data.pageX/scale + screenOffsetX, data.pageY/scale + screenOffsetY)
+    startDrawing(e.targetTouches[0].pageX/scale, e.targetTouches[0].pageY/scale, false)
+  } else if (e.targetTouches.length == 2) {
+    startDrawing(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale, true)
   }
    });
 displayCanvas.addEventListener('touchmove', function(e) {
-  if (e.targetTouches.length == 1)
+  if (isDrawing)
   {
-    var data = e.targetTouches[0];
-    draw(data.pageX/scale + screenOffsetX, data.pageY/scale + screenOffsetY)
+    draw(e.targetTouches[0].pageX/scale + screenOffsetX, e.targetTouches[0].pageY/scale + screenOffsetY)
+  }
+  if (isPanning)
+  {
+    pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale);
   }
 });
-displayCanvas.addEventListener('touchend', stopDrawing);
-displayCanvas.addEventListener('touchcancel', stopDrawing);
-//Please make these functrions instead of being in the addeventlistener block
-addEventListener('keydown', function(e) {
-  if (e.ctrlKey)
-  {
-    control = true;
-  }
-})
-addEventListener('keyup', function(e) {
-  control = false;
-})
+displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
+displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
 
 
 // Start listening to resize events and draw canvas.
@@ -88,14 +81,15 @@ function resizeCanvas() {
   screenHeight = window.innerHeight;
   document.getElementById('displayCanvas').width = screenWidth;
   document.getElementById('displayCanvas').height = screenHeight;
+  fixPanning();
   displayContent();
 }
 
 
 
 // Drawing functions
-function startDrawing(x, y) {
-  if (control) {
+function startDrawingOrPanning(x, y, ctrl) {
+  if (ctrl) {
     isPanning = true;
     lastX = x;
     lastY = y;
@@ -107,19 +101,34 @@ function startDrawing(x, y) {
   }
 }
 
+function fixPanning() {
+  if(screenOffsetX < 0)
+  {
+    screenOffsetX = 0;
+  }
+  if(screenOffsetX + screenWidth > canvasWidth)
+  {
+    screenOffsetX = canvasWidth - screenWidth;
+  }
+  if(screenOffsetY < 0)
+  {
+    screenOffsetY = 0;
+  }
+  if(screenOffsetY + screenHeight > canvasHeight)
+  {
+    screenOffsetY = canvasHeight - screenHeight;
+  }
+}
 function pan(x, y) {
 screenOffsetX += lastX - x;
 screenOffsetY += lastY - y;
-console.log(lastX-x)
-console.log(lastY-y)
 lastX = x;
 lastY = y;
-
+fixPanning();
 displayContent();
 }
 
 function draw(x, y) {
-  if (!isDrawing) return;
   drawLine(ctx, x, y, lastX, lastY);
   displayContent();
   // Emit drawing data to the server
@@ -128,7 +137,7 @@ function draw(x, y) {
   lastY = y;
 }
 
-function stopDrawing() {
+function stopDrawingOrPanning() {
   isDrawing = false;
   isPanning = false;
 }
