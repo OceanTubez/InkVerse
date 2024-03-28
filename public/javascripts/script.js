@@ -44,9 +44,9 @@ displayCanvas.addEventListener('mouseout', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchstart', function(e) {
   if (e.targetTouches.length == 1)
   {
-    startDrawing(e.targetTouches[0].pageX/scale, e.targetTouches[0].pageY/scale, false)
+    startDrawingOrPanning(e.targetTouches[0].pageX/scale, e.targetTouches[0].pageY/scale, false)
   } else if (e.targetTouches.length == 2) {
-    startDrawing(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale, true)
+    startDrawingOrPanning(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale, true)
   }
    });
 displayCanvas.addEventListener('touchmove', function(e) {
