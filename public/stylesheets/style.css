@@ -121,6 +121,22 @@ body {
   z-index: 9999; /* Ensure the text is above other content */
 }
 
+#showcase {
+  position: fixed;
+  bottom: 3%;
+  left: 95%;
+  z-index: 99999;
+}
+
+#pen-text {
+  position: fixed;
+  bottom: 8%;
+  left: 96%;
+  color: black; /* Change text color as needed */
+  font-size: 16px;
+  z-index: 99999;
+}
+
 .dropdown-container {
   position: fixed;
   top: 0;
@@ -195,3 +211,4 @@ hover-image {
     padding: 10px; /* Add padding */
     border-radius: 5px; /* Add border radius */
 }
+

@@ -1,12 +1,16 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   toggleDropdown();
   initialize();
+  redrawShowcase();
 });
 
 const canvas = document.getElementById('drawCanvas');
 const nameInput = document.getElementById('nameButton');
 const ctx = canvas.getContext('2d');
 const socket = io('localhost:3000'); // Connect to server
+
+const showcase = document.getElementById('showcase');
+const showcaseCTX = showcase.getContext('2d');
 
 // Track mouse state
 ctx.lineCap = "round";
@@ -181,14 +185,16 @@ function changeColor() {
   blue = Math.floor(Math.random()*256);
   //Inputs random numbers
   ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
+  redrawShowcase();
 }
 
 function changeSize() {
   playClick1();
   //Random linesize between 1-25
-  lineSize = Math.floor(Math.random()*24+1);
+  lineSize = Math.ceil(Math.random()*25);
   //Applies the change
   ctx.lineWidth = lineSize;
+  redrawShowcase();
           
 }
 
@@ -218,7 +224,19 @@ function changeBrush(size, r, b, g) {
     lineSize = size;
     ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")";
     ctx.lineWidth = size;
+    redrawShowcase();
 };
+
+
+function redrawShowcase() {
+  showcaseCTX.clearRect(0, 0, showcase.width, showcase.height);
+  showcaseCTX.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")"; 
+  showcaseCTX.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
+  showcaseCTX.beginPath();
+  showcaseCTX.arc(25, 25, lineSize/2, 0, 2 * Math.PI);
+  showcaseCTX.fill();
+}
+
 
 //points
 
@@ -283,12 +301,6 @@ function updateTimerDisplay(hours, minutes, seconds) {
  
 // Start the timer and point system when the page loads
 startTimerAndPoints();
-
-
-
-
-
-
 
 //SOCKETS ONLY NOTHING ELSE
 // Recieve drawing data from the server
