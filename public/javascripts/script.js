@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   initialize();
   redrawShowcase();
   refresh();
+  startTimerAndPoints();
 });
 
 const canvas = document.getElementById('drawCanvas');
@@ -255,10 +256,35 @@ function refresh() {
 function displayNames() {
   for (let i = 1; i < nameDisplay.length; i += 4) {
     if (socket.id != nameDisplay[i - 1]) {
-      displayctx.font = "24px serif"
+      displayctx.shadowOffsetX = 2;
+      displayctx.shadowOffsetY = 2;
+      displayctx.shadowColor = "rgb(255,255,255)"
+      displayctx.font = "16px serif"
+      displayctx.fillStyle = "rgb(0,0,0)";
       displayctx.fillText(nameDisplay[i], nameDisplay[i + 1], nameDisplay[i + 2])
+      displayctx.shadowOffsetX = 0;
+      displayctx.shadowOffsetY = 0;
+      drawMouse(nameDisplay[i+1], nameDisplay[i+2]);
     }
   }
+}
+
+function drawMouse(x, y) {
+  displayctx.beginPath();
+  let fillData = new Path2D();
+  fillData.moveTo(x, y);
+  drawPolygon(fillData, displayctx, x, x, y, y+13.5);
+  drawPolygon(fillData, displayctx, x, x+3, y+13.5, y+10);
+  drawPolygon(fillData, displayctx, x+3, x+5.5, y+10, y+16);
+  drawPolygon(fillData, displayctx, x+5.5, x+8, y+16, y+14);
+  drawPolygon(fillData, displayctx, x+8, x+5, y+14, y+10);
+  drawPolygon(fillData, displayctx, x+5, x+10, y+10, y+10);
+  drawPolygon(fillData, displayctx, x+10, x, y+10, y);
+  fillData.closePath();
+  displayctx.fillStyle = "rgb(255,255,255)";
+  displayctx.fill(fillData);
+  displayctx.strokeStyle = "rgb(0,0,0)";
+  displayctx.stroke();
 }
 //points
 
@@ -320,9 +346,6 @@ function updateTimerDisplay(hours, minutes, seconds) {
   // Update the HTML element with the formatted time
   document.getElementById('timer').textContent = formattedTime;
 }
-
-// Start the timer and point system when the page loads
-startTimerAndPoints();
 
 //SOCKETS ONLY NOTHING ELSE
 
