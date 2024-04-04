@@ -1,6 +1,3 @@
-
-
-
 const canvasWidth = 2800;
 const canvasHeight = 2400;
 

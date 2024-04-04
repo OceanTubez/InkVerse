@@ -26,7 +26,8 @@ let blue = 0;
 let lineSize = 1;
 
 //Other variables
-
+let vectorX = 0;
+let vectorY = 0;
 // Handle drawing events
 
 displayCanvas.addEventListener('mousedown', function(e){
@@ -127,8 +128,13 @@ function fixPanning() {
 function pan(x, y) {
 screenOffsetX += lastX - x;
 screenOffsetY += lastY - y;
+
+vectorX = x - lastX;
+vectorY = y - lastY;
+
 lastX = x;
 lastY = y;
+
 fixPanning();
 displayContent();
 }
@@ -143,8 +149,9 @@ function draw(x, y) {
 }
 
 function stopDrawingOrPanning() {
-  isDrawing = false;
   isPanning = false;
+  isDrawing = false;
+  panSlide()
 }
 
 // Base Functions
@@ -214,7 +221,8 @@ function zoomOutButton() {
 }
 //SUB-Heading: Apply zoom for the buttons
 function applyzoom() {
-  displayContent()
+  fixPanning();
+  displayContent();
 }
 
 //Brush functions
@@ -353,3 +361,54 @@ socket.on('nameConfirmed', (data) => {
 })
 
 //ONLY SOCKETS HERE
+
+//Animation Frames
+
+function panSlide() {
+  if (vectorX || vectorY)
+  {
+    if (vectorX)
+    {
+      screenOffsetX -= vectorX;
+      vectorX *= 0.8;
+      //Moves closer to 0
+      if(vectorX < 0)
+      {
+        vectorX += 0.01;
+        if (vectorX > 0)
+        {
+          vectorX = 0;
+        }
+      } else {
+        vectorX -= 0.01;
+        if (vectorX < 0)
+        {
+          vectorX = 0;
+        }
+      }
+    }
+    if (vectorY)
+    {
+    screenOffsetY -= vectorY;
+    vectorY *= 0.8;
+    if(vectorY < 0)
+      {
+        vectorY += 0.01;
+        if (vectorY > 0)
+        {
+          vectorY = 0;
+        }
+      } else {
+        vectorY -= 0.01;
+        if (vectorY < 0)
+        {
+          vectorY = 0;
+        }
+      }
+    }
+    fixPanning();
+    displayContent();
+    requestAnimationFrame(panSlide);
+  }
+}
+
