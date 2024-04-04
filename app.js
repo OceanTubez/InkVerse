@@ -23,7 +23,7 @@ const io = require('socket.io')(http);
 
 const connectedClientIDs = [];
 const clientUsernames = [];
-
+const nameLocations = [];
 
 
 //Probaly website stuff? Not sure lol
@@ -77,8 +77,22 @@ io.on('connection', (socket) => {
   socket.emit('loadCanvas', canvas.toDataURL())
 
   socket.on('mouseMovement', (data) => {
+    data.id = socket.id;
 
-    socket.broadcast.emit('mouse', data); // Broadcast mouse movement
+    let index = nameLocations.indexOf(data.id);
+    //Locates userid
+    if (index == -1)
+    {
+      nameLocations.push(data.id);
+      nameLocations.push(data.userName);
+      nameLocations.push(data.mouseX);
+      nameLocations.push(data.mouseY);
+    } else {
+      nameLocations[index+1] = data.userName;
+      nameLocations[index+2] = data.mouseX;
+      nameLocations[index+3] = data.mouseY;
+    }
+    socket.broadcast.emit('mouse', nameLocations); // Broadcast mouse movement
 
   });
 
@@ -118,6 +132,11 @@ io.on('connection', (socket) => {
     {
       clientUsernames.splice(deleteAt, 1);
       connectedClientIDs.splice(deleteAt, 1);
+    }
+    deleteAt = nameLocations.indexOf(socket.id);
+    if (deleteAt != -1)
+    {
+      nameLocations.splice(deleteAt, 4);
     }
   });
 });
