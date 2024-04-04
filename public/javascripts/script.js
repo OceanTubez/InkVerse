@@ -31,16 +31,16 @@ let vectorY = 0;
 // Handle drawing events
 
 displayCanvas.addEventListener('mousedown', function(e){
-  startDrawingOrPanning(e.offsetX/scale, e.offsetY/scale, e.ctrlKey);
+  startDrawingOrPanning(e.offsetX / scale, e.offsetY / scale, e.ctrlKey);
 });
 displayCanvas.addEventListener('mousemove', function(e){
   if (isDrawing)
   {
-  draw(e.offsetX/scale + screenOffsetX, e.offsetY/scale + screenOffsetY);
+  draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
   }
   if (isPanning)
   {
-  pan(e.offsetX/scale, e.offsetY/scale);
+  pan(e.offsetX / scale, e.offsetY / scale);
   }
   //socket.emit('mouse', {mouseX, mouseY})
 });
@@ -51,6 +51,7 @@ displayCanvas.addEventListener('touchstart', function(e) {
   {
     startDrawingOrPanning(e.targetTouches[0].pageX/scale, e.targetTouches[0].pageY/scale, false)
   } else if (e.targetTouches.length == 2) {
+    //Takes average of two touches. Ugly but it works.
     startDrawingOrPanning(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale, true)
   }
    });
@@ -61,6 +62,7 @@ displayCanvas.addEventListener('touchmove', function(e) {
   }
   if (isPanning)
   {
+    //Takes average of two touches. Ugly but it works.
     pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale);
   }
 });
@@ -108,6 +110,7 @@ function startDrawingOrPanning(x, y, ctrl) {
 }
 
 function fixPanning() {
+  //Fixes the screen panning.
   if(screenOffsetX + screenWidth/scale > canvasWidth)
   {
     screenOffsetX = canvasWidth - screenWidth/scale;
@@ -125,10 +128,12 @@ function fixPanning() {
     screenOffsetY = 0;
   }
 }
+
 function pan(x, y) {
+  //Moves pan and loads it
 screenOffsetX += lastX - x;
 screenOffsetY += lastY - y;
-
+//Only useful for sliding
 vectorX = x - lastX;
 vectorY = y - lastY;
 
@@ -213,13 +218,13 @@ function zoomInButton() {
   scale *= 1.5;
   applyzoom();
 }
-//SUB-Heading: ZoomOutButton
+
 function zoomOutButton() {
   playClick1();
   scale /= 1.5;
   applyzoom();
 }
-//SUB-Heading: Apply zoom for the buttons
+
 function applyzoom() {
   fixPanning();
   displayContent();
@@ -239,6 +244,7 @@ function changeBrush(size, r, b, g) {
 
 
 function redrawShowcase() {
+  //Loads the showcase pen stuff.
   showcaseCTX.clearRect(0, 0, showcase.width, showcase.height);
   showcaseCTX.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")"; 
   showcaseCTX.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
@@ -365,13 +371,14 @@ socket.on('nameConfirmed', (data) => {
 //Animation Frames
 
 function panSlide() {
+  //Slides the pan based on the vector speed.
   if (vectorX || vectorY)
   {
     if (vectorX)
     {
       screenOffsetX -= vectorX;
       vectorX *= 0.8;
-      //Moves closer to 0
+      //This if statement moves the vector closer to 0.
       if(vectorX < 0)
       {
         vectorX += 0.01;
@@ -391,6 +398,7 @@ function panSlide() {
     {
     screenOffsetY -= vectorY;
     vectorY *= 0.8;
+    //This if statement moves the vector closer to 0.
     if(vectorY < 0)
       {
         vectorY += 0.01;
@@ -406,6 +414,7 @@ function panSlide() {
         }
       }
     }
+    //Loads images and makes a new animation frame.
     fixPanning();
     displayContent();
     requestAnimationFrame(panSlide);
