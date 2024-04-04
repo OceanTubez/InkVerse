@@ -222,7 +222,13 @@ function zoomInButton() {
 function zoomOutButton() {
   playClick1();
   scale /= 1.5;
+  if (screenWidth/scale < canvasWidth)
+  {
   applyzoom();
+  } else {
+    scale *= 1.5;
+    alert("Zoom too large.");
+  }
 }
 
 function applyzoom() {
