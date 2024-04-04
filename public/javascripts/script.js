@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   toggleDropdown();
   initialize();
   redrawShowcase();
+  refresh();
 });
 
 const canvas = document.getElementById('drawCanvas');
@@ -42,17 +43,13 @@ displayCanvas.addEventListener('mousemove', function(e){
   {
   pan(e.offsetX / scale, e.offsetY / scale);
   }
-
+  const userName = document.getElementById("username").textContent
+  if (userName) {
   const mouseX = e.clientX / scale;
   const mouseY = e.clientY / scale;
 
-  var data;
-
-  data.mouseX = e.clientX / scale;
-  data.mouseY = e.clientY / scale;
-
-  socket.emit('mouseMovementIncoming', data);
-
+  socket.emit('mouseMovement', {mouseX, mouseY, userName});
+  }
 });
 displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
 displayCanvas.addEventListener('mouseout', stopDrawingOrPanning);
@@ -267,6 +264,12 @@ function redrawShowcase() {
   showcaseCTX.fill();
 }
 
+function refresh() {
+  fixPanning();
+  displayContent()
+  requestAnimationFrame(refresh);
+}
+
 
 //points
 
@@ -333,6 +336,13 @@ function updateTimerDisplay(hours, minutes, seconds) {
 startTimerAndPoints();
 
 //SOCKETS ONLY NOTHING ELSE
+
+socket.on('mouse', (data) => {
+
+  displayctx.fillText(data.userName, data.mouseX, data.mouseY);
+
+});
+
 // Recieve drawing data from the server
 socket.on('draw', (data) => {
   //save data
@@ -346,17 +356,6 @@ socket.on('draw', (data) => {
   ctx.restore();
 
 });
-
-socket.on('mouseMovementOutgoing', (data) => {
-
-  var X = data.mousepositions.mouseX
-  var Y = data.mousepositions.mouseY
-
-  var username = data.username
-
-  displayctx.fillText(username, X, Y);
-
-})
 
 socket.on('loadCanvas', (data) => {
 

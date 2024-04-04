@@ -76,6 +76,12 @@ io.on('connection', (socket) => {
   console.log("connecting");  
   socket.emit('loadCanvas', canvas.toDataURL())
 
+  socket.on('mouseMovement', (data) => {
+
+    socket.broadcast.emit('mouse', data); // Broadcast mouse movement
+
+  });
+
   socket.on('draw', (data) => {
 
     ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
@@ -102,6 +108,7 @@ io.on('connection', (socket) => {
 
   }); 
 
+
   // MY REPO IS BROKEN, UH GOTTA FIX MY NODE MODULE.
 
 
@@ -112,14 +119,6 @@ io.on('connection', (socket) => {
       clientUsernames.splice(deleteAt, 1);
       connectedClientIDs.splice(deleteAt, 1);
     }
-  });
-  socket.on('mouseMovementIncoming', (data) => {
-    var newData;
-
-    newData.username = clientUsernames[connectedClientIDs.indexOf(socket.id)]
-    newData.mousepositions = data
-    socket.broadcast.emit('mouseMovementOutgoing', newData); // Broadcast mouse movement (I MADE THIS ZELLA WATT)
-
   });
 });
 //CHANGE THIS FOR FULL RELEASE!!!!!!
