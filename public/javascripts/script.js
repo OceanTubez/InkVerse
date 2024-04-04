@@ -42,7 +42,17 @@ displayCanvas.addEventListener('mousemove', function(e){
   {
   pan(e.offsetX / scale, e.offsetY / scale);
   }
-  //socket.emit('mouse', {mouseX, mouseY})
+
+  const mouseX = e.clientX / scale;
+  const mouseY = e.clientY / scale;
+
+  var data;
+
+  data.mouseX = e.clientX / scale;
+  data.mouseY = e.clientY / scale;
+
+  socket.emit('mouseMovementIncoming', data);
+
 });
 displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
 displayCanvas.addEventListener('mouseout', stopDrawingOrPanning);
@@ -139,7 +149,6 @@ vectorY = y - lastY;
 
 lastX = x;
 lastY = y;
-
 fixPanning();
 displayContent();
 }
@@ -156,8 +165,7 @@ function draw(x, y) {
 function stopDrawingOrPanning() {
   isPanning = false;
   isDrawing = false;
-  panSlide()
-}
+  panSlide()}
 
 // Base Functions
 function playClick1() {
@@ -212,7 +220,7 @@ function changeSize() {
           
 }
 
-
+//Zoom stuff
 function zoomInButton() {
   playClick1();
   scale *= 1.5;
@@ -233,7 +241,7 @@ function zoomOutButton() {
 
 function applyzoom() {
   fixPanning();
-  displayContent();
+  displayContent()
 }
 
 //Brush functions
@@ -250,7 +258,7 @@ function changeBrush(size, r, b, g) {
 
 
 function redrawShowcase() {
-  //Loads the showcase pen stuff.
+  //Displays the current pen
   showcaseCTX.clearRect(0, 0, showcase.width, showcase.height);
   showcaseCTX.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")"; 
   showcaseCTX.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
@@ -339,9 +347,14 @@ socket.on('draw', (data) => {
 
 });
 
-socket.on('mouse', (data) => {
+socket.on('mouseMovementOutgoing', (data) => {
 
-  console.log("empty");
+  var X = data.mousepositions.mouseX
+  var Y = data.mousepositions.mouseY
+
+  var username = data.username
+
+  displayctx.fillText(username, X, Y);
 
 })
 
@@ -426,4 +439,3 @@ function panSlide() {
     requestAnimationFrame(panSlide);
   }
 }
-

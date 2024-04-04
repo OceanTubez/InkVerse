@@ -97,7 +97,6 @@ io.on('connection', (socket) => {
       clientUsernames.push(data);
       connectedClientIDs.push(socket.id);
       userName = data;
-      
 
     }
 
@@ -114,13 +113,15 @@ io.on('connection', (socket) => {
       connectedClientIDs.splice(deleteAt, 1);
     }
   });
-  socket.on('mouse', (data) => {
+  socket.on('mouseMovementIncoming', (data) => {
+    var newData;
 
-    socket.broadcast.emit('mouse', data); // Broadcast mouse movement (I MADE THIS ZELLA WATT)
+    newData.username = clientUsernames[connectedClientIDs.indexOf(socket.id)]
+    newData.mousepositions = data
+    socket.broadcast.emit('mouseMovementOutgoing', newData); // Broadcast mouse movement (I MADE THIS ZELLA WATT)
 
   });
 });
-
 //CHANGE THIS FOR FULL RELEASE!!!!!!
 http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
 
