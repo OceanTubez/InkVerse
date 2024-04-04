@@ -109,7 +109,7 @@ body {
   right: 20px; /* Adjust position as needed */
   color: black; /* Change text color as needed */
   font-size: 14px; /* Adjust font size as needed */
-  z-index: 9999; /* Ensure the text is above other content */
+  z-index: 99999; /* Ensure the text is above other content */
 }
 
 #username {
@@ -121,17 +121,30 @@ body {
   z-index: 9999; /* Ensure the text is above other content */
 }
 
+#rectangle{
+  width:200px;
+  height:100px;
+  background:grey;
+  opacity: 0.9;
+  position: fixed;
+  bottom: 0%;
+  left: 91.75%;
+  border-radius: 25px;
+  z-index: 99998;
+  border-radius: 40px 0px 0px 0px;
+}
+
 #showcase {
   position: fixed;
-  bottom: 3%;
+  bottom: 4%;
   left: 95%;
   z-index: 99999;
 }
 
 #pen-text {
   position: fixed;
-  bottom: 8%;
-  left: 96%;
+  bottom: 6%;
+  left: 93%;
   color: black; /* Change text color as needed */
   font-size: 16px;
   z-index: 99999;
