@@ -28,8 +28,8 @@ let blue = 0;
 let lineSize = 1;
 
 //Other variables
-let vectorX = 0;
-let vectorY = 0;
+let panSpeedX = 0;
+let panSpeedY = 0;
 const nameDisplay = [];
 // Handle drawing events
 
@@ -132,8 +132,8 @@ function pan(x, y) {
   screenOffsetX += lastX - x;
   screenOffsetY += lastY - y;
   //Only useful for sliding
-  vectorX = x - lastX;
-  vectorY = y - lastY;
+  panSpeedX = x - lastX;
+  panSpeedY = y - lastY;
 
   lastX = x;
   lastY = y;
@@ -246,25 +246,20 @@ function redrawShowcase() {
   showcaseCTX.fill();
 }
 
-function refresh() {
-  fixPanning();
-  displayContent();
-  displayNames();
-  requestAnimationFrame(refresh);
-}
-
 function displayNames() {
   for (let i = 1; i < nameDisplay.length; i += 4) {
     if (socket.id != nameDisplay[i - 1]) {
+      //Write text
       displayctx.shadowOffsetX = 2;
       displayctx.shadowOffsetY = 2;
       displayctx.shadowColor = "rgb(255,255,255)"
       displayctx.font = "16px serif"
       displayctx.fillStyle = "rgb(0,0,0)";
       displayctx.fillText(nameDisplay[i], nameDisplay[i + 1], nameDisplay[i + 2])
+      //DrawMouse
       displayctx.shadowOffsetX = 0;
       displayctx.shadowOffsetY = 0;
-      drawMouse(nameDisplay[i+1], nameDisplay[i+2]);
+      drawMouse(nameDisplay[i + 1], nameDisplay[i + 2]);
     }
   }
 }
@@ -273,13 +268,13 @@ function drawMouse(x, y) {
   displayctx.beginPath();
   let fillData = new Path2D();
   fillData.moveTo(x, y);
-  drawPolygon(fillData, displayctx, x, x, y, y+13.5);
-  drawPolygon(fillData, displayctx, x, x+3, y+13.5, y+10);
-  drawPolygon(fillData, displayctx, x+3, x+5.5, y+10, y+16);
-  drawPolygon(fillData, displayctx, x+5.5, x+8, y+16, y+14);
-  drawPolygon(fillData, displayctx, x+8, x+5, y+14, y+10);
-  drawPolygon(fillData, displayctx, x+5, x+10, y+10, y+10);
-  drawPolygon(fillData, displayctx, x+10, x, y+10, y);
+  drawPolygon(fillData, displayctx, x, x, y, y + 13.5);
+  drawPolygon(fillData, displayctx, x, x + 3, y + 13.5, y + 10);
+  drawPolygon(fillData, displayctx, x + 3, x + 5.5, y + 10, y + 16);
+  drawPolygon(fillData, displayctx, x + 5.5, x + 8, y + 16, y + 14);
+  drawPolygon(fillData, displayctx, x + 8, x + 5, y + 14, y + 10);
+  drawPolygon(fillData, displayctx, x + 5, x + 10, y + 10, y + 10);
+  drawPolygon(fillData, displayctx, x + 10, x, y + 10, y);
   fillData.closePath();
   displayctx.fillStyle = "rgb(255,255,255)";
   displayctx.fill(fillData);
@@ -399,38 +394,45 @@ socket.on('nameConfirmed', (data) => {
 
 //Animation Frames
 
+function refresh() {
+  fixPanning();
+  displayContent();
+  displayNames();
+  requestAnimationFrame(refresh);
+}
+
 function panSlide() {
   //Slides the pan based on the vector speed.
-  if (vectorX || vectorY) {
-    if (vectorX) {
-      screenOffsetX -= vectorX;
-      vectorX *= 0.8;
+  if (panSpeedX || panSpeedY) {
+    if (panSpeedX) {
+      screenOffsetX -= panSpeedX;
+      panSpeedX *= 0.8;
       //This if statement moves the vector closer to 0.
-      if (vectorX < 0) {
-        vectorX += 0.01;
-        if (vectorX > 0) {
-          vectorX = 0;
+      if (panSpeedX < 0) {
+        panSpeedX += 0.01;
+        if (panSpeedX > 0) {
+          panSpeedX = 0;
         }
       } else {
-        vectorX -= 0.01;
-        if (vectorX < 0) {
-          vectorX = 0;
+        panSpeedX -= 0.01;
+        if (panSpeedX < 0) {
+          panSpeedX = 0;
         }
       }
     }
-    if (vectorY) {
-      screenOffsetY -= vectorY;
-      vectorY *= 0.8;
+    if (panSpeedY) {
+      screenOffsetY -= panSpeedY;
+      panSpeedY *= 0.8;
       //This if statement moves the vector closer to 0.
-      if (vectorY < 0) {
-        vectorY += 0.01;
-        if (vectorY > 0) {
-          vectorY = 0;
+      if (panSpeedY < 0) {
+        panSpeedY += 0.01;
+        if (panSpeedY > 0) {
+          panSpeedY = 0;
         }
       } else {
-        vectorY -= 0.01;
-        if (vectorY < 0) {
-          vectorY = 0;
+        panSpeedY -= 0.01;
+        if (panSpeedY < 0) {
+          panSpeedY = 0;
         }
       }
     }
