@@ -124,7 +124,7 @@ body {
 #rectangle{
   width:30%;
   height:10%;
-  background:grey;
+  background:rgb(152, 151, 151);
   opacity: 0.9;
   position: fixed;
   bottom: 0%;
