@@ -23,7 +23,7 @@ const io = require('socket.io')(http);
 
 const connectedClientIDs = [];
 const clientUsernames = [];
-
+const nameLocations = [];
 
 
 //Probaly website stuff? Not sure lol
@@ -76,6 +76,26 @@ io.on('connection', (socket) => {
   console.log("connecting");  
   socket.emit('loadCanvas', canvas.toDataURL())
 
+  socket.on('mouseMovement', (data) => {
+    data.id = socket.id;
+
+    let index = nameLocations.indexOf(data.id);
+    //Locates userid
+    if (index == -1)
+    {
+      nameLocations.push(data.id);
+      nameLocations.push(data.userName);
+      nameLocations.push(data.mouseX);
+      nameLocations.push(data.mouseY);
+    } else {
+      nameLocations[index+1] = data.userName;
+      nameLocations[index+2] = data.mouseX;
+      nameLocations[index+3] = data.mouseY;
+    }
+    socket.broadcast.emit('mouse', nameLocations); // Broadcast mouse movement
+
+  });
+
   socket.on('draw', (data) => {
 
     ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
@@ -97,11 +117,11 @@ io.on('connection', (socket) => {
       clientUsernames.push(data);
       connectedClientIDs.push(socket.id);
       userName = data;
-      
 
     }
 
   }); 
+
 
   // MY REPO IS BROKEN, UH GOTTA FIX MY NODE MODULE.
 
@@ -113,14 +133,13 @@ io.on('connection', (socket) => {
       clientUsernames.splice(deleteAt, 1);
       connectedClientIDs.splice(deleteAt, 1);
     }
-  });
-  socket.on('mouse', (data) => {
-
-    socket.broadcast.emit('mouse', data); // Broadcast mouse movement (I MADE THIS ZELLA WATT)
-
+    deleteAt = nameLocations.indexOf(socket.id);
+    if (deleteAt != -1)
+    {
+      nameLocations.splice(deleteAt, 4);
+    }
   });
 });
-
 //CHANGE THIS FOR FULL RELEASE!!!!!!
 http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
 

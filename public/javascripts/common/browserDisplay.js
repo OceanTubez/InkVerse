@@ -21,5 +21,5 @@ function displayContent() {
     displayctx.drawImage(canvas, screenOffsetX, screenOffsetY, screenWidth/scale, screenHeight/scale, 0, 0, screenWidth, screenHeight);
 }
 
-module.exports = {displayContent};
+module.exports = {displayContent, displayctx};
 //NOTE: not an error.

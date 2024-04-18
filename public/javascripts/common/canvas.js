@@ -16,5 +16,11 @@ function drawLine(ctx, x, y, lastX, lastY) {
     ctx.stroke();
 }
 
-module.exports = {drawLine, canvasWidth, canvasHeight};
+function drawPolygon(filldata, ctx, x1, x2, y1, y2) {
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    filldata.lineTo(x2,y2);
+}
+
+module.exports = {drawLine, canvasWidth, canvasHeight, drawPolygon};
 //NOTE: not an error.
