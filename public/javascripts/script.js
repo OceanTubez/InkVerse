@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   toggleDropdown();
   initialize();
   redrawShowcase();
+  loadingScreen();
   refresh();
   startTimerAndPoints();
 });
@@ -30,6 +31,7 @@ let lineSize = 1;
 //Other variables
 let panSpeedX = 0;
 let panSpeedY = 0;
+let loading = true;
 const nameDisplay = [];
 // Handle drawing events
 
@@ -368,11 +370,10 @@ socket.on('loadCanvas', (data) => {
   img.onload = function () {
     ctx.drawImage(img, 0, 0);
     displayContent(); // Or at whatever offset you like
+    document.getElementById("Loading").remove();
+    loading = false;
   };
   img.src = data;
-  document.getElementById("Loading").remove();
-
-
 })
 
 socket.on('nameConfirmed', (data) => {
@@ -398,6 +399,13 @@ function refresh() {
   displayContent();
   displayNames();
   requestAnimationFrame(refresh);
+}
+
+function loadingScreen() {
+  document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
+  if (loading == true) {
+  requestAnimationFrame(loadingScreen);
+  }
 }
 
 function panSlide() {
