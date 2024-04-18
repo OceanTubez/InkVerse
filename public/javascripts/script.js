@@ -66,16 +66,17 @@ displayCanvas.addEventListener('touchstart', function (e) {
 });
 displayCanvas.addEventListener('touchmove', function (e) {
   if (userName) {
-  if (isDrawing) {
-    draw(e.targetTouches[0].pageX / scale + screenOffsetX, e.targetTouches[0].pageY / scale + screenOffsetY)
-  } else if (isPanning) {
-    //Takes average of two touches. Ugly but it works.
-    pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX) / 2) / scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY) / 2) / scale);
-  } else {
-    mouseX = e.targetTouches[0].pageX / scale + screenOffsetX;
-    mouseY = e.targetTouches[0].pageY / scale + screenOffsetY;
-    socket.emit('mouseMovement', { MouseX, mouseY, userName })
-  }}
+    if (isDrawing) {
+      draw(e.targetTouches[0].pageX / scale + screenOffsetX, e.targetTouches[0].pageY / scale + screenOffsetY)
+    } else if (isPanning) {
+      //Takes average of two touches. Ugly but it works.
+      pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX) / 2) / scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY) / 2) / scale);
+    } else {
+      mouseX = e.targetTouches[0].pageX / scale + screenOffsetX;
+      mouseY = e.targetTouches[0].pageY / scale + screenOffsetY;
+      socket.emit('mouseMovement', { MouseX, mouseY, userName })
+    }
+  }
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
