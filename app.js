@@ -20,10 +20,8 @@ var app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 //Locate users
-
-const connectedClientIDs = [];
-const clientUsernames = [];
-const nameLocations = [];
+//Stored in this fashion: user-id, username, x, y.
+const userInfo = [];
 
 
 //Probaly website stuff? Not sure lol
@@ -75,24 +73,17 @@ io.on('connection', (socket) => {
 
   console.log("connecting");  
   socket.emit('loadCanvas', canvas.toDataURL())
+  socket.emit('mouse', userInfo);
 
   socket.on('mouseMovement', (data) => {
-    data.id = socket.id;
 
-    let index = nameLocations.indexOf(data.id);
-    //Locates userid
-    if (index == -1)
-    {
-      nameLocations.push(data.id);
-      nameLocations.push(data.userName);
-      nameLocations.push(data.mouseX);
-      nameLocations.push(data.mouseY);
-    } else {
-      nameLocations[index+1] = data.userName;
-      nameLocations[index+2] = data.mouseX;
-      nameLocations[index+3] = data.mouseY;
-    }
-    socket.broadcast.emit('mouse', nameLocations); // Broadcast mouse movement
+    let index = userInfo.indexOf(socket.id);
+
+    userInfo[index+1] = data.userName;
+    userInfo[index+2] = data.mouseX;
+    userInfo[index+3] = data.mouseY;
+    
+    socket.broadcast.emit('mouse', userInfo); // Broadcast mouse movement
 
   });
 
@@ -103,20 +94,29 @@ io.on('connection', (socket) => {
     draw.drawLine(ctx, data.x, data.y, data.lastX, data.lastY);
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
 
+    let index = userInfo.indexOf(socket.id);
+
+    userInfo[index+1] = data.userName;
+    userInfo[index+2] = data.x;
+    userInfo[index+3] = data.y;
+    
+    socket.broadcast.emit('mouse', userInfo);
+
   });
 
   socket.on('sentNameData', (data) => {
 
-    if (clientUsernames.includes(data)) {
+    if (userInfo.includes(data)) {
 
       socket.emit('nameConfirmed', {b: false, name: data});
 
     } else {
       socket.emit('nameConfirmed', {b: true, name: data});
 
-      clientUsernames.push(data);
-      connectedClientIDs.push(socket.id);
-      userName = data;
+      userInfo.push(socket.id);
+      userInfo.push(data);
+      userInfo.push(draw.canvasWidth+100);
+      userInfo.push(draw.canvasHeight+100);
 
     }
 
@@ -127,17 +127,12 @@ io.on('connection', (socket) => {
 
 
   socket.on('disconnect', (notUsed) => {
-    let deleteAt = connectedClientIDs.indexOf(socket.id)
+    let deleteAt = userInfo.indexOf(socket.id)
     if (deleteAt != -1)
     {
-      clientUsernames.splice(deleteAt, 1);
-      connectedClientIDs.splice(deleteAt, 1);
+      userInfo.splice(deleteAt, 4);
     }
-    deleteAt = nameLocations.indexOf(socket.id);
-    if (deleteAt != -1)
-    {
-      nameLocations.splice(deleteAt, 4);
-    }
+    socket.broadcast.emit('mouse', userInfo);
   });
 });
 //CHANGE THIS FOR FULL RELEASE!!!!!!

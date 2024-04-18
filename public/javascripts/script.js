@@ -20,6 +20,8 @@ let isDrawing = false;
 let isPanning = false;
 let lastX = 0;
 let lastY = 0;
+let mouseX = 0;
+let mouseY = 0;
 
 //Track pen colors and size
 let red = 0;
@@ -30,6 +32,7 @@ let lineSize = 1;
 //Other variables
 let panSpeedX = 0;
 let panSpeedY = 0;
+let userName = "";
 const nameDisplay = [];
 // Handle drawing events
 
@@ -37,18 +40,18 @@ displayCanvas.addEventListener('mousedown', function (e) {
   startDrawingOrPanning(e.offsetX / scale, e.offsetY / scale, e.ctrlKey);
 });
 displayCanvas.addEventListener('mousemove', function (e) {
-  if (isDrawing) {
-    draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
-  }
-  if (isPanning) {
-    pan(e.offsetX / scale, e.offsetY / scale);
-  }
-  const userName = document.getElementById("username").textContent
   if (userName) {
-    const mouseX = e.clientX / scale;
-    const mouseY = e.clientY / scale;
-
-    socket.emit('mouseMovement', { mouseX, mouseY, userName });
+    if (isDrawing) {
+      draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
+    }
+    else if (isPanning) {
+      pan(e.offsetX / scale, e.offsetY / scale);
+    }
+    else {
+      mouseX = e.offsetX / scale + offsetX;
+      mouseY = e.offsetY / scale + offsetY;
+      socket.emit('mouseMovement', { mouseX, mouseY, userName });
+    }
   }
 });
 displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
@@ -62,13 +65,17 @@ displayCanvas.addEventListener('touchstart', function (e) {
   }
 });
 displayCanvas.addEventListener('touchmove', function (e) {
+  if (userName) {
   if (isDrawing) {
     draw(e.targetTouches[0].pageX / scale + screenOffsetX, e.targetTouches[0].pageY / scale + screenOffsetY)
-  }
-  if (isPanning) {
+  } else if (isPanning) {
     //Takes average of two touches. Ugly but it works.
     pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX) / 2) / scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY) / 2) / scale);
-  }
+  } else {
+    mouseX = e.targetTouches[0].pageX / scale + screenOffsetX;
+    mouseY = e.targetTouches[0].pageY / scale + screenOffsetY;
+    socket.emit('mouseMovement', { MouseX, mouseY, userName })
+  }}
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
@@ -131,6 +138,11 @@ function pan(x, y) {
   //Moves pan and loads it
   screenOffsetX += lastX - x;
   screenOffsetY += lastY - y;
+
+  mouseX = x + offsetX;
+  mouseY = y + offsetY;
+  socket.emit('mouseMovement', { MouseX, mouseY, userName })
+
   //Only useful for sliding
   panSpeedX = x - lastX;
   panSpeedY = y - lastY;
@@ -143,7 +155,10 @@ function draw(x, y) {
   drawLine(ctx, x, y, lastX, lastY);
   displayContent();
   // Emit drawing data to the server
-  socket.emit('draw', { lastX, lastY, x, y, red, green, blue, lineSize });
+  socket.emit('draw', { userName, lastX, lastY, x, y, red, green, blue, lineSize });
+  mouseX = x;
+  mouseY = y;
+  socket.emit('mouseMovement', { MouseX, mouseY, userName })
   lastX = x;
   lastY = y;
 }
@@ -381,6 +396,7 @@ socket.on('nameConfirmed', (data) => {
 
   if (data.b == true) {
     usernameDisplay.textContent = data.name;
+    userName = data.name;
   } else {
 
     document.getElementById("nameInput").value = "";
