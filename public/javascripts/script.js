@@ -48,8 +48,8 @@ displayCanvas.addEventListener('mousemove', function (e) {
       pan(e.offsetX / scale, e.offsetY / scale);
     }
     else {
-      mouseX = e.offsetX / scale + offsetX;
-      mouseY = e.offsetY / scale + offsetY;
+      mouseX = e.offsetX / scale + screenOffsetX;
+      mouseY = e.offsetY / scale + screenOffsetY;
       socket.emit('mouseMovement', { mouseX, mouseY, userName });
     }
   }
@@ -140,16 +140,16 @@ function pan(x, y) {
   screenOffsetX += lastX - x;
   screenOffsetY += lastY - y;
 
-  mouseX = x + offsetX;
-  mouseY = y + offsetY;
-  socket.emit('mouseMovement', { MouseX, mouseY, userName })
-
   //Only useful for sliding
   panSpeedX = x - lastX;
   panSpeedY = y - lastY;
 
   lastX = x;
   lastY = y;
+
+  mouseX = x + screenOffsetX;
+  mouseY = y + screenOffsetY;
+  socket.emit('mouseMovement', { mouseX, mouseY, userName })
 }
 
 function draw(x, y) {
@@ -157,9 +157,6 @@ function draw(x, y) {
   displayContent();
   // Emit drawing data to the server
   socket.emit('draw', { userName, lastX, lastY, x, y, red, green, blue, lineSize });
-  mouseX = x;
-  mouseY = y;
-  socket.emit('mouseMovement', { MouseX, mouseY, userName })
   lastX = x;
   lastY = y;
 }
@@ -271,11 +268,11 @@ function displayNames() {
       displayctx.shadowColor = "rgb(255,255,255)"
       displayctx.font = "16px serif"
       displayctx.fillStyle = "rgb(0,0,0)";
-      displayctx.fillText(nameDisplay[i], nameDisplay[i + 1], nameDisplay[i + 2])
+      displayctx.fillText(nameDisplay[i], nameDisplay[i + 1] - screenOffsetX, nameDisplay[i + 2] - screenOffsetY)
       //DrawMouse
       displayctx.shadowOffsetX = 0;
       displayctx.shadowOffsetY = 0;
-      drawMouse(nameDisplay[i + 1], nameDisplay[i + 2]);
+      drawMouse(nameDisplay[i + 1] - screenOffsetX, nameDisplay[i + 2] - screenOffsetY);
     }
   }
 }
@@ -423,7 +420,7 @@ function panSlide() {
   if (panSpeedX || panSpeedY) {
     if (panSpeedX) {
       screenOffsetX -= panSpeedX;
-      panSpeedX *= 0.8;
+      panSpeedX *= 0.83;
       //This if statement moves the vector closer to 0.
       if (panSpeedX < 0) {
         panSpeedX += 0.01;
@@ -439,7 +436,7 @@ function panSlide() {
     }
     if (panSpeedY) {
       screenOffsetY -= panSpeedY;
-      panSpeedY *= 0.8;
+      panSpeedY *= 0.83;
       //This if statement moves the vector closer to 0.
       if (panSpeedY < 0) {
         panSpeedY += 0.01;
