@@ -224,7 +224,6 @@ function changeSize() {
 function zoomInButton() {
   playClick1();
   scale *= 1.5;
-  applyzoom();
 }
 
 function zoomOutButton() {
@@ -268,11 +267,11 @@ function displayNames() {
       displayctx.shadowColor = "rgb(255,255,255)"
       displayctx.font = "16px serif"
       displayctx.fillStyle = "rgb(0,0,0)";
-      displayctx.fillText(nameDisplay[i], nameDisplay[i + 1] - screenOffsetX, nameDisplay[i + 2] - screenOffsetY)
+      displayctx.fillText(nameDisplay[i], nameDisplay[i + 1] * scale - screenOffsetX, nameDisplay[i + 2] * scale - screenOffsetY)
       //DrawMouse
       displayctx.shadowOffsetX = 0;
       displayctx.shadowOffsetY = 0;
-      drawMouse(nameDisplay[i + 1] - screenOffsetX, nameDisplay[i + 2] - screenOffsetY);
+      drawMouse(nameDisplay[i + 1] * scale - screenOffsetX, nameDisplay[i + 2] * scale - screenOffsetY);
     }
   }
 }
