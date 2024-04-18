@@ -102,16 +102,6 @@ body {
     z-index: 9999; /* Ensure the ribbon is above other content */
 }
 
-
-#footer-text {
-  position: fixed;
-  bottom: 20px; /* Adjust position as needed */
-  right: 20px; /* Adjust position as needed */
-  color: black; /* Change text color as needed */
-  font-size: 14px; /* Adjust font size as needed */
-  z-index: 99999; /* Ensure the text is above other content */
-}
-
 #username {
   position: fixed;
   bottom: 20px; /* Adjust position as needed */
@@ -121,17 +111,29 @@ body {
   z-index: 9999; /* Ensure the text is above other content */
 }
 
+
+#footer-text {
+  position: fixed;
+  bottom: 20px; /* Adjust position as needed */
+  right: 20px; /* Adjust position as needed */
+  color: black; /* Change text color as needed */
+  font-size: 90%; /* Adjust font size as needed */
+  z-index: 99999; /* Ensure the text is above other content */
+}
+
 #rectangle{
-  width:200px;
-  height:100px;
-  background:grey;
+  width:30%;
+  height:10%;
+  background:rgb(152, 151, 151);
   opacity: 0.9;
   position: fixed;
   bottom: 0%;
-  left: 91.75%;
+  left: 88%;
   border-radius: 25px;
   z-index: 99998;
   border-radius: 40px 0px 0px 0px;
+  overflow: hidden; /* Hide overflowing content */
+  word-wrap: break-word; /* Wrap long words to prevent overflow */
 }
 
 #showcase {
@@ -146,7 +148,7 @@ body {
   bottom: 6%;
   left: 93%;
   color: black; /* Change text color as needed */
-  font-size: 16px;
+  font-size: 90%;
   z-index: 99999;
 }
 
