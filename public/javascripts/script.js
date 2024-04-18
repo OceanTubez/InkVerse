@@ -314,15 +314,13 @@ function startTimerAndPoints() {
     if (seconds >= 60) {
       seconds = 0;
       minutes++;
+      // Add points every 60 seconds
+      points += 50;
+      updatePointsDisplay(points);
       // If minutes reach 60, reset minutes and increment hours
       if (minutes >= 60) {
         minutes = 0;
         hours++;
-      }
-      // Add points every 60 seconds
-      if (minutes % 1 === 0 && seconds === 0) {
-        points += 50;
-        updatePointsDisplay(points);
       }
     }
     // Update the timer display
@@ -372,6 +370,7 @@ socket.on('loadCanvas', (data) => {
     displayContent(); // Or at whatever offset you like
   };
   img.src = data;
+  document.getElementById("Loading").remove();
 
 
 })
