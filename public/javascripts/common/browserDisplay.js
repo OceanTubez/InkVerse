@@ -13,8 +13,7 @@ if (typeof document !== 'undefined') {
     //Loads a canvas with the browser size - This is then used to view the real canvas
     document.getElementById("displayCanvas").width = screenWidth;
     document.getElementById("displayCanvas").height = screenHeight;
-};
-
+}
 function displayContent() {
     //Clears the content and then redraws it. Copies from the real canvas
     displayctx.clearRect(0, 0, displayCanvas.width, displayCanvas.height)

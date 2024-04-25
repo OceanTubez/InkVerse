@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   toggleDropdown();
   initialize();
   redrawShowcase();
+  loadingScreen();
   refresh();
   startTimerAndPoints();
 });
@@ -30,6 +31,7 @@ let lineSize = 1;
 //Other variables
 let panSpeedX = 0;
 let panSpeedY = 0;
+let loading = true;
 const nameDisplay = [];
 // Handle drawing events
 
@@ -314,15 +316,13 @@ function startTimerAndPoints() {
     if (seconds >= 60) {
       seconds = 0;
       minutes++;
+      // Add points every 60 seconds
+      points += 50;
+      updatePointsDisplay(points);
       // If minutes reach 60, reset minutes and increment hours
       if (minutes >= 60) {
         minutes = 0;
         hours++;
-      }
-      // Add points every 60 seconds
-      if (minutes % 1 === 0 && seconds === 0) {
-        points += 50;
-        updatePointsDisplay(points);
       }
     }
     // Update the timer display
@@ -370,10 +370,10 @@ socket.on('loadCanvas', (data) => {
   img.onload = function () {
     ctx.drawImage(img, 0, 0);
     displayContent(); // Or at whatever offset you like
+    document.getElementById("Loading").remove();
+    loading = false;
   };
   img.src = data;
-
-
 })
 
 socket.on('nameConfirmed', (data) => {
@@ -399,6 +399,13 @@ function refresh() {
   displayContent();
   displayNames();
   requestAnimationFrame(refresh);
+}
+
+function loadingScreen() {
+  document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
+  if (loading == true) {
+  requestAnimationFrame(loadingScreen);
+  }
 }
 
 function panSlide() {

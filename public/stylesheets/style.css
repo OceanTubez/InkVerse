@@ -15,9 +15,29 @@ body {
 
 #displayCanvas {
   opacity: 100;
-  z-index: 100;
+  z-index: 2;
   left: 0;
   top: 0;
+}
+
+#Loading {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  position: fixed;
+  word-wrap: break-word;
+}
+
+#LoadingText {
+  text-align: center;
+  vertical-align: center;
+  color: white;
+  font-size: 75px;
+  z-index: 1;
+
 }
 
 #changeColor {
@@ -99,7 +119,7 @@ body {
     border-radius: 55px; /* Ensure rounded edges */
     width: 49%; /* Adjust width automatically */
     height: 20%; /* Adjust height automa=\tically */
-    z-index: 9999; /* Ensure the ribbon is above other content */
+    z-index: 4; /* Ensure the ribbon is above other content */
 }
 
 #username {
@@ -108,7 +128,7 @@ body {
   left: 20px; /* Adjust position as needed */
   color: black; /* Change text color as needed */
   font-size: 34px; /* Adjust font size as needed */
-  z-index: 9999; /* Ensure the text is above other content */
+  z-index: 3; /* Ensure the text is above other content */
 }
 
 
@@ -118,7 +138,7 @@ body {
   right: 20px; /* Adjust position as needed */
   color: black; /* Change text color as needed */
   font-size: 90%; /* Adjust font size as needed */
-  z-index: 99999; /* Ensure the text is above other content */
+  z-index: 4; /* Ensure the text is above other content */
 }
 
 #rectangle{
@@ -130,7 +150,7 @@ body {
   bottom: 0%;
   left: 88%;
   border-radius: 25px;
-  z-index: 99998;
+  z-index: 3;
   border-radius: 40px 0px 0px 0px;
   overflow: hidden; /* Hide overflowing content */
   word-wrap: break-word; /* Wrap long words to prevent overflow */
@@ -140,7 +160,7 @@ body {
   position: fixed;
   bottom: 4%;
   left: 95%;
-  z-index: 99999;
+  z-index: 4;
 }
 
 #pen-text {
@@ -149,7 +169,7 @@ body {
   left: 93%;
   color: black; /* Change text color as needed */
   font-size: 90%;
-  z-index: 99999;
+  z-index: 4;
 }
 
 .dropdown-container {
@@ -160,7 +180,7 @@ body {
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   padding: 20px;
-  z-index: 1000;
+  z-index: 100;
   transition: transform 0.3s ease-in-out;
   display: none;
 }
