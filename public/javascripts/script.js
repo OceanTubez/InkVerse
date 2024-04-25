@@ -268,11 +268,11 @@ function displayNames() {
       displayctx.shadowColor = "rgb(255,255,255)"
       displayctx.font = "16px serif"
       displayctx.fillStyle = "rgb(0,0,0)";
-      displayctx.fillText(nameDisplay[i], nameDisplay[i + 1] * scale - screenOffsetX, nameDisplay[i + 2] * scale - screenOffsetY)
+      displayctx.fillText(nameDisplay[i], (nameDisplay[i + 1] - screenOffsetX) * scale, (nameDisplay[i + 2] - screenOffsetY) * scale)
       //DrawMouse
       displayctx.shadowOffsetX = 0;
       displayctx.shadowOffsetY = 0;
-      drawMouse(nameDisplay[i + 1] * scale - screenOffsetX, nameDisplay[i + 2] * scale - screenOffsetY);
+      drawMouse((nameDisplay[i + 1] - screenOffsetX) * scale, (nameDisplay[i + 2] - screenOffsetY) * scale);
     }
   }
 }
