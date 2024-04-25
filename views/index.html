@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>InkVerse: Client V1.13</title>
-        <link rel="stylesheet" href="/stylesheets/style.css">
-    </head>
+<head>
+    <title>InkVerse: Client V1.13</title>
+    <link rel="icon" type="image/x-icon" href="/images/IMG_0219.png">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
     <body>
         
+        <div id="Loading">
+            <div id="LoadingText">Loading</div>
+        </div>
         <canvas id="displayCanvas"></canvas>
         <canvas id="drawCanvas"></canvas>
         <canvas id="showcase", height="50", width="50"></canvas>
@@ -17,7 +21,7 @@
         <script type="text/javascript" src="/javascripts/script.js"></script>
         <div class="dropdown-container" id="dropdownContainer">
 
-            <img src="/images/logo.png" alt="Logo" id="dropimage">
+            <img src="/images/IMG_0234.png" id="dropimage">
             <input type="text" id="nameInput" placeholder="Enter your name">
             <button id="nameButton" onClick="toggleDropdown()">Draw!</button>
 
