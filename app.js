@@ -7,7 +7,7 @@ var logger = require('morgan');
 
 //Creates server canvas
 const draw = require('./public/javascripts/common/canvas.js')
-const {createCanvas} = require('canvas');
+const { createCanvas } = require('canvas');
 const canvas = createCanvas(draw.canvasWidth, draw.canvasHeight);
 const ctx = canvas.getContext('2d');
 //NOT CURRENTLY UsING - IGNOREs
@@ -21,10 +21,7 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 //Locate users
 
-const connectedClientIDs = [];
-const clientUsernames = [];
-
-
+const userInfo = [];
 
 //Probaly website stuff? Not sure lol
 app.use(logger('dev'));
@@ -44,12 +41,12 @@ app.use('/socket.io', express.static('public'));
 app.use('/socket.io', express.static('views'));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -73,8 +70,19 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   ctx.lineCap = "round";
 
-  console.log("connecting");  
+  console.log("connecting");
   socket.emit('loadCanvas', canvas.toDataURL())
+  socket.emit('mouse', userInfo);
+
+  socket.on('mouseMovement', (data) => {
+    let index = userInfo.indexOf(socket.id);
+
+    userInfo[index + 1] = data.userName;
+    userInfo[index + 2] = data.mouseX;
+    userInfo[index + 3] = data.mouseY;
+
+    socket.broadcast.emit('mouse', userInfo); // Broadcast mouse movement
+  });
 
   socket.on('draw', (data) => {
 
@@ -83,44 +91,46 @@ io.on('connection', (socket) => {
     draw.drawLine(ctx, data.x, data.y, data.lastX, data.lastY);
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
 
+    let index = userInfo.indexOf(socket.id);
+
+    userInfo[index + 1] = data.userName;
+    userInfo[index + 2] = data.x;
+    userInfo[index + 3] = data.y;
+
+    socket.broadcast.emit('mouse', userInfo);
+
   });
 
   socket.on('sentNameData', (data) => {
 
-    if (clientUsernames.includes(data)) {
+    if (userInfo.includes(data)) {
 
-      socket.emit('nameConfirmed', {b: false, name: data});
+      socket.emit('nameConfirmed', { b: false, name: data });
 
     } else {
-      socket.emit('nameConfirmed', {b: true, name: data});
+      socket.emit('nameConfirmed', { b: true, name: data });
 
-      clientUsernames.push(data);
-      connectedClientIDs.push(socket.id);
-      userName = data;
-      
+      userInfo.push(socket.id);
+      userInfo.push(data);
+      userInfo.push(draw.canvasWidth + 100);
+      userInfo.push(draw.canvasHeight + 100);
 
     }
 
-  }); 
+  });
+
 
   // MY REPO IS BROKEN, UH GOTTA FIX MY NODE MODULE.
 
 
   socket.on('disconnect', (notUsed) => {
-    let deleteAt = connectedClientIDs.indexOf(socket.id)
-    if (deleteAt != -1)
-    {
-      clientUsernames.splice(deleteAt, 1);
-      connectedClientIDs.splice(deleteAt, 1);
+    let deleteAt = userInfo.indexOf(socket.id)
+    if (deleteAt != -1) {
+      userInfo.splice(deleteAt, 4);
     }
-  });
-  socket.on('mouse', (data) => {
-
-    socket.broadcast.emit('mouse', data); // Broadcast mouse movement (I MADE THIS ZELLA WATT)
-
+    socket.broadcast.emit('mouse', userInfo);
   });
 });
-
 //CHANGE THIS FOR FULL RELEASE!!!!!!
 http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
 

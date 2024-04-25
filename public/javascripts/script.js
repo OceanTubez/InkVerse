@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   toggleDropdown();
   initialize();
   redrawShowcase();
+  loadingScreen();
+  refresh();
+  startTimerAndPoints();
 });
 
 const canvas = document.getElementById('drawCanvas');
@@ -18,6 +21,8 @@ let isDrawing = false;
 let isPanning = false;
 let lastX = 0;
 let lastY = 0;
+let mouseX = 0;
+let mouseY = 0;
 
 //Track pen colors and size
 let red = 0;
@@ -26,6 +31,7 @@ let blue = 0;
 let lineSize = 1;
 
 //Other variables
+
 let vectorX = 0;
 let vectorY = 0;
 
@@ -114,42 +120,54 @@ let brush_points = {
 };
 
 let points = 0;
+
+let panSpeedX = 0;
+let panSpeedY = 0;
+let loading = true;
+let userName = "";
+let nameDisplay = [];
 // Handle drawing events
 
-displayCanvas.addEventListener('mousedown', function(e){
+displayCanvas.addEventListener('mousedown', function (e) {
   startDrawingOrPanning(e.offsetX / scale, e.offsetY / scale, e.ctrlKey);
 });
-displayCanvas.addEventListener('mousemove', function(e){
-  if (isDrawing)
-  {
-  draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
+displayCanvas.addEventListener('mousemove', function (e) {
+  if (userName) {
+    if (isDrawing) {
+      draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
+    }
+    else if (isPanning) {
+      pan(e.offsetX / scale, e.offsetY / scale);
+    }
+    else {
+      mouseX = e.offsetX / scale + screenOffsetX;
+      mouseY = e.offsetY / scale + screenOffsetY;
+      socket.emit('mouseMovement', { mouseX, mouseY, userName });
+    }
   }
-  if (isPanning)
-  {
-  pan(e.offsetX / scale, e.offsetY / scale);
-  }
-  //socket.emit('mouse', {mouseX, mouseY})
 });
 displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
 displayCanvas.addEventListener('mouseout', stopDrawingOrPanning);
-displayCanvas.addEventListener('touchstart', function(e) {
-  if (e.targetTouches.length == 1)
-  {
-    startDrawingOrPanning(e.targetTouches[0].pageX/scale, e.targetTouches[0].pageY/scale, false)
+displayCanvas.addEventListener('touchstart', function (e) {
+  if (e.targetTouches.length == 1) {
+    startDrawingOrPanning(e.targetTouches[0].pageX / scale, e.targetTouches[0].pageY / scale, false)
   } else if (e.targetTouches.length == 2) {
     //Takes average of two touches. Ugly but it works.
-    startDrawingOrPanning(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale, true)
+    startDrawingOrPanning(((e.targetTouches[0].pageX + e.targetTouches[1].pageX) / 2) / scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY) / 2) / scale, true)
   }
-   });
-displayCanvas.addEventListener('touchmove', function(e) {
-  if (isDrawing)
-  {
-    draw(e.targetTouches[0].pageX/scale + screenOffsetX, e.targetTouches[0].pageY/scale + screenOffsetY)
-  }
-  if (isPanning)
-  {
-    //Takes average of two touches. Ugly but it works.
-    pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX)/2)/scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY)/2)/scale);
+});
+displayCanvas.addEventListener('touchmove', function (e) {
+  if (userName) {
+    if (isDrawing) {
+      draw(e.targetTouches[0].pageX / scale + screenOffsetX, e.targetTouches[0].pageY / scale + screenOffsetY)
+    } else if (isPanning) {
+      //Takes average of two touches. Ugly but it works.
+      pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX) / 2) / scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY) / 2) / scale);
+    } else {
+      mouseX = e.targetTouches[0].pageX / scale + screenOffsetX;
+      mouseY = e.targetTouches[0].pageY / scale + screenOffsetY;
+      socket.emit('mouseMovement', { MouseX, mouseY, userName })
+    }
   }
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
@@ -175,8 +193,6 @@ function resizeCanvas() {
   screenHeight = window.innerHeight;
   document.getElementById('displayCanvas').width = screenWidth;
   document.getElementById('displayCanvas').height = screenHeight;
-  fixPanning();
-  displayContent();
 }
 
 function initializeBrushStates() {
@@ -208,44 +224,41 @@ function startDrawingOrPanning(x, y, ctrl) {
 
 function fixPanning() {
   //Fixes the screen panning.
-  if(screenOffsetX + screenWidth/scale > canvasWidth)
-  {
-    screenOffsetX = canvasWidth - screenWidth/scale;
+  if (screenOffsetX + screenWidth / scale > canvasWidth) {
+    screenOffsetX = canvasWidth - screenWidth / scale;
   }
-  if(screenOffsetY + screenHeight/scale > canvasHeight)
-  {
-    screenOffsetY = canvasHeight - screenHeight/scale;
+  if (screenOffsetY + screenHeight / scale > canvasHeight) {
+    screenOffsetY = canvasHeight - screenHeight / scale;
   }
-  if(screenOffsetX < 0)
-  {
+  if (screenOffsetX < 0) {
     screenOffsetX = 0;
   }
-  if(screenOffsetY < 0)
-  {
+  if (screenOffsetY < 0) {
     screenOffsetY = 0;
   }
 }
 
 function pan(x, y) {
   //Moves pan and loads it
-screenOffsetX += lastX - x;
-screenOffsetY += lastY - y;
-//Only useful for sliding
-vectorX = x - lastX;
-vectorY = y - lastY;
+  screenOffsetX += lastX - x;
+  screenOffsetY += lastY - y;
+  //Only useful for sliding
+  panSpeedX = x - lastX;
+  panSpeedY = y - lastY;
 
-lastX = x;
-lastY = y;
+  lastX = x;
+  lastY = y;
 
-fixPanning();
-displayContent();
+  mouseX = x + screenOffsetX;
+  mouseY = y + screenOffsetY;
+  socket.emit('mouseMovement', { mouseX, mouseY, userName })
 }
 
 function draw(x, y) {
   drawLine(ctx, x, y, lastX, lastY);
   displayContent();
   // Emit drawing data to the server
-  socket.emit('draw', {lastX, lastY, x, y, red, green, blue, lineSize});
+  socket.emit('draw', { userName, lastX, lastY, x, y, red, green, blue, lineSize });
   lastX = x;
   lastY = y;
 }
@@ -291,9 +304,9 @@ function saveName() {
 function changeColor() {
   playClick1();
   //Gets random number from 0-255
-  red = Math.floor(Math.random()*256);
-  green = Math.floor(Math.random()*256);
-  blue = Math.floor(Math.random()*256);
+  red = Math.floor(Math.random() * 256);
+  green = Math.floor(Math.random() * 256);
+  blue = Math.floor(Math.random() * 256);
   //Inputs random numbers
   ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
   redrawShowcase();
@@ -302,38 +315,30 @@ function changeColor() {
 function changeSize() {
   playClick1();
   //Random linesize between 1-25
-  lineSize = Math.ceil(Math.random()*25);
+  lineSize = Math.ceil(Math.random() * 25);
   //Applies the change
   ctx.lineWidth = lineSize;
   redrawShowcase();
-          
+
 }
 
-
+//Zoom stuff
 function zoomInButton() {
   playClick1();
   scale *= 1.5;
-  applyzoom();
 }
 
 function zoomOutButton() {
   playClick1();
   scale /= 1.5;
-  if (screenWidth/scale < canvasWidth)
-  {
-  applyzoom();
-  } else {
+  if (screenWidth / scale > canvasWidth) {
     scale *= 1.5;
     alert("Zoom too large.");
   }
 }
 
-function applyzoom() {
-  fixPanning();
-  displayContent();
-}
-
 //Brush functions
+
 function changeBrush(brush_name) {
   console.log("changing brush for ", brush_name)
   let attributes = brush_attributes[brush_name];
@@ -349,6 +354,7 @@ function changeBrush(brush_name) {
   let rgb = attributes.rgb;
   ctx.strokeStyle = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
   ctx.lineWidth = attributes.size;
+
   redrawShowcase();
 };
 
@@ -368,37 +374,72 @@ function updateBrushState(brush_name) {
 
 
 function redrawShowcase() {
-  //Loads the showcase pen stuff.
+  //Displays the current pen
   showcaseCTX.clearRect(0, 0, showcase.width, showcase.height);
-  showcaseCTX.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")"; 
+  showcaseCTX.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
   showcaseCTX.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
   showcaseCTX.beginPath();
-  showcaseCTX.arc(25, 25, lineSize/2, 0, 2 * Math.PI);
+  showcaseCTX.arc(25, 25, lineSize / 2, 0, 2 * Math.PI);
   showcaseCTX.fill();
 }
 
+function displayNames() {
+  for (let i = 1; i < nameDisplay.length; i += 4) {
+    if (socket.id != nameDisplay[i - 1]) {
+      //Write text
+      displayctx.shadowOffsetX = 2;
+      displayctx.shadowOffsetY = 2;
+      displayctx.shadowColor = "rgb(255,255,255)"
+      displayctx.font = "16px serif"
+      displayctx.fillStyle = "rgb(0,0,0)";
+      displayctx.fillText(nameDisplay[i], (nameDisplay[i + 1] - screenOffsetX) * scale, (nameDisplay[i + 2] - screenOffsetY) * scale)
+      //DrawMouse
+      displayctx.shadowOffsetX = 0;
+      displayctx.shadowOffsetY = 0;
+      drawMouse((nameDisplay[i + 1] - screenOffsetX) * scale, (nameDisplay[i + 2] - screenOffsetY) * scale);
+    }
+  }
+}
 
+function drawMouse(x, y) {
+  displayctx.beginPath();
+  let fillData = new Path2D();
+  fillData.moveTo(x, y);
+  drawPolygon(fillData, displayctx, x, x, y, y + 13.5);
+  drawPolygon(fillData, displayctx, x, x + 3, y + 13.5, y + 10);
+  drawPolygon(fillData, displayctx, x + 3, x + 5.5, y + 10, y + 16);
+  drawPolygon(fillData, displayctx, x + 5.5, x + 8, y + 16, y + 14);
+  drawPolygon(fillData, displayctx, x + 8, x + 5, y + 14, y + 10);
+  drawPolygon(fillData, displayctx, x + 5, x + 10, y + 10, y + 10);
+  drawPolygon(fillData, displayctx, x + 10, x, y + 10, y);
+  fillData.closePath();
+  displayctx.fillStyle = "rgb(255,255,255)";
+  displayctx.fill(fillData);
+  displayctx.strokeStyle = "rgb(0,0,0)";
+  displayctx.stroke();
+}
 //points
 
 function updatePointsDisplay(points) {
-    document.getElementById('points').textContent = points + " Points";
+  document.getElementById('points').textContent = points + " Points";
 }
 
 // Function to update the timer display
 function updateTimerDisplay(hours, minutes, seconds) {
-    // Format the time with leading zeros
-    const formattedTime = 
-        (hours < 10 ? '0' : '') + hours + ':' +
-        (minutes < 10 ? '0' : '') + minutes + ':' +
-        (seconds < 10 ? '0' : '') + seconds;
+  // Format the time with leading zeros
+  const formattedTime =
+    (hours < 10 ? '0' : '') + hours + ':' +
+    (minutes < 10 ? '0' : '') + minutes + ':' +
+    (seconds < 10 ? '0' : '') + seconds;
 
-    // Update the HTML element with the formatted time
-    document.getElementById('timer').textContent = formattedTime;
+  // Update the HTML element with the formatted time
+  document.getElementById('timer').textContent = formattedTime;
 }
 
 //Time and Poitns
 
 function startTimerAndPoints() {
+
     let hours = 0;
     let minutes = 0;
     let seconds = 0;
@@ -424,24 +465,26 @@ function startTimerAndPoints() {
         // Update the timer display
         updateTimerDisplay(hours, minutes, seconds);
     }, 1000); // Update every second
-}
+
 
 // Function to update the timer display
 function updateTimerDisplay(hours, minutes, seconds) {
-    // Format the time with leading zeros
-    const formattedTime = 
-        (hours < 10 ? '0' : '') + hours + ':' +
-        (minutes < 10 ? '0' : '') + minutes + ':' +
-        (seconds < 10 ? '0' : '') + seconds;
+  // Format the time with leading zeros
+  const formattedTime =
+    (hours < 10 ? '0' : '') + hours + ':' +
+    (minutes < 10 ? '0' : '') + minutes + ':' +
+    (seconds < 10 ? '0' : '') + seconds;
 
-    // Update the HTML element with the formatted time
-    document.getElementById('timer').textContent = formattedTime;
+  // Update the HTML element with the formatted time
+  document.getElementById('timer').textContent = formattedTime;
 }
- 
-// Start the timer and point system when the page loads
-startTimerAndPoints();
 
 //SOCKETS ONLY NOTHING ELSE
+
+socket.on('mouse', (data) => {
+  nameDisplay = data;
+});
+
 // Recieve drawing data from the server
 socket.on('draw', (data) => {
   //save data
@@ -456,36 +499,30 @@ socket.on('draw', (data) => {
 
 });
 
-socket.on('mouse', (data) => {
-
-  console.log("empty");
-
-})
-
 socket.on('loadCanvas', (data) => {
 
   let img = new Image;
-  img.onload = function(){
-    ctx.drawImage(img,0,0);
+  img.onload = function () {
+    ctx.drawImage(img, 0, 0);
     displayContent(); // Or at whatever offset you like
+    document.getElementById("Loading").remove();
+    loading = false;
   };
   img.src = data;
-
-
 })
 
 socket.on('nameConfirmed', (data) => {
   var usernameDisplay = document.getElementById("username");
 
-  if (data.b == true)
-  {
+  if (data.b == true) {
     usernameDisplay.textContent = data.name;
+    userName = data.name;
   } else {
 
     document.getElementById("nameInput").value = "";
     alert("Name is already in use.");
     toggleDropdown();
-    
+
   }
 })
 
@@ -493,54 +530,56 @@ socket.on('nameConfirmed', (data) => {
 
 //Animation Frames
 
+function refresh() {
+  fixPanning();
+  displayContent();
+  displayNames();
+  requestAnimationFrame(refresh);
+}
+
+function loadingScreen() {
+  if (loading == true) {
+  document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
+  requestAnimationFrame(loadingScreen);
+  }
+}
+
 function panSlide() {
   //Slides the pan based on the vector speed.
-  if (vectorX || vectorY)
-  {
-    if (vectorX)
-    {
-      screenOffsetX -= vectorX;
-      vectorX *= 0.8;
+  if (panSpeedX || panSpeedY) {
+    if (panSpeedX) {
+      screenOffsetX -= panSpeedX;
+      panSpeedX *= 0.83;
       //This if statement moves the vector closer to 0.
-      if(vectorX < 0)
-      {
-        vectorX += 0.01;
-        if (vectorX > 0)
-        {
-          vectorX = 0;
+      if (panSpeedX < 0) {
+        panSpeedX += 0.01;
+        if (panSpeedX > 0) {
+          panSpeedX = 0;
         }
       } else {
-        vectorX -= 0.01;
-        if (vectorX < 0)
-        {
-          vectorX = 0;
+        panSpeedX -= 0.01;
+        if (panSpeedX < 0) {
+          panSpeedX = 0;
         }
       }
     }
-    if (vectorY)
-    {
-    screenOffsetY -= vectorY;
-    vectorY *= 0.8;
-    //This if statement moves the vector closer to 0.
-    if(vectorY < 0)
-      {
-        vectorY += 0.01;
-        if (vectorY > 0)
-        {
-          vectorY = 0;
+    if (panSpeedY) {
+      screenOffsetY -= panSpeedY;
+      panSpeedY *= 0.83;
+      //This if statement moves the vector closer to 0.
+      if (panSpeedY < 0) {
+        panSpeedY += 0.01;
+        if (panSpeedY > 0) {
+          panSpeedY = 0;
         }
       } else {
-        vectorY -= 0.01;
-        if (vectorY < 0)
-        {
-          vectorY = 0;
+        panSpeedY -= 0.01;
+        if (panSpeedY < 0) {
+          panSpeedY = 0;
         }
       }
     }
     //Loads images and makes a new animation frame.
-    fixPanning();
-    displayContent();
     requestAnimationFrame(panSlide);
   }
 }
-
