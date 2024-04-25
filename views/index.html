@@ -13,10 +13,10 @@
         </div>
         <canvas id="displayCanvas"></canvas>
         <canvas id="drawCanvas"></canvas>
-        <canvas id="showcase", height="50", width="50"></canvas>
+<canvas id="showcase", height="50", width="50"></canvas>
         <audio id="clickSound" href="/audio/UiClick.mp3"></audio>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script type="text/javascript" src="/javascripts/common/browserDisplay.js"></script>
+<script type="text/javascript" src="/javascripts/common/browserDisplay.js"></script>
         <script type="text/javascript" src="/javascripts/common/canvas.js"></script>
         <script type="text/javascript" src="/javascripts/script.js"></script>
         <div class="dropdown-container" id="dropdownContainer">
@@ -24,52 +24,53 @@
             <img src="/images/IMG_0234.png" id="dropimage">
             <input type="text" id="nameInput" placeholder="Enter your name">
             <button id="nameButton" onClick="toggleDropdown()">Draw!</button>
-
         </div>
 
         <div id="timer">00:00:00</div>
         <div id="points">0 Points</div> <!-- Element to display points -->
 
         <div class="ribbon" id="ribbon">
-
             <!--BLACK -->
-            <button class="button" id="bigBlack" onClick="changeBrush(24,0,0,0)">
+            <button class="button" id="bigBlack" onClick="changeBrush('bigBlack')">
                 <img class="hover-image" src="/images/black.png" alt="brushes">
+                <!-- Lock icon on top of the thing-->
             </button>
-
             <!-- green-->
-            <button class="button" id="bigGreen" onClick="changeBrush(24,0,0,255)">
+            <button class="button" id="bigGreen" onClick="changeBrush('bigGreen')">
                 <img class="hover-image" src="/images/green.png" alt="brushes">
             </button>
-
             <!-- blue-->
-            <button class="button" id="bigLightBlue" onClick="changeBrush(15,173,216,230)">
+            <button class="button" id="bigLightBlue" onClick="changeBrush('bigLightBlue')">
                 <img class="hover-image" src="/images/lightblue.png" alt="brushes">
             </button>
-
             <!-- orange-->
-            <button class="button" id="bigOrange" onClick="changeBrush(18,255,0,177)">
+            <button class="button" id="bigOrange" onClick="changeBrush('bigOrange')">
                 <img class="hover-image" src="/images/red.png" alt="brushes">
             </button>
 
             <!-- Red-->
-            <button class="button" id="bigRed" onClick="changeBrush(27,178,34,34)">
+            <button class="button" id="bigRed" onClick="changeBrush('bigRed')">
                 <img class="hover-image" src="/images/orange.png" alt="brushes">
             </button>
 
             <!-- brown-->
-            <button class="button" id="bigBrown" onClick="changeBrush(25,78,34,34)">
+            <button class="button" id="bigBrown" onClick="changeBrush('bigBrown')">
                 <img class="hover-image" src="/images/brown.png" alt="brushes">
             </button>
 
-            <!-- Dark Blue -->
-            <button class="button" id="bigdarkblue" onClick="changeBrush(25,0,139,0)">
+               <!-- Dark Blue -->
+               <button class="button" id="bigdarkblue" onClick="changeBrush('bigdarkblue')">
                 <img class="hover-image" src="/images/darkblue.png" alt="brushes">
             </button>
 
-            <!-- Color and Size changers-->
+
+
+
+
+            <!-- Color and Size changers--> 
             <button id="changeColor" onClick="changeColor()">Change Color</button>
             <button id="changeSize" onClick="changeSize()">Change Size</button>
+
 
             <!-- ZOOM Buttons-->
             <button id="zoomInButton" onClick="zoomInButton()">+</button>
