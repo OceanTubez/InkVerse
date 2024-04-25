@@ -20,8 +20,6 @@ let isDrawing = false;
 let isPanning = false;
 let lastX = 0;
 let lastY = 0;
-let mouseX = 0;
-let mouseY = 0;
 
 //Track pen colors and size
 let red = 0;
@@ -32,7 +30,6 @@ let lineSize = 1;
 //Other variables
 let panSpeedX = 0;
 let panSpeedY = 0;
-let userName = "";
 const nameDisplay = [];
 // Handle drawing events
 
@@ -40,18 +37,18 @@ displayCanvas.addEventListener('mousedown', function (e) {
   startDrawingOrPanning(e.offsetX / scale, e.offsetY / scale, e.ctrlKey);
 });
 displayCanvas.addEventListener('mousemove', function (e) {
+  if (isDrawing) {
+    draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
+  }
+  if (isPanning) {
+    pan(e.offsetX / scale, e.offsetY / scale);
+  }
+  const userName = document.getElementById("username").textContent
   if (userName) {
-    if (isDrawing) {
-      draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
-    }
-    else if (isPanning) {
-      pan(e.offsetX / scale, e.offsetY / scale);
-    }
-    else {
-      mouseX = e.offsetX / scale + screenOffsetX;
-      mouseY = e.offsetY / scale + screenOffsetY;
-      socket.emit('mouseMovement', { mouseX, mouseY, userName });
-    }
+    const mouseX = e.clientX / scale;
+    const mouseY = e.clientY / scale;
+
+    socket.emit('mouseMovement', { mouseX, mouseY, userName });
   }
 });
 displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
@@ -65,17 +62,12 @@ displayCanvas.addEventListener('touchstart', function (e) {
   }
 });
 displayCanvas.addEventListener('touchmove', function (e) {
-  if (userName) {
-    if (isDrawing) {
-      draw(e.targetTouches[0].pageX / scale + screenOffsetX, e.targetTouches[0].pageY / scale + screenOffsetY)
-    } else if (isPanning) {
-      //Takes average of two touches. Ugly but it works.
-      pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX) / 2) / scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY) / 2) / scale);
-    } else {
-      mouseX = e.targetTouches[0].pageX / scale + screenOffsetX;
-      mouseY = e.targetTouches[0].pageY / scale + screenOffsetY;
-      socket.emit('mouseMovement', { MouseX, mouseY, userName })
-    }
+  if (isDrawing) {
+    draw(e.targetTouches[0].pageX / scale + screenOffsetX, e.targetTouches[0].pageY / scale + screenOffsetY)
+  }
+  if (isPanning) {
+    //Takes average of two touches. Ugly but it works.
+    pan(((e.targetTouches[0].pageX + e.targetTouches[1].pageX) / 2) / scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY) / 2) / scale);
   }
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
@@ -139,24 +131,19 @@ function pan(x, y) {
   //Moves pan and loads it
   screenOffsetX += lastX - x;
   screenOffsetY += lastY - y;
-
   //Only useful for sliding
   panSpeedX = x - lastX;
   panSpeedY = y - lastY;
 
   lastX = x;
   lastY = y;
-
-  mouseX = x + screenOffsetX;
-  mouseY = y + screenOffsetY;
-  socket.emit('mouseMovement', { mouseX, mouseY, userName })
 }
 
 function draw(x, y) {
   drawLine(ctx, x, y, lastX, lastY);
   displayContent();
   // Emit drawing data to the server
-  socket.emit('draw', { userName, lastX, lastY, x, y, red, green, blue, lineSize });
+  socket.emit('draw', { lastX, lastY, x, y, red, green, blue, lineSize });
   lastX = x;
   lastY = y;
 }
@@ -224,6 +211,7 @@ function changeSize() {
 function zoomInButton() {
   playClick1();
   scale *= 1.5;
+  applyzoom();
 }
 
 function zoomOutButton() {
@@ -267,11 +255,11 @@ function displayNames() {
       displayctx.shadowColor = "rgb(255,255,255)"
       displayctx.font = "16px serif"
       displayctx.fillStyle = "rgb(0,0,0)";
-      displayctx.fillText(nameDisplay[i], nameDisplay[i + 1] * scale - screenOffsetX, nameDisplay[i + 2] * scale - screenOffsetY)
+      displayctx.fillText(nameDisplay[i], nameDisplay[i + 1], nameDisplay[i + 2])
       //DrawMouse
       displayctx.shadowOffsetX = 0;
       displayctx.shadowOffsetY = 0;
-      drawMouse(nameDisplay[i + 1] * scale - screenOffsetX, nameDisplay[i + 2] * scale - screenOffsetY);
+      drawMouse(nameDisplay[i + 1], nameDisplay[i + 2]);
     }
   }
 }
@@ -393,7 +381,6 @@ socket.on('nameConfirmed', (data) => {
 
   if (data.b == true) {
     usernameDisplay.textContent = data.name;
-    userName = data.name;
   } else {
 
     document.getElementById("nameInput").value = "";
@@ -419,7 +406,7 @@ function panSlide() {
   if (panSpeedX || panSpeedY) {
     if (panSpeedX) {
       screenOffsetX -= panSpeedX;
-      panSpeedX *= 0.83;
+      panSpeedX *= 0.8;
       //This if statement moves the vector closer to 0.
       if (panSpeedX < 0) {
         panSpeedX += 0.01;
@@ -435,7 +422,7 @@ function panSlide() {
     }
     if (panSpeedY) {
       screenOffsetY -= panSpeedY;
-      panSpeedY *= 0.83;
+      panSpeedY *= 0.8;
       //This if statement moves the vector closer to 0.
       if (panSpeedY < 0) {
         panSpeedY += 0.01;
