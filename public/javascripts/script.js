@@ -35,7 +35,7 @@ let panSpeedX = 0;
 let panSpeedY = 0;
 let loading = true;
 let userName = "";
-const nameDisplay = [];
+let nameDisplay = [];
 // Handle drawing events
 
 displayCanvas.addEventListener('mousedown', function (e) {
@@ -268,11 +268,11 @@ function displayNames() {
       displayctx.shadowColor = "rgb(255,255,255)"
       displayctx.font = "16px serif"
       displayctx.fillStyle = "rgb(0,0,0)";
-      displayctx.fillText(nameDisplay[i], nameDisplay[i + 1] * scale - screenOffsetX, nameDisplay[i + 2] * scale - screenOffsetY)
+      displayctx.fillText(nameDisplay[i], (nameDisplay[i + 1] - screenOffsetX) * scale, (nameDisplay[i + 2] - screenOffsetY) * scale)
       //DrawMouse
       displayctx.shadowOffsetX = 0;
       displayctx.shadowOffsetY = 0;
-      drawMouse(nameDisplay[i + 1] * scale - screenOffsetX, nameDisplay[i + 2] * scale - screenOffsetY);
+      drawMouse((nameDisplay[i + 1] - screenOffsetX) * scale, (nameDisplay[i + 2] - screenOffsetY) * scale);
     }
   }
 }
@@ -356,9 +356,7 @@ function updateTimerDisplay(hours, minutes, seconds) {
 //SOCKETS ONLY NOTHING ELSE
 
 socket.on('mouse', (data) => {
-  for (let i = 0; i < data.length; i++) {
-    nameDisplay[i] = data[i];
-  }
+  nameDisplay = data;
 });
 
 // Recieve drawing data from the server
@@ -414,8 +412,8 @@ function refresh() {
 }
 
 function loadingScreen() {
-  document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
   if (loading == true) {
+  document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
   requestAnimationFrame(loadingScreen);
   }
 }
