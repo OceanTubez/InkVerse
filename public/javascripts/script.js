@@ -39,37 +39,37 @@ let vectorY = 0;
 let brush_attributes = {
   "bigBlack": {
     size: 24,
-    rgb: [0,0,0],
+    rgb: [0, 0, 0],
   },
 
   "bigGreen": {
     size: 24,
-    rgb: [173,216,230],
+    rgb: [173, 216, 230],
   },
 
   "bigLightBlue": {
     size: 15,
-    rgb: [173,216,230],
+    rgb: [173, 216, 230],
   },
 
   "bigOrange": {
     size: 18,
-    rgb: [255,0,177],
+    rgb: [255, 0, 177],
   },
 
   "bigRed": {
     size: 27,
-    rgb: [178,34,34],
+    rgb: [178, 34, 34],
   },
 
   "bigBrown": {
     size: 47,
-    rgb: [178,34,34],
+    rgb: [178, 34, 34],
   },
 
   "bigdarkblue": {
     size: 25,
-    rgb: [0,139,0],
+    rgb: [0, 139, 0],
   }
 };
 
@@ -106,17 +106,17 @@ let brush_states = {
 let brush_points = {
   "bigBlack": 0,
 
-  "bigGreen": 0,
+  "bigGreen": 1,
 
-  "bigLightBlue": 10,
+  "bigLightBlue": 1,
 
-  "bigOrange": 20,
+  "bigOrange": 2,
 
-  "bigRed": 30,
+  "bigRed": 3,
 
-  "bigBrown": 40,
+  "bigBrown": 4,
 
-  "bigdarkblue": 50
+  "bigdarkblue": 5
 };
 
 let points = 0;
@@ -346,30 +346,34 @@ function changeBrush(brush_name) {
 
   console.log(attributes);
   console.log(state);
-  
-  if (!updateBrushState(brush_name)) {
-    return
+  if (state.locked)
+  {
+    updateBrushState(brush_name)
+    return;
   }
   playClick1()
   let rgb = attributes.rgb;
   ctx.strokeStyle = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
   ctx.lineWidth = attributes.size;
+  red = rgb[0];
+  green = rgb[1];
+  blue = rgb[2];
+  lineSize = attributes.size;
 
   redrawShowcase();
 };
 
 function updateBrushState(brush_name) {
   // Not enough points, then retrun false and don't update points/brush state
-  if (points < brush_points[brush_name] ) {
-    console.log("not updating brush because not enough points", brush_name)
-    return false
+  if (points < brush_points[brush_name]) {
+    console.log("not updating brush because not enough points", brush_name);
+    return;
   }
   // Enough points, so update points and brush state and retun true
   points -= brush_points[brush_name];
-  updatePointsDisplay(points)
-  brush_states[brush_name].locked = false
-  document.getElementById(brush_name).className = 'button'
-  return true
+  updatePointsDisplay(points);
+  brush_states[brush_name].locked = false;
+  document.getElementById(brush_name).className = 'button';
 }
 
 
@@ -440,31 +444,32 @@ function updateTimerDisplay(hours, minutes, seconds) {
 
 function startTimerAndPoints() {
 
-    let hours = 0;
-    let minutes = 0;
-    let seconds = 0;
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
 
-    setInterval(function() {
-        // Increment seconds
-        seconds++;
-        // If seconds reach 60, reset seconds and increment minutes
-        if (seconds >= 60) {
-            seconds = 0;
-            minutes++;
-            // If minutes reach 60, reset minutes and increment hours
-            if (minutes >= 60) {
-                minutes = 0;
-                hours++;
-            }
-            // Add points every 60 seconds
-            if (minutes % 1 === 0 && seconds === 0) {
-                points += 50;
-                updatePointsDisplay(points);
-            }
-        }
-        // Update the timer display
-        updateTimerDisplay(hours, minutes, seconds);
-    }, 1000); // Update every second
+  setInterval(function () {
+    // Increment seconds
+    seconds++;
+    // If seconds reach 60, reset seconds and increment minutes
+    if (seconds >= 60) {
+      seconds = 0;
+      minutes++;
+      // If minutes reach 60, reset minutes and increment hours
+      if (minutes >= 60) {
+        minutes = 0;
+        hours++;
+      }
+      // Add points every 60 seconds
+      if (minutes % 1 === 0 && seconds === 0) {
+        points += 50;
+        updatePointsDisplay(points);
+      }
+    }
+    // Update the timer display
+    updateTimerDisplay(hours, minutes, seconds);
+  }, 1000); // Update every second
+}
 
 
 // Function to update the timer display
@@ -539,8 +544,8 @@ function refresh() {
 
 function loadingScreen() {
   if (loading == true) {
-  document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
-  requestAnimationFrame(loadingScreen);
+    document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
+    requestAnimationFrame(loadingScreen);
   }
 }
 
@@ -583,3 +588,4 @@ function panSlide() {
     requestAnimationFrame(panSlide);
   }
 }
+
