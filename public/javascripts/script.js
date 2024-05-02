@@ -44,7 +44,7 @@ let brush_attributes = {
 
   "bigGreen": {
     size: 24,
-    rgb: [173, 216, 230],
+    rgb: [0, 139, 0],
   },
 
   "bigLightBlue": {
@@ -64,7 +64,7 @@ let brush_attributes = {
 
   "bigBrown": {
     size: 47,
-    rgb: [178, 34, 34],
+    rgb: [139, 69, 19],
   },
 
   "bigdarkblue": {
@@ -299,6 +299,18 @@ function saveName() {
   // console.log("Input value:", inputValue);
 
 }
+
+//gacha roll button
+
+function rolldice(){
+    if (pts >= 300) {
+        //subtract points
+        pts = pts - 300
+        //roll random number
+        dice = Math.floor(Math.random()*7)
+
+
+    }
 
 // Buttons
 function changeColor() {
