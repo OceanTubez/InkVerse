@@ -256,7 +256,6 @@ function pan(x, y) {
 
 function draw(x, y) {
   drawLine(ctx, x, y, lastX, lastY);
-  displayContent();
   // Emit drawing data to the server
   socket.emit('draw', { userName, lastX, lastY, x, y, red, green, blue, lineSize });
   lastX = x;
@@ -493,7 +492,6 @@ socket.on('draw', (data) => {
   ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
   ctx.lineWidth = data.lineSize;
   drawLine(ctx, data.x, data.y, data.lastX, data.lastY);
-  displayContent();
   //Reset to original
   ctx.restore();
 
@@ -504,7 +502,6 @@ socket.on('loadCanvas', (data) => {
   let img = new Image;
   img.onload = function () {
     ctx.drawImage(img, 0, 0);
-    displayContent(); // Or at whatever offset you like
     document.getElementById("Loading").remove();
     loading = false;
   };
