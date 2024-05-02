@@ -44,7 +44,7 @@ let brush_attributes = {
 
   "bigGreen": {
     size: 24,
-    rgb: [173, 216, 230],
+    rgb: [0, 139, 0],
   },
 
   "bigLightBlue": {
@@ -64,12 +64,12 @@ let brush_attributes = {
 
   "bigBrown": {
     size: 47,
-    rgb: [178, 34, 34],
+    rgb: [139, 69, 19],
   },
 
   "bigdarkblue": {
     size: 25,
-    rgb: [0, 139, 0],
+    rgb: [0, 0, 139],
   }
 };
 
