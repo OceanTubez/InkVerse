@@ -126,6 +126,18 @@ let panSpeedY = 0;
 let loading = true;
 let userName = "";
 let nameDisplay = [];
+
+//number to brush; for dice
+
+let dice = {
+    1: "bigBlack",
+    2: "bigGreen",
+    3: "bigLightBlue",
+    4: "bigOrange",
+    5: "bigRed",
+    6: "bigBrown",
+    7: "bigdarkblue"
+};
 // Handle drawing events
 
 displayCanvas.addEventListener('mousedown', function (e) {
@@ -302,15 +314,27 @@ function saveName() {
 
 //gacha roll button
 
-function rolldice(){
-    if (pts >= 300) {
-        //subtract points
-        pts = pts - 300
-        //roll random number
-        dice = Math.floor(Math.random()*7)
-
-
+function rolldice() {
+    if (pts >= 1) {
+        // Subtract points
+        pts -= 1;
+        
+        // Roll random number
+        let diceroll = Math.floor(Math.random() * 7);
+        
+        if (state.locked) {
+            // Check if the diceroll is a valid key in the dice dictionary
+            if (diceroll in dice) {
+                updateBrushState(diceroll);
+            }
+            return;
+        } else {
+            // If not locked, add points
+            pts += 150;
+        }
     }
+}
+
 
 // Buttons
 function changeColor() {
