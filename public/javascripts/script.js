@@ -34,7 +34,7 @@ let lineSize = 1;
 
 let vectorX = 0;
 let vectorY = 0;
-
+let stampPan, stampRefresh, stampLoad;
 
 let brush_attributes = {
   "bigBlack": {
@@ -340,14 +340,10 @@ function zoomOutButton() {
 //Brush functions
 
 function changeBrush(brush_name) {
-  console.log("changing brush for ", brush_name)
   let attributes = brush_attributes[brush_name];
   let state = brush_states[brush_name];
 
-  console.log(attributes);
-  console.log(state);
-  if (state.locked)
-  {
+  if (state.locked) {
     updateBrushState(brush_name)
     return;
   }
@@ -366,7 +362,6 @@ function changeBrush(brush_name) {
 function updateBrushState(brush_name) {
   // Not enough points, then retrun false and don't update points/brush state
   if (points < brush_points[brush_name]) {
-    console.log("not updating brush because not enough points", brush_name);
     return;
   }
   // Enough points, so update points and brush state and retun true
@@ -535,54 +530,73 @@ socket.on('nameConfirmed', (data) => {
 
 //Animation Frames
 
-function refresh() {
-  fixPanning();
-  displayContent();
-  displayNames();
+function refresh(time) {
+  if (!stampRefresh) {
+    stampRefresh = time;
+  }
+  if (time - stampRefresh > 30) {
+    fixPanning();
+    displayContent();
+    displayNames();
+    stampRefresh = time;
+  }
   requestAnimationFrame(refresh);
 }
 
-function loadingScreen() {
+function loadingScreen(time) {
   if (loading == true) {
-    document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
+    if (!stampLoad) {
+      stampLoad = time;
+    }
+    if (time - stampLoad > 30) {
+      document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
+      stampLoad = time;
+    }
     requestAnimationFrame(loadingScreen);
   }
 }
 
-function panSlide() {
+function panSlide(time) {
   //Slides the pan based on the vector speed.
   if (panSpeedX || panSpeedY) {
-    if (panSpeedX) {
-      screenOffsetX -= panSpeedX;
-      panSpeedX *= 0.83;
-      //This if statement moves the vector closer to 0.
-      if (panSpeedX < 0) {
-        panSpeedX += 0.01;
-        if (panSpeedX > 0) {
-          panSpeedX = 0;
-        }
-      } else {
-        panSpeedX -= 0.01;
-        if (panSpeedX < 0) {
-          panSpeedX = 0;
-        }
-      }
+    if (!stampPan) {
+      stampPan = time;
     }
-    if (panSpeedY) {
-      screenOffsetY -= panSpeedY;
-      panSpeedY *= 0.83;
-      //This if statement moves the vector closer to 0.
-      if (panSpeedY < 0) {
-        panSpeedY += 0.01;
-        if (panSpeedY > 0) {
-          panSpeedY = 0;
-        }
-      } else {
-        panSpeedY -= 0.01;
-        if (panSpeedY < 0) {
-          panSpeedY = 0;
+    let elapsedTime = time - stampPan
+    if (elapsedTime > 30) {
+      if (panSpeedX) {
+        screenOffsetX -= panSpeedX * elapsedTime / 30 / scale;
+        panSpeedX *= 0.82 * elapsedTime / 30;
+        //This if statement moves the vector closer to 0.
+        if (panSpeedX < 0) {
+          panSpeedX += 0.01;
+          if (panSpeedX > 0) {
+            panSpeedX = 0;
+          }
+        } else {
+          panSpeedX -= 0.01;
+          if (panSpeedX < 0) {
+            panSpeedX = 0;
+          }
         }
       }
+      if (panSpeedY) {
+        screenOffsetY -= panSpeedY * elapsedTime / 30 / scale;
+        panSpeedY *= 0.82 * elapsedTime / 30;
+        //This if statement moves the vector closer to 0.
+        if (panSpeedY < 0) {
+          panSpeedY += 0.01;
+          if (panSpeedY > 0) {
+            panSpeedY = 0;
+          }
+        } else {
+          panSpeedY -= 0.01;
+          if (panSpeedY < 0) {
+            panSpeedY = 0;
+          }
+        }
+      }
+      stampPan = time;
     }
     //Loads images and makes a new animation frame.
     requestAnimationFrame(panSlide);
