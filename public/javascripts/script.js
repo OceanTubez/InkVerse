@@ -106,17 +106,17 @@ let brush_states = {
 let brush_points = {
   "bigBlack": 0,
 
-  "bigGreen": 0,
+  "bigGreen": 1,
 
-  "bigLightBlue": 10,
+  "bigLightBlue": 1,
 
-  "bigOrange": 20,
+  "bigOrange": 2,
 
-  "bigRed": 30,
+  "bigRed": 3,
 
-  "bigBrown": 40,
+  "bigBrown": 4,
 
-  "bigdarkblue": 50
+  "bigdarkblue": 5
 };
 
 let points = 0;
@@ -346,14 +346,19 @@ function changeBrush(brush_name) {
 
   console.log(attributes);
   console.log(state);
-
-  if (!updateBrushState(brush_name)) {
-    return
+  if (state.locked)
+  {
+    updateBrushState(brush_name)
+    return;
   }
   playClick1()
   let rgb = attributes.rgb;
   ctx.strokeStyle = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
   ctx.lineWidth = attributes.size;
+  red = rgb[0];
+  green = rgb[1];
+  blue = rgb[2];
+  lineSize = attributes.size;
 
   redrawShowcase();
 };
@@ -361,15 +366,14 @@ function changeBrush(brush_name) {
 function updateBrushState(brush_name) {
   // Not enough points, then retrun false and don't update points/brush state
   if (points < brush_points[brush_name]) {
-    console.log("not updating brush because not enough points", brush_name)
-    return false
+    console.log("not updating brush because not enough points", brush_name);
+    return;
   }
   // Enough points, so update points and brush state and retun true
   points -= brush_points[brush_name];
-  updatePointsDisplay(points)
-  brush_states[brush_name].locked = false
-  document.getElementById(brush_name).className = 'button'
-  return true
+  updatePointsDisplay(points);
+  brush_states[brush_name].locked = false;
+  document.getElementById(brush_name).className = 'button';
 }
 
 
