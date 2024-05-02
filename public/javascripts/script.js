@@ -131,10 +131,13 @@ let nameDisplay = [];
 displayCanvas.addEventListener('mousedown', function (e) {
   startDrawingOrPanning(e.offsetX / scale, e.offsetY / scale, e.ctrlKey);
 });
-displayCanvas.addEventListener('mousemove', function (e) {
+displayCanvas.addEventListener('pointermove', function (e) {
   if (userName) {
+    var events = e.getCoalescedEvents();
     if (isDrawing) {
-      draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
+      for (const event of events) {
+        draw(event.offsetX / scale + screenOffsetX, event.offsetY / scale + screenOffsetY);
+      }
     }
     else if (isPanning) {
       pan(e.offsetX / scale, e.offsetY / scale);
