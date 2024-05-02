@@ -31,6 +31,96 @@ let blue = 0;
 let lineSize = 1;
 
 //Other variables
+
+let vectorX = 0;
+let vectorY = 0;
+
+
+let brush_attributes = {
+  "bigBlack": {
+    size: 24,
+    rgb: [0,0,0],
+  },
+
+  "bigGreen": {
+    size: 24,
+    rgb: [173,216,230],
+  },
+
+  "bigLightBlue": {
+    size: 15,
+    rgb: [173,216,230],
+  },
+
+  "bigOrange": {
+    size: 18,
+    rgb: [255,0,177],
+  },
+
+  "bigRed": {
+    size: 27,
+    rgb: [178,34,34],
+  },
+
+  "bigBrown": {
+    size: 47,
+    rgb: [178,34,34],
+  },
+
+  "bigdarkblue": {
+    size: 25,
+    rgb: [0,139,0],
+  }
+};
+
+let brush_states = {
+  "bigBlack": {
+    "locked": false,
+  },
+
+  "bigGreen": {
+    "locked": true,
+  },
+
+  "bigLightBlue": {
+    "locked": true,
+  },
+
+  "bigOrange": {
+    "locked": true,
+  },
+
+  "bigRed": {
+    "locked": true,
+  },
+
+  "bigBrown": {
+    "locked": true,
+  },
+
+  "bigdarkblue": {
+    "locked": true,
+  }
+};
+
+let brush_points = {
+  "bigBlack": 0,
+
+  "bigGreen": 0,
+
+  "bigLightBlue": 10,
+
+  "bigOrange": 20,
+
+  "bigRed": 30,
+
+  "bigBrown": 40,
+
+  "bigdarkblue": 50
+};
+
+let points = 0;
+
 let panSpeedX = 0;
 let panSpeedY = 0;
 let loading = true;
@@ -92,6 +182,8 @@ function initialize() {
   window.addEventListener('resize', resizeCanvas, false);
   // Draw canvas border for the first time.
   resizeCanvas();
+  // Initialize brush states
+  initializeBrushStates();
 }
 // Runs each time the DOM window resize event fires.
 // Resets the canvas dimensions to match window,
@@ -103,6 +195,15 @@ function resizeCanvas() {
   document.getElementById('displayCanvas').height = screenHeight;
 }
 
+function initializeBrushStates() {
+  Object.entries(brush_states).forEach(([key, value]) => {
+    if (value.locked) {
+      document.getElementById(key).className = 'button locked'
+    } else {
+      document.getElementById(key).className = 'button'
+    }
+  })
+}
 
 
 // Drawing functions
@@ -237,16 +338,39 @@ function zoomOutButton() {
 }
 
 //Brush functions
-function changeBrush(size, r, b, g) {
+
+function changeBrush(brush_name) {
+  console.log("changing brush for ", brush_name)
+  let attributes = brush_attributes[brush_name];
+  let state = brush_states[brush_name];
+
+  console.log(attributes);
+  console.log(state);
+  
+  if (!updateBrushState(brush_name)) {
+    return
+  }
   playClick1()
-  red = r;
-  blue = b;
-  green = g;
-  lineSize = size;
-  ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")";
-  ctx.lineWidth = size;
+  let rgb = attributes.rgb;
+  ctx.strokeStyle = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
+  ctx.lineWidth = attributes.size;
+
   redrawShowcase();
 };
+
+function updateBrushState(brush_name) {
+  // Not enough points, then retrun false and don't update points/brush state
+  if (points < brush_points[brush_name] ) {
+    console.log("not updating brush because not enough points", brush_name)
+    return false
+  }
+  // Enough points, so update points and brush state and retun true
+  points -= brush_points[brush_name];
+  updatePointsDisplay(points)
+  brush_states[brush_name].locked = false
+  document.getElementById(brush_name).className = 'button'
+  return true
+}
 
 
 function redrawShowcase() {
@@ -315,31 +439,33 @@ function updateTimerDisplay(hours, minutes, seconds) {
 //Time and Poitns
 
 function startTimerAndPoints() {
-  let hours = 0;
-  let minutes = 0;
-  let seconds = 0;
-  let points = 0;
 
-  setInterval(function () {
-    // Increment seconds
-    seconds++;
-    // If seconds reach 60, reset seconds and increment minutes
-    if (seconds >= 60) {
-      seconds = 0;
-      minutes++;
-      // Add points every 60 seconds
-      points += 50;
-      updatePointsDisplay(points);
-      // If minutes reach 60, reset minutes and increment hours
-      if (minutes >= 60) {
-        minutes = 0;
-        hours++;
-      }
-    }
-    // Update the timer display
-    updateTimerDisplay(hours, minutes, seconds);
-  }, 1000); // Update every second
-}
+    let hours = 0;
+    let minutes = 0;
+    let seconds = 0;
+
+    setInterval(function() {
+        // Increment seconds
+        seconds++;
+        // If seconds reach 60, reset seconds and increment minutes
+        if (seconds >= 60) {
+            seconds = 0;
+            minutes++;
+            // If minutes reach 60, reset minutes and increment hours
+            if (minutes >= 60) {
+                minutes = 0;
+                hours++;
+            }
+            // Add points every 60 seconds
+            if (minutes % 1 === 0 && seconds === 0) {
+                points += 50;
+                updatePointsDisplay(points);
+            }
+        }
+        // Update the timer display
+        updateTimerDisplay(hours, minutes, seconds);
+    }, 1000); // Update every second
+
 
 // Function to update the timer display
 function updateTimerDisplay(hours, minutes, seconds) {

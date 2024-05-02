@@ -222,6 +222,11 @@ hover-image {
     user-select: none;
 }
 
+.locked {
+  /* filter: grayscale(100%); */
+  filter: brightness(0);
+}
+
 #timer {
     position: fixed;
     top: 10px; /* Adjust as needed */
