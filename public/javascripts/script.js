@@ -439,7 +439,7 @@ function rolldice(brush_states) {
           case 2:
             brush_name = "bigGreen";
 
-            if (brush_states.bigBlack.locked) {
+            if (brush_states.bigGreen.locked) {
               unlockgacha(brush_name);
             } else {
               // If not locked, add points
@@ -452,7 +452,7 @@ function rolldice(brush_states) {
           case 3:
             brush_name = "bigLightBlue";
 
-            if (brush_states.bigBlack.locked) {
+            if (brush_states.bigLightBlue.locked) {
               unlockgacha(brush_name);
             } else {
               // If not locked, add points
@@ -465,7 +465,7 @@ function rolldice(brush_states) {
           case 4:
             brush_name = "bigOrange";
 
-            if (brush_states.bigBlack.locked) {
+            if (brush_states.bigOrange.locked) {
               unlockgacha(brush_name);
             } else {
               // If not locked, add points
@@ -478,7 +478,7 @@ function rolldice(brush_states) {
           case 5:
             brush_name = "bigRed";
 
-            if (brush_states.bigBlack.locked) {
+            if (brush_states.bigRed.locked) {
               unlockgacha(brush_name);
             } else {
               // If not locked, add points
@@ -491,7 +491,7 @@ function rolldice(brush_states) {
           case 6:
             brush_name = "bigBrown";
 
-            if (brush_states.bigBlack.locked) {
+            if (brush_states.bigBrown.locked) {
               unlockgacha(brush_name);
             } else {
               // If not locked, add points
@@ -504,7 +504,7 @@ function rolldice(brush_states) {
           case 7:
             brush_name = "bigdarkblue";
 
-            if (brush_states.bigBlack.locked) {
+            if (brush_states.bigdarkblue.locked) {
               unlockgacha(brush_name);
             } else {
               // If not locked, add points
