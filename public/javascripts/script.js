@@ -159,7 +159,7 @@ displayCanvas.addEventListener('touchstart', function (e) {
     //Takes average of two touches. Ugly but it works.
     startDrawingOrPanning(((e.targetTouches[0].pageX + e.targetTouches[1].pageX) / 2) / scale, ((e.targetTouches[0].pageY + e.targetTouches[1].pageY) / 2) / scale, true)
   }
-});
+}, {passive: false});
 displayCanvas.addEventListener('touchmove', function (e) {
   if (userName) {
     if (isDrawing) {
