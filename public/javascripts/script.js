@@ -413,10 +413,45 @@ function rolldice(brush_states) {
         
         // Roll random number
         const diceNumber = Math.floor(Math.random() * 7) + 1; // Adjusted to generate numbers between 1 and 7
-        const brush_name = getBrushName(diceNumber);
+        const brush_name = null;
+
+
+        // const brush_name = getBrushName(diceNumber);
         console.log(diceNumber);
-        console.log(brush_name);
-        console.log(brush_states[brush_name].locked);
+        // console.log(brush_name);
+        // console.log(brush_states[brush_name].locked);
+
+        switch(diceNumber) {
+
+          case 1:
+            brush_name = bigBlack;
+            break;
+          
+          case 2:
+            brush_name = bigGreen;
+            break;
+          
+          case 3:
+            brush_name = bigLightBlue;
+            break;
+
+          case 4:
+            brush_name = bigOrange;
+            break;
+
+          case 5:
+            brush_name = bigRed;
+            break;
+
+          case 6:
+            brush_name = bigBrown;
+            break;
+
+          case 7:
+            brush_name = bigdarkblue;
+            break;
+
+        }
         
         // Unlock the gacha if the state is locked
         if (brush_states.locked) {
