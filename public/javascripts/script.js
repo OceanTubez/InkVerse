@@ -424,55 +424,19 @@ function rolldice(brush_states) {
         switch(diceNumber) {
 
           case 1:
-            brush_name = "bigBlack";
-            console.log("Reached switch statement 1");
-
-            if (brush_states.bigBlack.locked) {
-              unlockgacha(brush_name);
-            } else {
-              // If not locked, add points
-              points += 150;
-            }
-
+            diceBrush("BigBlack");
             break;
           
           case 2:
-            brush_name = "bigGreen";
-
-            if (brush_states.bigGreen.locked) {
-              unlockgacha(brush_name);
-            } else {
-              // If not locked, add points
-              points += 150;
-            }
-
-            console.log("Reached switch statement 2");
+            diceBrush("BigGreen");
             break;
           
           case 3:
-            brush_name = "bigLightBlue";
-
-            if (brush_states.bigLightBlue.locked) {
-              unlockgacha(brush_name);
-            } else {
-              // If not locked, add points
-              points += 150;
-            }
-
-            console.log("Reached switch statement 3");
+            diceBrush("BigLightBlue");
             break;
 
           case 4:
-            brush_name = "bigOrange";
-
-            if (brush_states.bigOrange.locked) {
-              unlockgacha(brush_name);
-            } else {
-              // If not locked, add points
-              points += 150;
-            }
-
-            console.log("Reached switch statement 4");
+            diceBrush("bigOrange");
             break;
 
           case 5:
