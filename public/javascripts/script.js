@@ -37,87 +37,55 @@ let vectorX = 0;
 let vectorY = 0;
 let stampPan, stampRefresh, stampLoad;
 
-let brush_attributes = {
+let brushAttributes = {
   "bigBlack": {
     size: 24,
     rgb: [0, 0, 0],
+    "locked": false,
+    points: 0,
   },
 
   "bigGreen": {
     size: 24,
     rgb: [0, 139, 0],
+    "locked": true,
+    points: 1,
   },
 
   "bigLightBlue": {
     size: 15,
     rgb: [173, 216, 230],
+    "locked": true,
+    points: 1,
   },
 
   "bigOrange": {
     size: 18,
     rgb: [255, 0, 177],
+    "locked": true,
+    points: 2,
   },
 
   "bigRed": {
     size: 27,
     rgb: [178, 34, 34],
+    "locked": true,
+    points: 3,
   },
 
   "bigBrown": {
     size: 47,
     rgb: [139, 69, 19],
+    "locked": true,
+    points: 4,
   },
 
-  "bigdarkblue": {
+  "bigDarkBlue": {
     size: 25,
     rgb: [0, 0, 139],
+    "locked": true,
+    points: 5,
   }
-};
-
-let brush_states = {
-  "bigBlack": {
-    "locked": false,
-  },
-
-  "bigGreen": {
-    "locked": true,
-  },
-
-  "bigLightBlue": {
-    "locked": true,
-  },
-
-  "bigOrange": {
-    "locked": true,
-  },
-
-  "bigRed": {
-    "locked": true,
-  },
-
-  "bigBrown": {
-    "locked": true,
-  },
-
-  "bigdarkblue": {
-    "locked": true,
-  }
-};
-
-let brush_points = {
-  "bigBlack": 0,
-
-  "bigGreen": 1,
-
-  "bigLightBlue": 1,
-
-  "bigOrange": 2,
-
-  "bigRed": 3,
-
-  "bigBrown": 4,
-
-  "bigdarkblue": 5
 };
 
 let points = 0;
@@ -208,7 +176,7 @@ function setSocket() {
 }
 
 function initializeBrushStates() {
-  Object.entries(brush_states).forEach(([key, value]) => {
+  Object.entries(brushAttributes).forEach(([key, value]) => {
     if (value.locked) {
       document.getElementById(key).className = 'button locked'
     } else {
@@ -351,10 +319,9 @@ function zoomOutButton() {
 //Brush functions
 
 function changeBrush(brush_name) {
-  let attributes = brush_attributes[brush_name];
-  let state = brush_states[brush_name];
+  let attributes = brushAttributes[brush_name];
 
-  if (state.locked) {
+  if (attributes.locked) {
     updateBrushState(brush_name)
     return;
   }
@@ -372,13 +339,13 @@ function changeBrush(brush_name) {
 
 function updateBrushState(brush_name) {
   // Not enough points, then retrun false and don't update points/brush state
-  if (points < brush_points[brush_name]) {
+  if (points < brushAttributes[brush_name].points) {
     return;
   }
   // Enough points, so update points and brush state and retun true
-  points -= brush_points[brush_name];
+  points -= brushAttributes[brush_name].points;
   updatePointsDisplay(points);
-  brush_states[brush_name].locked = false;
+  brushAttributes[brush_name].locked = false;
   document.getElementById(brush_name).className = 'button';
 }
 
