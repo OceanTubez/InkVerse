@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 const canvas = document.getElementById('drawCanvas');
 const nameInput = document.getElementById('nameButton');
 const ctx = canvas.getContext('2d');
-const socket = io('localhost:3000'); // Connect to server
+let socket; // Connect to server
+setSocket();
 
 const showcase = document.getElementById('showcase');
 const showcaseCTX = showcase.getContext('2d');
@@ -34,96 +35,64 @@ let lineSize = 1;
 
 let vectorX = 0;
 let vectorY = 0;
+let stampPan, stampRefresh, stampLoad;
 
-
-let brush_attributes = {
+let brushAttributes = {
   "bigBlack": {
     size: 24,
     rgb: [0, 0, 0],
     dice: 1,
+    "locked": false,
+    points: 0,
   },
 
   "bigGreen": {
     size: 24,
     rgb: [0, 139, 0],
     dice: 2,
+    "locked": true,
+    points: 1,
   },
 
   "bigLightBlue": {
     size: 15,
     rgb: [173, 216, 230],
     dice: 3,
+    "locked": true,
+    points: 1,
   },
 
   "bigOrange": {
     size: 18,
     rgb: [255, 0, 177],
     dice: 4,
+    "locked": true,
+    points: 2,
   },
 
   "bigRed": {
     size: 27,
     rgb: [178, 34, 34],
     dice: 5,
+    "locked": true,
+    points: 3,
   },
 
   "bigBrown": {
     size: 47,
     rgb: [139, 69, 19],
     dice: 6,
+    "locked": true,
+    points: 4,
   },
 
-  "bigdarkblue": {
+  "bigDarkBlue": {
     size: 25,
     rgb: [0, 139, 0],
     dice: 7,
+    "locked": true,
+    points: 5,
   }
-};
-
-let brush_states = {
-  "bigBlack": {
-    "locked": true,
-  },
-
-  "bigGreen": {
-    "locked": true,
-  },
-
-  "bigLightBlue": {
-    "locked": true,
-  },
-
-  "bigOrange": {
-    "locked": true,
-  },
-
-  "bigRed": {
-    "locked": true,
-  },
-
-  "bigBrown": {
-    "locked": true,
-  },
-
-  "bigdarkblue": {
-    "locked": true,
-  }
-};
-
-let brush_points = {
-  "bigBlack": 0,
-
-  "bigGreen": 1,
-
-  "bigLightBlue": 1,
-
-  "bigOrange": 2,
-
-  "bigRed": 3,
-
-  "bigBrown": 4,
-
-  "bigdarkblue": 5
 };
 
 let points = 100;
@@ -139,10 +108,13 @@ let nameDisplay = [];
 displayCanvas.addEventListener('mousedown', function (e) {
   startDrawingOrPanning(e.offsetX / scale, e.offsetY / scale, e.ctrlKey);
 });
-displayCanvas.addEventListener('mousemove', function (e) {
+displayCanvas.addEventListener('pointermove', function (e) {
   if (userName) {
+    var events = e.getCoalescedEvents();
     if (isDrawing) {
-      draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
+      for (const event of events) {
+        draw(event.offsetX / scale + screenOffsetX, event.offsetY / scale + screenOffsetY);
+      }
     }
     else if (isPanning) {
       pan(e.offsetX / scale, e.offsetY / scale);
@@ -203,8 +175,16 @@ function resizeCanvas() {
   document.getElementById('displayCanvas').height = screenHeight;
 }
 
+function setSocket() {
+  if (onServer == 0) {
+    socket = io('localhost:3000');
+  } else {
+    socket = io('54.39.97.208:3000');
+  }
+}
+
 function initializeBrushStates() {
-  Object.entries(brush_states).forEach(([key, value]) => {
+  Object.entries(brushAttributes).forEach(([key, value]) => {
     if (value.locked) {
       document.getElementById(key).className = 'button locked'
     } else {
@@ -264,7 +244,6 @@ function pan(x, y) {
 
 function draw(x, y) {
   drawLine(ctx, x, y, lastX, lastY);
-  displayContent();
   // Emit drawing data to the server
   socket.emit('draw', { userName, lastX, lastY, x, y, red, green, blue, lineSize });
   lastX = x;
@@ -308,9 +287,6 @@ function saveName() {
 
 }
 
-
-
-
 // Buttons
 function changeColor() {
   playClick1();
@@ -330,7 +306,6 @@ function changeSize() {
   //Applies the change
   ctx.lineWidth = lineSize;
   redrawShowcase();
-
 }
 
 //Zoom stuff
@@ -351,13 +326,10 @@ function zoomOutButton() {
 //Brush functions
 
 function changeBrush(brush_name) {
-  console.log("changing brush for ", brush_name)
-  let attributes = brush_attributes[brush_name];
-  let state = brush_states[brush_name];
 
-  console.log(attributes);
-  console.log(state);
-  if (state.locked) {
+  let attributes = brushAttributes[brush_name];
+
+  if (attributes.locked) {
     updateBrushState(brush_name)
     return;
   }
@@ -375,20 +347,19 @@ function changeBrush(brush_name) {
 
 function updateBrushState(brush_name) {
   // Not enough points, then retrun false and don't update points/brush state
-  if (points < brush_points[brush_name]) {
-    console.log("not updating brush because not enough points", brush_name);
+  if (points < brushAttributes[brush_name].points) {
     return;
   }
   // Enough points, so update points and brush state and retun true
-  points -= brush_points[brush_name];
-  updatePointsDisplay();
-  brush_states[brush_name].locked = false;
+  points -= brushAttributes[brush_name].points;
+  updatePointsDisplay(points);
+  brushAttributes[brush_name].locked = false;
   document.getElementById(brush_name).className = 'button';
 }
 
 const diceToBrush = {};
-for (const brushName in brush_attributes) {
-  const diceNumber = brush_attributes[brushName].dice;
+for (const brushName in brushAttributes) {
+  const diceNumber = brushAttributes[brushName].dice;
   diceToBrush[diceNumber] = brushName;
 }
 
@@ -398,14 +369,12 @@ function getBrushName(diceNumber) {
 
 // Function to unlock gacha
 function unlockgacha(brush_name) {
-  console.log(brush_states[brush_name].locked)
-  brush_states[brush_name].locked = false;
-  console.log(brush_states[brush_name].locked)
+  brushAttributes[brush_name].locked = false;
 }
 
 //gacha system
 
-function rolldice(brush_states) {
+function rolldice() {
   if (points < 1) {
     return;
   }
@@ -413,9 +382,6 @@ function rolldice(brush_states) {
   // Subtract points
   points -= 1;
   // const brush_name = getBrushName(diceNumber);
-  console.log(diceNumber);
-  // console.log(brush_name);
-  // console.log(brush_states[brush_name].locked);
 
   switch (diceNumber) {
     case 1:
@@ -443,7 +409,7 @@ function rolldice(brush_states) {
       break;
 
     case 7:
-      diceBrush("bigdarkblue");
+      diceBrush("bigDarkBlue");
       break;
   }
   updatePointsDisplay();
@@ -456,8 +422,6 @@ function diceBrush(brushName) {
     // If not locked, add points
     points += 150;
   }
-
-  console.log("Reached switch statement" + brushName);
 }
 
 function redrawShowcase() {
@@ -582,7 +546,6 @@ socket.on('draw', (data) => {
   ctx.strokeStyle = "rgb(" + data.red + "," + data.green + "," + data.blue + ")";
   ctx.lineWidth = data.lineSize;
   drawLine(ctx, data.x, data.y, data.lastX, data.lastY);
-  displayContent();
   //Reset to original
   ctx.restore();
 
@@ -593,7 +556,6 @@ socket.on('loadCanvas', (data) => {
   let img = new Image;
   img.onload = function () {
     ctx.drawImage(img, 0, 0);
-    displayContent(); // Or at whatever offset you like
     document.getElementById("Loading").remove();
     loading = false;
   };
@@ -619,54 +581,73 @@ socket.on('nameConfirmed', (data) => {
 
 //Animation Frames
 
-function refresh() {
-  fixPanning();
-  displayContent();
-  displayNames();
+function refresh(time) {
+  if (!stampRefresh) {
+    stampRefresh = time;
+  }
+  if (time - stampRefresh > 30) {
+    fixPanning();
+    displayContent();
+    displayNames();
+    stampRefresh = time;
+  }
   requestAnimationFrame(refresh);
 }
 
-function loadingScreen() {
+function loadingScreen(time) {
   if (loading == true) {
-    document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
+    if (!stampLoad) {
+      stampLoad = time;
+    }
+    if (time - stampLoad > 30) {
+      document.getElementById("LoadingText").textContent = document.getElementById("LoadingText").textContent + ".";
+      stampLoad = time;
+    }
     requestAnimationFrame(loadingScreen);
   }
 }
 
-function panSlide() {
+function panSlide(time) {
   //Slides the pan based on the vector speed.
   if (panSpeedX || panSpeedY) {
-    if (panSpeedX) {
-      screenOffsetX -= panSpeedX;
-      panSpeedX *= 0.83;
-      //This if statement moves the vector closer to 0.
-      if (panSpeedX < 0) {
-        panSpeedX += 0.01;
-        if (panSpeedX > 0) {
-          panSpeedX = 0;
-        }
-      } else {
-        panSpeedX -= 0.01;
-        if (panSpeedX < 0) {
-          panSpeedX = 0;
-        }
-      }
+    if (!stampPan) {
+      stampPan = time;
     }
-    if (panSpeedY) {
-      screenOffsetY -= panSpeedY;
-      panSpeedY *= 0.83;
-      //This if statement moves the vector closer to 0.
-      if (panSpeedY < 0) {
-        panSpeedY += 0.01;
-        if (panSpeedY > 0) {
-          panSpeedY = 0;
-        }
-      } else {
-        panSpeedY -= 0.01;
-        if (panSpeedY < 0) {
-          panSpeedY = 0;
+    let elapsedTime = time - stampPan
+    if (elapsedTime > 30) {
+      if (panSpeedX) {
+        screenOffsetX -= panSpeedX * elapsedTime / 30 / scale;
+        panSpeedX *= 0.82 * elapsedTime / 30;
+        //This if statement moves the vector closer to 0.
+        if (panSpeedX < 0) {
+          panSpeedX += 0.01;
+          if (panSpeedX > 0) {
+            panSpeedX = 0;
+          }
+        } else {
+          panSpeedX -= 0.01;
+          if (panSpeedX < 0) {
+            panSpeedX = 0;
+          }
         }
       }
+      if (panSpeedY) {
+        screenOffsetY -= panSpeedY * elapsedTime / 30 / scale;
+        panSpeedY *= 0.82 * elapsedTime / 30;
+        //This if statement moves the vector closer to 0.
+        if (panSpeedY < 0) {
+          panSpeedY += 0.01;
+          if (panSpeedY > 0) {
+            panSpeedY = 0;
+          }
+        } else {
+          panSpeedY -= 0.01;
+          if (panSpeedY < 0) {
+            panSpeedY = 0;
+          }
+        }
+      }
+      stampPan = time;
     }
     //Loads images and makes a new animation frame.
     requestAnimationFrame(panSlide);

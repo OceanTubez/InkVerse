@@ -10,6 +10,7 @@ const draw = require('./public/javascripts/common/canvas.js')
 const { createCanvas } = require('canvas');
 const canvas = createCanvas(draw.canvasWidth, draw.canvasHeight);
 const ctx = canvas.getContext('2d');
+const server = require('./public/javascripts/common/server.js')
 //NOT CURRENTLY UsING - IGNOREs
 //var indexRouter = require('./routes/index');
 //var usersRouter = require('./routes/users');
@@ -76,10 +77,11 @@ io.on('connection', (socket) => {
 
   socket.on('mouseMovement', (data) => {
     let index = userInfo.indexOf(socket.id);
-
+    if (index != -1) {
     userInfo[index + 1] = data.userName;
     userInfo[index + 2] = data.mouseX;
     userInfo[index + 3] = data.mouseY;
+    }
 
     socket.broadcast.emit('mouse', userInfo); // Broadcast mouse movement
   });
@@ -92,11 +94,11 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
 
     let index = userInfo.indexOf(socket.id);
-
+    if (index != -1) {
     userInfo[index + 1] = data.userName;
     userInfo[index + 2] = data.x;
     userInfo[index + 3] = data.y;
-
+    }
     socket.broadcast.emit('mouse', userInfo);
 
   });
@@ -132,7 +134,14 @@ io.on('connection', (socket) => {
   });
 });
 //CHANGE THIS FOR FULL RELEASE!!!!!!
-http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
+
+if (server.onServer == 0)
+  {
+    http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
+  } else {
+    http.listen(3000, '54.39.97.208', () => console.log('Server listening on port 3000'));
+  } 
+
 
 
 module.exports = app;
