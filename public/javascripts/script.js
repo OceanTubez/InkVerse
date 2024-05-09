@@ -5,15 +5,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
   loadingScreen();
   refresh();
   startTimerAndPoints();
-  if (server == 1) {
-    socket = io('54.39.97.208:3000')
-  }
 });
 
 const canvas = document.getElementById('drawCanvas');
 const nameInput = document.getElementById('nameButton');
 const ctx = canvas.getContext('2d');
-const socket = io('localhost:3000'); // Connect to server
+let socket; // Connect to server
+setSocket();
 
 const showcase = document.getElementById('showcase');
 const showcaseCTX = showcase.getContext('2d');
@@ -199,6 +197,14 @@ function resizeCanvas() {
   screenHeight = window.innerHeight;
   document.getElementById('displayCanvas').width = screenWidth;
   document.getElementById('displayCanvas').height = screenHeight;
+}
+
+function setSocket() {
+  if (onServer == 0) {
+    socket = io('localhost:3000');
+  } else {
+    socket = io('54.39.97.208:3000');
+  }
 }
 
 function initializeBrushStates() {

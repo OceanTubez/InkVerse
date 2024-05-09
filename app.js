@@ -134,7 +134,7 @@ io.on('connection', (socket) => {
 });
 //CHANGE THIS FOR FULL RELEASE!!!!!!
 
-if (server.server == 0)
+if (server.onServer == 0)
   {
     http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
   } else {
