@@ -40,42 +40,49 @@ let brush_attributes = {
   "bigBlack": {
     size: 24,
     rgb: [0, 0, 0],
+    dice: 1,
   },
 
   "bigGreen": {
     size: 24,
     rgb: [0, 139, 0],
+    dice: 2,
   },
 
   "bigLightBlue": {
     size: 15,
     rgb: [173, 216, 230],
+    dice: 3,
   },
 
   "bigOrange": {
     size: 18,
     rgb: [255, 0, 177],
+    dice: 4,
   },
 
   "bigRed": {
     size: 27,
     rgb: [178, 34, 34],
+    dice: 5,
   },
 
   "bigBrown": {
     size: 47,
     rgb: [139, 69, 19],
+    dice: 6,
   },
 
   "bigdarkblue": {
     size: 25,
     rgb: [0, 139, 0],
+    dice: 7,
   }
 };
 
 let brush_states = {
   "bigBlack": {
-    "locked": false,
+    "locked": true,
   },
 
   "bigGreen": {
@@ -119,7 +126,7 @@ let brush_points = {
   "bigdarkblue": 5
 };
 
-let points = 0;
+let points = 100;
 
 let panSpeedX = 0;
 let panSpeedY = 0;
@@ -127,17 +134,6 @@ let loading = true;
 let userName = "";
 let nameDisplay = [];
 
-//number to brush; for dice
-
-let dice = {
-    1: "bigBlack",
-    2: "bigGreen",
-    3: "bigLightBlue",
-    4: "bigOrange",
-    5: "bigRed",
-    6: "bigBrown",
-    7: "bigdarkblue"
-};
 // Handle drawing events
 
 displayCanvas.addEventListener('mousedown', function (e) {
@@ -312,28 +308,7 @@ function saveName() {
 
 }
 
-//gacha roll button
 
-function rolldice() {
-    if (pts >= 1) {
-        // Subtract points
-        pts -= 1;
-        
-        // Roll random number
-        let diceroll = Math.floor(Math.random() * 7);
-        
-        if (state.locked) {
-            // Check if the diceroll is a valid key in the dice dictionary
-            if (diceroll in dice) {
-                updateBrushState(diceroll);
-            }
-            return;
-        } else {
-            // If not locked, add points
-            pts += 150;
-        }
-    }
-}
 
 
 // Buttons
@@ -410,6 +385,47 @@ function updateBrushState(brush_name) {
   updatePointsDisplay(points);
   brush_states[brush_name].locked = false;
   document.getElementById(brush_name).className = 'button';
+}
+
+const diceToBrush = {};
+for (const brushName in brush_attributes) {
+  const diceNumber = brush_attributes[brushName].dice;
+  diceToBrush[diceNumber] = brushName;
+}
+
+function getBrushName(diceNumber) {
+  return diceToBrush[diceNumber] || null;
+}
+
+// Function to unlock gacha
+function unlockgacha(brush_name) {
+    console.log(brush_states[brush_name].locked)
+    brush_states[brush_name].locked = false;
+    console.log(brush_states[brush_name].locked)
+}
+
+//gacha system
+
+function rolldice(brush_states) {
+    if (points >= 1) {
+        // Subtract points
+        points -= 1;
+        
+        // Roll random number
+        const diceNumber = Math.floor(Math.random() * 7) + 1; // Adjusted to generate numbers between 1 and 7
+        const brush_name = getBrushName(diceNumber);
+        console.log(diceNumber);
+        console.log(brush_name);
+        console.log(brush_states[brush_name].locked);
+        
+        // Unlock the gacha if the state is locked
+        if (brush_states.locked) {
+            unlockgacha(brush_name);
+        } else {
+            // If not locked, add points
+            points += 150;
+        }
+    }
 }
 
 
