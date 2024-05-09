@@ -419,15 +419,15 @@ function rolldice(brush_states) {
 
   switch (diceNumber) {
     case 1:
-      diceBrush("BigBlack");
+      diceBrush("bigBlack");
       break;
 
     case 2:
-      diceBrush("BigGreen");
+      diceBrush("bigGreen");
       break;
 
     case 3:
-      diceBrush("BigLightBlue");
+      diceBrush("bigLightBlue");
       break;
 
     case 4:
