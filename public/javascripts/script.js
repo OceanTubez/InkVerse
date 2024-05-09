@@ -267,7 +267,6 @@ function toggleDropdown() {
   dropdown.classList.toggle("active");
 
   saveName();
-
 }
 
 function saveName() {
@@ -284,7 +283,6 @@ function saveName() {
 
   // You can store the input value in a variable or do other processing here
   // console.log("Input value:", inputValue);
-
 }
 
 // Buttons
@@ -325,12 +323,12 @@ function zoomOutButton() {
 
 //Brush functions
 
-function changeBrush(brush_name) {
+function changeBrush(brushName) {
 
-  let attributes = brushAttributes[brush_name];
+  let attributes = brushAttributes[brushName];
 
   if (attributes.locked) {
-    updateBrushState(brush_name)
+    updateBrushState(brushName)
     return;
   }
   playClick1()
@@ -345,16 +343,16 @@ function changeBrush(brush_name) {
   redrawShowcase();
 };
 
-function updateBrushState(brush_name) {
+function updateBrushState(brushName) {
   // Not enough points, then retrun false and don't update points/brush state
-  if (points < brushAttributes[brush_name].points) {
+  if (points < brushAttributes[brushName].points) {
     return;
   }
   // Enough points, so update points and brush state and retun true
-  points -= brushAttributes[brush_name].points;
+  points -= brushAttributes[brushName].points;
   updatePointsDisplay(points);
-  brushAttributes[brush_name].locked = false;
-  document.getElementById(brush_name).className = 'button';
+  brushAttributes[brushName].locked = false;
+  document.getElementById(brushName).className = 'button';
 }
 
 const diceToBrush = {};
@@ -365,11 +363,6 @@ for (const brushName in brushAttributes) {
 
 function getBrushName(diceNumber) {
   return diceToBrush[diceNumber] || null;
-}
-
-// Function to unlock gacha
-function unlockgacha(brush_name) {
-  brushAttributes[brush_name].locked = false;
 }
 
 //gacha system
@@ -417,7 +410,8 @@ function rolldice() {
 
 function diceBrush(brushName) {
   if (brushAttributes[brushName].locked) {
-    unlockgacha(brushName);
+    brushAttributes[brushName].locked = false;
+    document.getElementById(brushName).className = 'button'
   } else {
     // If not locked, add points
     points += 150;
