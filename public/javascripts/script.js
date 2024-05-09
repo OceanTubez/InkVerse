@@ -131,7 +131,7 @@ let nameDisplay = [];
 displayCanvas.addEventListener('mousedown', function (e) {
   startDrawingOrPanning(e.offsetX / scale, e.offsetY / scale, e.ctrlKey);
 });
-displayCanvas.addEventListener('mousemove', function (e) {
+displayCanvas.addEventListener('pointermove', function (e){
   if (userName) {
     if (isDrawing) {
       draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
@@ -145,7 +145,7 @@ displayCanvas.addEventListener('mousemove', function (e) {
       socket.emit('mouseMovement', { mouseX, mouseY, userName });
     }
   }
-});
+}, {passive: false});
 displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
 displayCanvas.addEventListener('mouseout', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchstart', function (e) {
