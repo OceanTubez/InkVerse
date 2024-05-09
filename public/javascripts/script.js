@@ -381,7 +381,7 @@ function updateBrushState(brush_name) {
   }
   // Enough points, so update points and brush state and retun true
   points -= brush_points[brush_name];
-  updatePointsDisplay(points);
+  updatePointsDisplay();
   brush_states[brush_name].locked = false;
   document.getElementById(brush_name).className = 'button';
 }
@@ -446,6 +446,7 @@ function rolldice(brush_states) {
       diceBrush("bigdarkblue");
       break;
   }
+  updatePointsDisplay();
 }
 
 function diceBrush(brushName) {
@@ -507,7 +508,7 @@ function drawMouse(x, y) {
 }
 //points
 
-function updatePointsDisplay(points) {
+function updatePointsDisplay() {
   document.getElementById('points').textContent = points + " Points";
 }
 
@@ -546,7 +547,7 @@ function startTimerAndPoints() {
       // Add points every 60 seconds
       if (minutes % 1 === 0 && seconds === 0) {
         points += 50;
-        updatePointsDisplay(points);
+        updatePointsDisplay();
       }
     }
     // Update the timer display
