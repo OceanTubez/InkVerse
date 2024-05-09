@@ -357,8 +357,7 @@ function changeBrush(brush_name) {
 
   console.log(attributes);
   console.log(state);
-  if (state.locked)
-  {
+  if (state.locked) {
     updateBrushState(brush_name)
     return;
   }
@@ -399,61 +398,54 @@ function getBrushName(diceNumber) {
 
 // Function to unlock gacha
 function unlockgacha(brush_name) {
-    console.log(brush_states[brush_name].locked)
-    brush_states[brush_name].locked = false;
-    console.log(brush_states[brush_name].locked)
+  console.log(brush_states[brush_name].locked)
+  brush_states[brush_name].locked = false;
+  console.log(brush_states[brush_name].locked)
 }
 
 //gacha system
 
 function rolldice(brush_states) {
-    if (points >= 1) {
-        // Subtract points
-        points -= 1;
-        
-        // Roll random number
-        const diceNumber = Math.ceil(Math.random() * 7); // Adjusted to generate numbers between 1 and 7
-        let brush_name;
+  if (points < 1) {
+    return;
+  }
+  const diceNumber = Math.ceil(Math.random() * 7); // Rolls random number between 1 and 7
+  // Subtract points
+  points -= 1;
+  // const brush_name = getBrushName(diceNumber);
+  console.log(diceNumber);
+  // console.log(brush_name);
+  // console.log(brush_states[brush_name].locked);
 
+  switch (diceNumber) {
+    case 1:
+      diceBrush("BigBlack");
+      break;
 
-        // const brush_name = getBrushName(diceNumber);
-        console.log(diceNumber);
-        // console.log(brush_name);
-        // console.log(brush_states[brush_name].locked);
+    case 2:
+      diceBrush("BigGreen");
+      break;
 
-        switch(diceNumber) {
+    case 3:
+      diceBrush("BigLightBlue");
+      break;
 
-          case 1:
-            diceBrush("BigBlack");
-            break;
-          
-          case 2:
-            diceBrush("BigGreen");
-            break;
-          
-          case 3:
-            diceBrush("BigLightBlue");
-            break;
+    case 4:
+      diceBrush("bigOrange");
+      break;
 
-          case 4:
-            diceBrush("bigOrange");
-            break;
+    case 5:
+      diceBrush("bigRed");
+      break;
 
-          case 5:
-            diceBrush("bigRed");
-            break;
+    case 6:
+      diceBrush("bigBrown");
+      break;
 
-          case 6:
-            diceBrush("bigBrown");
-            break;
-
-          case 7:
-            diceBrush("bigdarkblue");
-            break;
-        }
-        
-        // Unlock the gacha if the state is locked
-    }
+    case 7:
+      diceBrush("bigdarkblue");
+      break;
+  }
 }
 
 function diceBrush(brushName) {
@@ -469,7 +461,8 @@ function diceBrush(brushName) {
 
 function redrawShowcase() {
   //Displays the current pen
-  showcaseCTX.clearRect(0, 0, showcase.width, showcase.height);
+  showcaseCTX.clearRect(0, 0, showcase.width,
+    showcase.height);
   showcaseCTX.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
   showcaseCTX.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
   showcaseCTX.beginPath();
