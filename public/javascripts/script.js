@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 const canvas = document.getElementById('drawCanvas');
 const nameInput = document.getElementById('nameButton');
 const ctx = canvas.getContext('2d');
-const socket = io('localhost:3000'); // Connect to server
+let socket; // Connect to server
+setSocket();
 
 const showcase = document.getElementById('showcase');
 const showcaseCTX = showcase.getContext('2d');
@@ -131,10 +132,13 @@ let nameDisplay = [];
 displayCanvas.addEventListener('mousedown', function (e) {
   startDrawingOrPanning(e.offsetX / scale, e.offsetY / scale, e.ctrlKey);
 });
-displayCanvas.addEventListener('mousemove', function (e) {
+displayCanvas.addEventListener('pointermove', function (e) {
   if (userName) {
+    var events = e.getCoalescedEvents();
     if (isDrawing) {
-      draw(e.offsetX / scale + screenOffsetX, e.offsetY / scale + screenOffsetY);
+      for (const event of events) {
+        draw(event.offsetX / scale + screenOffsetX, event.offsetY / scale + screenOffsetY);
+      }
     }
     else if (isPanning) {
       pan(e.offsetX / scale, e.offsetY / scale);
@@ -193,6 +197,14 @@ function resizeCanvas() {
   screenHeight = window.innerHeight;
   document.getElementById('displayCanvas').width = screenWidth;
   document.getElementById('displayCanvas').height = screenHeight;
+}
+
+function setSocket() {
+  if (onServer == 0) {
+    socket = io('localhost:3000');
+  } else {
+    socket = io('54.39.97.208:3000');
+  }
 }
 
 function initializeBrushStates() {
