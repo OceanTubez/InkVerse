@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   loadingScreen();
   refresh();
   startTimerAndPoints();
+  diceSetup();
 });
 
 const canvas = document.getElementById('drawCanvas');
@@ -35,6 +36,7 @@ let lineSize = 1;
 
 let vectorX = 0;
 let vectorY = 0;
+let maxDice = 0;
 let stampPan, stampRefresh, stampLoad;
 
 let brushAttributes = {
@@ -183,6 +185,12 @@ function setSocket() {
   }
 }
 
+function diceSetup() {
+  Object.entries(brushAttributes).forEach(([key, value]) => {
+    maxDice += value.dice;
+  })
+}
+
 function initializeBrushStates() {
   Object.entries(brushAttributes).forEach(([key, value]) => {
     if (value.locked) {
@@ -192,7 +200,6 @@ function initializeBrushStates() {
     }
   })
 }
-
 
 // Drawing functions
 function startDrawingOrPanning(x, y, ctrl) {
@@ -278,6 +285,7 @@ function saveName() {
     return;
 
   }
+  //WRITE CODE HERE TO SANITIZE
 
   socket.emit('sentNameData', inputValue);
 
@@ -355,56 +363,30 @@ function updateBrushState(brushName) {
   document.getElementById(brushName).className = 'button';
 }
 
-const diceToBrush = {};
-for (const brushName in brushAttributes) {
-  const diceNumber = brushAttributes[brushName].dice;
-  diceToBrush[diceNumber] = brushName;
-}
 
-function getBrushName(diceNumber) {
-  return diceToBrush[diceNumber] || null;
+//finds the brush associated with gacha
+function gachaRoll(diceNumber) {
+  let counter = 0;
+  Object.entries(brushAttributes).forEach(([key, value]) => {
+    counter += value.dice;
+    if (counter >= diceNumber) //Only activates on one dice. 
+      {
+        diceBrush(key);
+        counter = -9999999; //Please find a better solution lol.
+      }
+  })
 }
-
 //gacha system
 
-function rolldice() {
+function rollDice() {
   if (points < 1) {
     return;
   }
-  const diceNumber = Math.ceil(Math.random() * 7); // Rolls random number between 1 and 7
+  const diceNumber = Math.ceil(Math.random() * maxDice); // Rolls random number between 1 and 7
   // Subtract points
   points -= 1;
+  gachaRoll(diceNumber);
   // const brush_name = getBrushName(diceNumber);
-
-  switch (diceNumber) {
-    case 1:
-      diceBrush("bigBlack");
-      break;
-
-    case 2:
-      diceBrush("bigGreen");
-      break;
-
-    case 3:
-      diceBrush("bigLightBlue");
-      break;
-
-    case 4:
-      diceBrush("bigOrange");
-      break;
-
-    case 5:
-      diceBrush("bigRed");
-      break;
-
-    case 6:
-      diceBrush("bigBrown");
-      break;
-
-    case 7:
-      diceBrush("bigDarkBlue");
-      break;
-  }
   updatePointsDisplay();
 }
 
