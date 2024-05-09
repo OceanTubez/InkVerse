@@ -252,3 +252,9 @@ hover-image {
     border-radius: 5px; /* Add border radius */
 }
 
+.gacha {
+    position: fixed;
+    top: 80px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+}
+

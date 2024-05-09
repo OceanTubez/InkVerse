@@ -41,6 +41,7 @@ let brushAttributes = {
   "bigBlack": {
     size: 24,
     rgb: [0, 0, 0],
+    dice: 1,
     "locked": false,
     points: 0,
   },
@@ -48,6 +49,7 @@ let brushAttributes = {
   "bigGreen": {
     size: 24,
     rgb: [0, 139, 0],
+    dice: 2,
     "locked": true,
     points: 1,
   },
@@ -55,6 +57,7 @@ let brushAttributes = {
   "bigLightBlue": {
     size: 15,
     rgb: [173, 216, 230],
+    dice: 3,
     "locked": true,
     points: 1,
   },
@@ -62,6 +65,7 @@ let brushAttributes = {
   "bigOrange": {
     size: 18,
     rgb: [255, 0, 177],
+    dice: 4,
     "locked": true,
     points: 2,
   },
@@ -69,6 +73,7 @@ let brushAttributes = {
   "bigRed": {
     size: 27,
     rgb: [178, 34, 34],
+    dice: 5,
     "locked": true,
     points: 3,
   },
@@ -76,25 +81,28 @@ let brushAttributes = {
   "bigBrown": {
     size: 47,
     rgb: [139, 69, 19],
+    dice: 6,
     "locked": true,
     points: 4,
   },
 
   "bigDarkBlue": {
     size: 25,
-    rgb: [0, 0, 139],
+    rgb: [0, 139, 0],
+    dice: 7,
     "locked": true,
     points: 5,
   }
 };
 
-let points = 0;
+let points = 100;
 
 let panSpeedX = 0;
 let panSpeedY = 0;
 let loading = true;
 let userName = "";
 let nameDisplay = [];
+
 // Handle drawing events
 
 displayCanvas.addEventListener('mousedown', function (e) {
@@ -259,7 +267,6 @@ function toggleDropdown() {
   dropdown.classList.toggle("active");
 
   saveName();
-
 }
 
 function saveName() {
@@ -276,7 +283,6 @@ function saveName() {
 
   // You can store the input value in a variable or do other processing here
   // console.log("Input value:", inputValue);
-
 }
 
 // Buttons
@@ -298,7 +304,6 @@ function changeSize() {
   //Applies the change
   ctx.lineWidth = lineSize;
   redrawShowcase();
-
 }
 
 //Zoom stuff
@@ -318,11 +323,12 @@ function zoomOutButton() {
 
 //Brush functions
 
-function changeBrush(brush_name) {
-  let attributes = brushAttributes[brush_name];
+function changeBrush(brushName) {
+
+  let attributes = brushAttributes[brushName];
 
   if (attributes.locked) {
-    updateBrushState(brush_name)
+    updateBrushState(brushName)
     return;
   }
   playClick1()
@@ -337,22 +343,85 @@ function changeBrush(brush_name) {
   redrawShowcase();
 };
 
-function updateBrushState(brush_name) {
+function updateBrushState(brushName) {
   // Not enough points, then retrun false and don't update points/brush state
-  if (points < brushAttributes[brush_name].points) {
+  if (points < brushAttributes[brushName].points) {
     return;
   }
   // Enough points, so update points and brush state and retun true
-  points -= brushAttributes[brush_name].points;
+  points -= brushAttributes[brushName].points;
   updatePointsDisplay(points);
-  brushAttributes[brush_name].locked = false;
-  document.getElementById(brush_name).className = 'button';
+  brushAttributes[brushName].locked = false;
+  document.getElementById(brushName).className = 'button';
 }
 
+const diceToBrush = {};
+for (const brushName in brushAttributes) {
+  const diceNumber = brushAttributes[brushName].dice;
+  diceToBrush[diceNumber] = brushName;
+}
+
+function getBrushName(diceNumber) {
+  return diceToBrush[diceNumber] || null;
+}
+
+//gacha system
+
+function rolldice() {
+  if (points < 1) {
+    return;
+  }
+  const diceNumber = Math.ceil(Math.random() * 7); // Rolls random number between 1 and 7
+  // Subtract points
+  points -= 1;
+  // const brush_name = getBrushName(diceNumber);
+
+  switch (diceNumber) {
+    case 1:
+      diceBrush("bigBlack");
+      break;
+
+    case 2:
+      diceBrush("bigGreen");
+      break;
+
+    case 3:
+      diceBrush("bigLightBlue");
+      break;
+
+    case 4:
+      diceBrush("bigOrange");
+      break;
+
+    case 5:
+      diceBrush("bigRed");
+      break;
+
+    case 6:
+      diceBrush("bigBrown");
+      break;
+
+    case 7:
+      diceBrush("bigDarkBlue");
+      break;
+  }
+  updatePointsDisplay();
+}
+
+function diceBrush(brushName) {
+  if (brushAttributes[brushName].locked) {
+    brushAttributes[brushName].locked = false;
+    document.getElementById(brushName).className = 'button'
+  } else {
+    // If not locked, add points
+    points += 150;
+  }
+}
 
 function redrawShowcase() {
   //Displays the current pen
-  showcaseCTX.clearRect(0, 0, showcase.width, showcase.height);
+  showcaseCTX.clearRect(0, 0, showcase.width,
+    showcase.height);
   showcaseCTX.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
   showcaseCTX.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
   showcaseCTX.beginPath();
@@ -397,7 +466,7 @@ function drawMouse(x, y) {
 }
 //points
 
-function updatePointsDisplay(points) {
+function updatePointsDisplay() {
   document.getElementById('points').textContent = points + " Points";
 }
 
@@ -436,7 +505,7 @@ function startTimerAndPoints() {
       // Add points every 60 seconds
       if (minutes % 1 === 0 && seconds === 0) {
         points += 50;
-        updatePointsDisplay(points);
+        updatePointsDisplay();
       }
     }
     // Update the timer display
