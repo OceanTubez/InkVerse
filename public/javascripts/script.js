@@ -412,8 +412,8 @@ function rolldice(brush_states) {
         points -= 1;
         
         // Roll random number
-        const diceNumber = Math.floor(Math.random() * 7) + 1; // Adjusted to generate numbers between 1 and 7
-        let brush_name = null;
+        const diceNumber = Math.ceil(Math.random() * 7); // Adjusted to generate numbers between 1 and 7
+        let brush_name;
 
 
         // const brush_name = getBrushName(diceNumber);
@@ -476,50 +476,32 @@ function rolldice(brush_states) {
             break;
 
           case 5:
-            brush_name = "bigRed";
-
-            if (brush_states.bigRed.locked) {
-              unlockgacha(brush_name);
-            } else {
-              // If not locked, add points
-              points += 150;
-            }
-
-            console.log("Reached switch statement 5");
+            diceBrush("bigRed");
             break;
 
           case 6:
-            brush_name = "bigBrown";
-
-            if (brush_states.bigBrown.locked) {
-              unlockgacha(brush_name);
-            } else {
-              // If not locked, add points
-              points += 150;
-            }
-
-            console.log("Reached switch statement 6");
+            diceBrush("bigBrown");
             break;
 
           case 7:
-            brush_name = "bigdarkblue";
-
-            if (brush_states.bigdarkblue.locked) {
-              unlockgacha(brush_name);
-            } else {
-              // If not locked, add points
-              points += 150;
-            }
-
-            console.log("Reached switch statement 7");
+            diceBrush("bigdarkblue");
             break;
-
         }
         
         // Unlock the gacha if the state is locked
     }
 }
 
+function diceBrush(brushName) {
+  if (brush_states[brushName].locked) {
+    unlockgacha(brushName);
+  } else {
+    // If not locked, add points
+    points += 150;
+  }
+
+  console.log("Reached switch statement" + brushName);
+}
 
 function redrawShowcase() {
   //Displays the current pen
