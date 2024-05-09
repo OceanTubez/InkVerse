@@ -416,7 +416,7 @@ function rolldice() {
 }
 
 function diceBrush(brushName) {
-  if (brush_states[brushName].locked) {
+  if (brushAttributes[brushName].locked) {
     unlockgacha(brushName);
   } else {
     // If not locked, add points
