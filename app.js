@@ -77,10 +77,11 @@ io.on('connection', (socket) => {
 
   socket.on('mouseMovement', (data) => {
     let index = userInfo.indexOf(socket.id);
-
+    if (index != -1) {
     userInfo[index + 1] = data.userName;
     userInfo[index + 2] = data.mouseX;
     userInfo[index + 3] = data.mouseY;
+    }
 
     socket.broadcast.emit('mouse', userInfo); // Broadcast mouse movement
   });
@@ -93,11 +94,11 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('draw', data); // Broadcast to all other clients
 
     let index = userInfo.indexOf(socket.id);
-
+    if (index != -1) {
     userInfo[index + 1] = data.userName;
     userInfo[index + 2] = data.x;
     userInfo[index + 3] = data.y;
-
+    }
     socket.broadcast.emit('mouse', userInfo);
 
   });
