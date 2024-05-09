@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   loadingScreen();
   refresh();
   startTimerAndPoints();
+  if (server == 1) {
+    socket = io('54.39.97.208:3000')
+  }
 });
 
 const canvas = document.getElementById('drawCanvas');

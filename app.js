@@ -10,6 +10,7 @@ const draw = require('./public/javascripts/common/canvas.js')
 const { createCanvas } = require('canvas');
 const canvas = createCanvas(draw.canvasWidth, draw.canvasHeight);
 const ctx = canvas.getContext('2d');
+const server = require('./public/javascripts/common/server.js')
 //NOT CURRENTLY UsING - IGNOREs
 //var indexRouter = require('./routes/index');
 //var usersRouter = require('./routes/users');
@@ -132,7 +133,14 @@ io.on('connection', (socket) => {
   });
 });
 //CHANGE THIS FOR FULL RELEASE!!!!!!
-http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
+
+if (server.server == 0)
+  {
+    http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
+  } else {
+    http.listen(3000, '54.39.97.208', () => console.log('Server listening on port 3000'));
+  } 
+
 
 
 module.exports = app;
