@@ -4,7 +4,6 @@ body {
   border: 0;
   overflow: hidden;
   touch-action: none;
-  font-size: 17px;
 }
 
 #drawCanvas {
@@ -184,6 +183,7 @@ body {
   z-index: 1000;
   transition: transform 0.3s ease-in-out;
   display: none;
+  font-size: 17px;
 }
 
 .dropdown-container.active {
