@@ -176,7 +176,6 @@ body {
   position: fixed;
   top: 0;
   left: 50%;
-  transform: translateX(-50%);
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   padding: 20px;
@@ -184,8 +183,7 @@ body {
   transition: transform 0.3s ease-in-out;
   display: none;
   font-size: 17px;
-  width: 50%;
-  height: 50%;
+  width: 33%;
 }
 
 .dropdown-container.active {
