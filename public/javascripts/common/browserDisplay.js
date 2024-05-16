@@ -17,7 +17,7 @@ if (typeof document !== 'undefined') {
 function displayContent() {
     //Clears the content and then redraws it. Copies from the real canvas
     displayctx.clearRect(0, 0, displayCanvas.width, displayCanvas.height)
-    displayctx.drawImage(canvas, 0, 0, 70, 300, 0, 0, screenWidth, screenHeight);
+    displayctx.drawImage(canvas, 0, 0, screenWidth/scale, screenHeight/scale, 0, 0, screenWidth, screenHeight);
     displayctx.beginPath();
     displayctx.moveTo(0,0)
     displayctx.lineTo(screenWidth, screenHeight);
