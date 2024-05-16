@@ -566,6 +566,7 @@ function refresh(time) {
   if (time - stampRefresh > 30) {
     displayContent();
     displayNames();
+    drawLine(ctx, 0, 0, screenWidth, screenHeight);
     stampRefresh = time;
   }
   requestAnimationFrame(refresh);
