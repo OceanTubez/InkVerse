@@ -181,8 +181,10 @@ function resizeCanvas() {
 function setSocket() {
   if (onServer == 0) {
     socket = io('localhost:3000');
-  } else {
+  } else if (onServer == 1) {
     socket = io('54.39.97.208');
+  } else {
+    socket = io('inkverse.qxcg.net');
   }
 }
 
