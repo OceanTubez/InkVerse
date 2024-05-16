@@ -4,6 +4,7 @@ body {
   border: 0;
   overflow: hidden;
   touch-action: none;
+  font-size: 17px;
 }
 
 #drawCanvas {
