@@ -139,7 +139,7 @@ if (server.onServer == 0)
   {
     http.listen(3000, '127.0.0.1', () => console.log('Server listening on port 3000'));
   } else {
-    http.listen(3000, '54.39.97.208', () => console.log('Server listening on port 3000'));
+    http.listen(80, '54.39.97.208', () => console.log('Server listening on port 3000'));
   } 
 
 
