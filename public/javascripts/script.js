@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   loadingScreen();
   refresh();
   startTimerAndPoints();
+  updatePointsDisplay();
   diceSetup();
   updatePointsDisplay();
 });
