@@ -238,6 +238,7 @@ function pan(x, y) {
   //Moves pan and loads it
   screenOffsetX += lastX - x;
   screenOffsetY += lastY - y;
+  fixPanning();
   //Only useful for sliding
   panSpeedX = x - lastX;
   panSpeedY = y - lastY;
@@ -623,8 +624,8 @@ function panSlide(time) {
           }
         }
       }
-      stampPan = time;
       fixPanning();
+      stampPan = time;
     }
     //Loads images and makes a new animation frame.
     requestAnimationFrame(panSlide);
