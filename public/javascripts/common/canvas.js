@@ -1,6 +1,6 @@
 //Canvas size. This updates for other canvas.
-const canvasWidth = 5000;
-const canvasHeight = 5000;
+const canvasWidth = 3000;
+const canvasHeight = 3000;
 
 if (typeof document !== 'undefined') {
     //Loads the real canvas.
