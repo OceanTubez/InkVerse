@@ -240,6 +240,7 @@ hover-image {
     border-radius: 5px;
     font-family: Arial, sans-serif;
     font-size: 16px;
+    z-index: 3;
 }
 
 .container {
@@ -253,11 +254,13 @@ hover-image {
     border: 1px solid #ccc; /* Add border */
     padding: 10px; /* Add padding */
     border-radius: 5px; /* Add border radius */
+    z-index: 3;
 }
 
 .gacha {
     position: fixed;
     top: 80px; /* Adjust as needed */
     right: 20px; /* Adjust as needed */
+    z-index: 3;
 }
 
