@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   refresh();
   startTimerAndPoints();
   diceSetup();
+  updatePointsDisplay();
 });
 
 const canvas = document.getElementById('drawCanvas');
@@ -181,7 +182,7 @@ function setSocket() {
   if (onServer == 0) {
     socket = io('localhost:3000');
   } else {
-    socket = io('54.39.97.208:3000');
+    socket = io('54.39.97.208');
   }
 }
 
@@ -237,6 +238,7 @@ function pan(x, y) {
   //Moves pan and loads it
   screenOffsetX += lastX - x;
   screenOffsetY += lastY - y;
+  fixPanning();
   //Only useful for sliding
   panSpeedX = x - lastX;
   panSpeedY = y - lastY;
@@ -562,7 +564,6 @@ function refresh(time) {
     stampRefresh = time;
   }
   if (time - stampRefresh > 30) {
-    fixPanning();
     displayContent();
     displayNames();
     stampRefresh = time;
@@ -623,6 +624,7 @@ function panSlide(time) {
           }
         }
       }
+      fixPanning();
       stampPan = time;
     }
     //Loads images and makes a new animation frame.
