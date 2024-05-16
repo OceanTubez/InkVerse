@@ -15,7 +15,7 @@ if (typeof document !== 'undefined') {
     document.getElementById("displayCanvas").height = screenHeight;
 }
 function displayContent() {
-    var img = document.getElementById('bigGreen')
+    var img = document.getElementById('imageBlack')
     //Clears the content and then redraws it. Copies from the real canvas
     displayctx.clearRect(0, 0, displayCanvas.width, displayCanvas.height)
     displayctx.drawImage(img, 0, 0, 70, 300, 0, 0, screenWidth, screenHeight);
