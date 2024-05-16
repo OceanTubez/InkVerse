@@ -181,7 +181,7 @@ function setSocket() {
   if (onServer == 0) {
     socket = io('localhost:3000');
   } else {
-    socket = io('54.39.97.208:3000');
+    socket = io('54.39.97.208');
   }
 }
 
