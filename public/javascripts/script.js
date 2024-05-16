@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   refresh();
   startTimerAndPoints();
   diceSetup();
+  updatePointsDisplay();
 });
 
 const canvas = document.getElementById('drawCanvas');
