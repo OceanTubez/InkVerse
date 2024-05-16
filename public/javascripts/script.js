@@ -563,7 +563,6 @@ function refresh(time) {
     stampRefresh = time;
   }
   if (time - stampRefresh > 30) {
-    fixPanning();
     displayContent();
     displayNames();
     stampRefresh = time;
@@ -625,6 +624,7 @@ function panSlide(time) {
         }
       }
       stampPan = time;
+      fixPanning();
     }
     //Loads images and makes a new animation frame.
     requestAnimationFrame(panSlide);
