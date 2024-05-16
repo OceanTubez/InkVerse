@@ -184,6 +184,8 @@ body {
   transition: transform 0.3s ease-in-out;
   display: none;
   font-size: 17px;
+  width: 50%;
+  height: 50%;
 }
 
 .dropdown-container.active {
