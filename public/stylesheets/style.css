@@ -38,7 +38,7 @@ body {
   vertical-align: center;
   color: white;
   font-size: 75px;
-  z-index: 1;
+  z-index: 99;
 
 }
 
@@ -112,16 +112,15 @@ body {
     bottom: -10%; /* Adjust position as needed */
     left: 50%;
     transform: translateX(-50%);
-    background-image: url("/images/long tray.png"); /* Set the image as background */
-    background-repeat: no-repeat;
-    color: white;
+    color: #C2B5D6;
+    background-color: #C2B5D6;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
     border-radius: 55px; /* Ensure rounded edges */
     width: 49%; /* Adjust width automatically */
     height: 20%; /* Adjust height automa=\tically */
-    z-index: 4; /* Ensure the ribbon is above other content */
+    z-index: 99; /* Ensure the ribbon is above other content */
 }
 
 #username {
@@ -135,34 +134,36 @@ body {
 
 
 #footer-text {
-  position: fixed;
-  bottom: 20px; /* Adjust position as needed */
-  right: 20px; /* Adjust position as needed */
-  color: black; /* Change text color as needed */
-  font-size: 90%; /* Adjust font size as needed */
-  z-index: 4; /* Ensure the text is above other content */
+    position: fixed;
+    bottom: 20px; /* Adjust position as needed */
+    right: 20px; /* Adjust position as needed */
+    color: black; /* Change text color as needed */
+    font-size: 90%; /* Adjust font size as needed */
+    z-index: 4; /* Ensure the text is above other content */
+    color: #9994B2;
 }
 
-#rectangle{
-  width:30%;
-  height:10%;
-  background:rgb(152, 151, 151);
-  opacity: 0.9;
-  position: fixed;
-  bottom: 0%;
-  left: 88%;
-  border-radius: 25px;
-  z-index: 3;
-  border-radius: 40px 0px 0px 0px;
-  overflow: hidden; /* Hide overflowing content */
-  word-wrap: break-word; /* Wrap long words to prevent overflow */
+#rectangle {
+    width: 30%;
+    height: 10%;
+    background: #9994B2;
+    opacity: 0.9;
+    position: fixed;
+    bottom: 0%;
+    left: 88%;
+    border-radius: 25px;
+    z-index: 3;
+    border-radius: 40px 0px 0px 0px;
+    overflow: hidden; /* Hide overflowing content */
+    word-wrap: break-word; /* Wrap long words to prevent overflow */
 }
 
 #showcase {
-  position: fixed;
-  bottom: 4%;
-  left: 95%;
-  z-index: 4;
+    position: fixed;
+    color: #9994B2;
+    bottom: 4%;
+    left: 95%;
+    z-index: 4;
 }
 
 #pen-text {
@@ -175,37 +176,37 @@ body {
 }
 
 .dropdown-container {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  padding: 20px;
-  z-index: 1000;
-  transition: transform 0.3s ease-in-out;
-  display: none;
-  font-size: 17px;
-  width: 33%;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    background-color: #C2B5D6;
+    color: #C2B5D6;
+    border-radius: 55px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    display: none;
+    font-size: 17px;
 }
 
-.dropdown-container.active {
-  transform: translateX(-50%) translateY(100%);
-  display: block;
-}
+    
 
-.dropdown-container img {
-  max-width: 100px;
-  height: auto;
-  display: block;
-  margin: 0 auto 20px;
-}
+    .dropdown-container img {
+        max-width: 100px;
+        height: 200%;
+        display: block;
+        margin: 0 auto 20px;
+        color: #9994B2;
+    }
 
 .dropdown-container input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-}
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        color: #5E618C;
+    }
 
 hover-image {
     transition: transform 1s ease;
@@ -216,7 +217,7 @@ hover-image {
 .hover-image:hover {
     transform: translateY(-50px);
     cursor: pointer;
-    transition: transform 0.5s ease;
+    transition: transform 1s ease;
 }
 
 .button {
@@ -235,7 +236,7 @@ hover-image {
     top: 10px; /* Adjust as needed */
     right: 10px; /* Adjust as needed */
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    color: white;
+    color: #9994B2;
     padding: 5px 10px;
     border-radius: 5px;
     font-family: Arial, sans-serif;
@@ -255,6 +256,7 @@ hover-image {
     padding: 10px; /* Add padding */
     border-radius: 5px; /* Add border radius */
     z-index: 3;
+    color: #9994B2;
 }
 
 .gacha {
@@ -262,5 +264,6 @@ hover-image {
     top: 80px; /* Adjust as needed */
     right: 20px; /* Adjust as needed */
     z-index: 3;
+    color: #9994B2;
 }
 
