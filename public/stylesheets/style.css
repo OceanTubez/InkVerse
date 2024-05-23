@@ -190,7 +190,11 @@ body {
     font-size: 17px;
 }
 
-    
+    .dropdown-container.active {
+        transform: translateX(-50%) translateY(100%);
+        display: block;
+        color: #9994B2;
+    }
 
     .dropdown-container img {
         max-width: 100px;
