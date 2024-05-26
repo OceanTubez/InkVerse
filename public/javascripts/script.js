@@ -6,8 +6,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   refresh();
   startTimerAndPoints();
   updatePointsDisplay();
-  diceSetup();
-  updatePointsDisplay();
 });
 
 const canvas = document.getElementById('drawCanvas');
@@ -40,6 +38,7 @@ let vectorX = 0;
 let vectorY = 0;
 let maxDice = 0;
 let stampPan, stampRefresh, stampLoad;
+const brushState = document.getElementById('scrollBrushes'); //Not the best name but I couldn't think of something better.
 
 let brushAttributes = {
   "bigBlack": {
@@ -48,6 +47,7 @@ let brushAttributes = {
     weight: 1,
     "locked": false,
     points: 0,
+    image: 1,
   },
 
   "bigGreen": {
@@ -56,6 +56,7 @@ let brushAttributes = {
     weight: 2,
     "locked": true,
     points: 1,
+    image: 4,
   },
 
   "bigLightBlue": {
@@ -64,6 +65,7 @@ let brushAttributes = {
     weight: 3,
     "locked": true,
     points: 1,
+    image: 5,
   },
 
   "bigOrange": {
@@ -72,6 +74,7 @@ let brushAttributes = {
     weight: 4,
     "locked": true,
     points: 2,
+    image: 6,
   },
 
   "bigRed": {
@@ -80,6 +83,7 @@ let brushAttributes = {
     weight: 5,
     "locked": true,
     points: 3,
+    image: 7,
   },
 
   "bigBrown": {
@@ -88,6 +92,7 @@ let brushAttributes = {
     weight: 6,
     "locked": true,
     points: 4,
+    image: 2,
   },
 
   "bigDarkBlue": {
@@ -96,6 +101,7 @@ let brushAttributes = {
     weight: 7,
     "locked": true,
     points: 5,
+    image: 3,
   }
 };
 
@@ -129,7 +135,6 @@ displayCanvas.addEventListener('pointermove', function (e) {
       socket.emit('mouseMovement', { mouseX, mouseY, userName });
     }
   }
-  hoverCheck();
 });
 displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
 displayCanvas.addEventListener('mouseout', stopDrawingOrPanning);
@@ -158,6 +163,7 @@ displayCanvas.addEventListener('touchmove', function (e) {
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
+brushState.addEventListener('mousemove', hoverCheck);
 
 // Start listening to resize events and draw canvas.
 
@@ -168,7 +174,7 @@ function initialize() {
   // Draw canvas border for the first time.
   resizeCanvas();
   // Initialize brush states
-  initializeBrushStates();
+  initializeBrushes();
 }
 // Runs each time the DOM window resize event fires.
 // Resets the canvas dimensions to match window,
@@ -190,19 +196,28 @@ function setSocket() {
   }
 }
 
-function diceSetup() {
+function initializeBrushes() {
   Object.entries(brushAttributes).forEach(([key, value]) => {
-    maxDice += value.weight;
-  })
-}
-
-function initializeBrushStates() {
-  Object.entries(brushAttributes).forEach(([key, value]) => {
-    if (value.locked) {
-      document.getElementById(key).className = 'button-brush locked'
-    } else {
-      document.getElementById(key).className = 'button-brush'
+    var newBrush = document.createElement("button");
+    newBrush.id = key;
+    newBrush.onclick = function () {
+      changeBrush(key);
     }
+    if (value.locked) {
+      newBrush.className = 'button-brush locked'
+    } else {
+      newBrush.className = 'button-brush'
+    }
+
+    var img = document.createElement("img");
+    img.src = "/images/brush" + value.image + ".png";
+    img.className = "hover-image";
+    img.alt = "Brushes";
+    newBrush.appendChild(img);
+
+    brushState.appendChild(newBrush);
+
+    maxDice += value.weight;
   })
 }
 
@@ -279,9 +294,31 @@ function backpack() {
 }
 
 function hoverCheck() {
-  var hover = $(':hover');
-  hover = hover.last();
-  console.log(hover);
+  var hover = document.querySelector('.hover-image:hover');
+  if (hover == null)
+    {
+      redrawShowcase();
+      return;
+    }
+  hover = hover.parentElement.id;
+  var data = brushAttributes[hover];
+  var rgb = data.rgb;
+  //Yucky. Please find another solution if possible.
+  var saveRed = red;
+  var saveGreen = green;
+  var saveBlue = blue;
+  var saveSize = lineSize;
+
+  red = rgb[0];
+  green = rgb[1];
+  blue = rgb[2];
+  lineSize = data.size;
+  redrawShowcase()
+
+  red = saveRed;
+  blue = saveBlue;
+  green = saveGreen;
+  lineSize = saveSize;
 }
 // Base Functions
 function playClick1() {

@@ -16,10 +16,6 @@
 <canvas id="showcase", height="50", width="50"></canvas>
         <audio id="clickSound" href="/audio/UiClick.mp3"></audio>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script type="text/javascript" src="/javascripts/common/browserDisplay.js"></script>
-        <script type="text/javascript" src="/javascripts/common/canvas.js"></script>
-        <script type="text/javascript" src="/javascripts/common/server.js"></script>
-        <script type="text/javascript" src="/javascripts/script.js"></script>
         <div class="dropdown-container" id="dropdownContainer">
 
             <img src="/images/IMG_0234.png" id="dropimage">
@@ -31,40 +27,7 @@
         <div id="points">0 Points</div> <!-- Element to display points -->
         <button class="gacha" id="gacha" onClick="rollDice()" >click to roll</button>
 
-        <div id="scrollBrushes">
-            <!--BLACK -->
-            <button class="button-brush" id="bigBlack" onClick="changeBrush('bigBlack')">
-                <img class="hover-image" src="/images/black.png" alt="brushes">
-                <!-- Lock icon on top of the thing-->
-            </button>
-            <!-- green-->
-            <button class="button-brush" id="bigGreen" onClick="changeBrush('bigGreen')">
-                <img class="hover-image" src="/images/green.png" alt="brushes">
-            </button>
-            <!-- blue-->
-            <button class="button-brush" id="bigLightBlue" onClick="changeBrush('bigLightBlue')">
-                <img class="hover-image" src="/images/lightblue.png" alt="brushes">
-            </button>
-            <!-- orange-->
-            <button class="button-brush" id="bigOrange" onClick="changeBrush('bigOrange')">
-                <img class="hover-image" src="/images/red.png" alt="brushes">
-            </button>
-
-            <!-- Red-->
-            <button class="button-brush" id="bigRed" onClick="changeBrush('bigRed')">
-                <img class="hover-image" src="/images/orange.png" alt="brushes">
-            </button>
-
-            <!-- brown-->
-            <button class="button-brush" id="bigBrown" onClick="changeBrush('bigBrown')">
-                <img class="hover-image" src="/images/brown.png" alt="brushes">
-            </button>
-
-               <!-- Dark Blue -->
-            <button class="button-brush" id="bigDarkBlue" onClick="changeBrush('bigDarkBlue')">
-                <img class="hover-image" src="/images/darkblue.png" alt="brushes">
-            </button>
-        </div>
+        <div id="scrollBrushes"></div>
         <button class="ribbon" id="ribbon" onClick="backpack()"></button>
         
         <!-- ZOOM Buttons-->
@@ -75,6 +38,11 @@
         <div id="username"></div>
         <div id="pen-text">Pen: </div>
         <div id="rectangle"></div>
+
+        <script type="text/javascript" src="/javascripts/common/browserDisplay.js"></script>
+        <script type="text/javascript" src="/javascripts/common/canvas.js"></script>
+        <script type="text/javascript" src="/javascripts/common/server.js"></script>
+        <script type="text/javascript" src="/javascripts/script.js"></script>
         
     </body>
 </html>
