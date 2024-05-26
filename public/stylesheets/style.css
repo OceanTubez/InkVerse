@@ -42,86 +42,56 @@ body {
 
 }
 
-#changeColor {
-
-    position: fixed;
-    bottom: 130px; /* Adjust as needed */
-    left: 90%; /* Position horizontally at the middle */
-    transform: translateX(-50%);
-    background-color: #0d8797;
-    color: #fff;
-    border-radius: 20px;
-    width: 12%;
-    height: 17%;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-
-}
-
-#changeSize {
-
-    position: fixed;
-    bottom: 90px; /* Adjust as needed */
-    left: 90%; /* Position horizontally at the middle */
-    transform: translateX(-50%);
-    background-color: #0d8797;
-    color: #fff;
-    width: 12%;
-    height: 17%;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-
-}
-
 #zoomInButton {
   position: fixed;
-  bottom: 130px; /* Adjust as needed */
-  left: 78%; /* Position horizontally at the middle */
+  bottom: 5cqb; /* Adjust as needed */
+  left: 85%; /* Position horizontally at the middle */
   transform: translateX(-50%);
   background-color: #dc7e7e;
   color: #fff;
   width: 6%;
-  height: 17%;
+  height: 5%;
   border-radius: 20px;
   border: none;
   cursor: pointer;
   user-select: none;
+  z-index: 4;
 }
 
 #zoomOutButton {
   position: fixed;
-  bottom: 90px; /* Adjust as needed */
-  left: 78%; /* Position horizontally at the middle */
+  bottom: 0%; /* Adjust as needed */
+  left: 85%; /* Position horizontally at the middle */
   transform: translateX(-50%);
   background-color: #a3a9ea;
   color: #fff;
   width: 6%;
-  height: 17%;
+  height: 5%;
   border-radius: 20px;
   border: none;
   cursor: pointer;
   user-select: none;
+  z-index: 4;
 }
 
 
-#ribbon {
+#backpack {
     position: fixed;
     bottom: -10%; /* Adjust position as needed */
     left: 50%;
     transform: translateX(-50%);
-    background-image: url("/images/long tray.png"); /* Set the image as background */
+    background-image: url("/images/backpackClose.png"); /* Set the image as background */
     background-repeat: no-repeat;
+    background-size: contain;
     color: white;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
     border-radius: 55px; /* Ensure rounded edges */
-    width: 49%; /* Adjust width automatically */
+    width: 10%; /* Adjust width automatically */
     height: 20%; /* Adjust height automa=\tically */
     z-index: 4; /* Ensure the ribbon is above other content */
+
 }
 
 #username {

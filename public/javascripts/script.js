@@ -288,8 +288,10 @@ function backpack() {
   if (document.getElementById("scrollBrushes").style.display == 'none')
     {
       document.getElementById("scrollBrushes").style.display = 'block';
+      document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackOpen.png)';
     } else {
       document.getElementById("scrollBrushes").style.display = 'none';
+      document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackClose.png)';
     }
 }
 
