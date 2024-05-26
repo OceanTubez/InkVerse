@@ -31,53 +31,46 @@
         <div id="points">0 Points</div> <!-- Element to display points -->
         <button class="gacha" id="gacha" onClick="rollDice()" >click to roll</button>
 
-        <div class="ribbon" id="ribbon">
+        <div id="scrollBrushes">
             <!--BLACK -->
-            <button class="button" id="bigBlack" onClick="changeBrush('bigBlack')">
+            <button class="button-brush" id="bigBlack" onClick="changeBrush('bigBlack')">
                 <img class="hover-image" src="/images/black.png" alt="brushes">
                 <!-- Lock icon on top of the thing-->
             </button>
             <!-- green-->
-            <button class="button" id="bigGreen" onClick="changeBrush('bigGreen')">
+            <button class="button-brush" id="bigGreen" onClick="changeBrush('bigGreen')">
                 <img class="hover-image" src="/images/green.png" alt="brushes">
             </button>
             <!-- blue-->
-            <button class="button" id="bigLightBlue" onClick="changeBrush('bigLightBlue')">
+            <button class="button-brush" id="bigLightBlue" onClick="changeBrush('bigLightBlue')">
                 <img class="hover-image" src="/images/lightblue.png" alt="brushes">
             </button>
             <!-- orange-->
-            <button class="button" id="bigOrange" onClick="changeBrush('bigOrange')">
+            <button class="button-brush" id="bigOrange" onClick="changeBrush('bigOrange')">
                 <img class="hover-image" src="/images/red.png" alt="brushes">
             </button>
 
             <!-- Red-->
-            <button class="button" id="bigRed" onClick="changeBrush('bigRed')">
+            <button class="button-brush" id="bigRed" onClick="changeBrush('bigRed')">
                 <img class="hover-image" src="/images/orange.png" alt="brushes">
             </button>
 
             <!-- brown-->
-            <button class="button" id="bigBrown" onClick="changeBrush('bigBrown')">
+            <button class="button-brush" id="bigBrown" onClick="changeBrush('bigBrown')">
                 <img class="hover-image" src="/images/brown.png" alt="brushes">
             </button>
 
                <!-- Dark Blue -->
-               <button class="button" id="bigDarkBlue" onClick="changeBrush('bigDarkBlue')">
+            <button class="button-brush" id="bigDarkBlue" onClick="changeBrush('bigDarkBlue')">
                 <img class="hover-image" src="/images/darkblue.png" alt="brushes">
             </button>
-
-
-
-
-
-            <!-- Color and Size changers--> 
-            <button id="changeColor" onClick="changeColor()">Change Color</button>
-            <button id="changeSize" onClick="changeSize()">Change Size</button>
-
-
-            <!-- ZOOM Buttons-->
-            <button id="zoomInButton" onClick="zoomInButton()">+</button>
-            <button id="zoomOutButton" onClick="zoomOutButton()">-</button>
         </div>
+        <button class="ribbon" id="ribbon" onClick="backpack()"></button>
+        
+        <!-- ZOOM Buttons-->
+        <button id="zoomInButton" onClick="zoomInButton()">+</button>
+        <button id="zoomOutButton" onClick="zoomOutButton()">-</button>
+
         <div id="footer-text">InkVerse: Local Server</div>
         <div id="username"></div>
         <div id="pen-text">Pen: </div>

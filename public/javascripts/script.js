@@ -129,6 +129,7 @@ displayCanvas.addEventListener('pointermove', function (e) {
       socket.emit('mouseMovement', { mouseX, mouseY, userName });
     }
   }
+  hoverCheck();
 });
 displayCanvas.addEventListener('mouseup', stopDrawingOrPanning);
 displayCanvas.addEventListener('mouseout', stopDrawingOrPanning);
@@ -153,10 +154,10 @@ displayCanvas.addEventListener('touchmove', function (e) {
       socket.emit('mouseMovement', { MouseX, mouseY, userName })
     }
   }
+  hoverCheck();
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
-
 
 // Start listening to resize events and draw canvas.
 
@@ -198,9 +199,9 @@ function diceSetup() {
 function initializeBrushStates() {
   Object.entries(brushAttributes).forEach(([key, value]) => {
     if (value.locked) {
-      document.getElementById(key).className = 'button locked'
+      document.getElementById(key).className = 'button-brush locked'
     } else {
-      document.getElementById(key).className = 'button'
+      document.getElementById(key).className = 'button-brush'
     }
   })
 }
@@ -268,6 +269,20 @@ function stopDrawingOrPanning() {
   panSlide()
 }
 
+function backpack() {
+  if (document.getElementById("scrollBrushes").style.display == 'none')
+    {
+      document.getElementById("scrollBrushes").style.display = 'block';
+    } else {
+      document.getElementById("scrollBrushes").style.display = 'none';
+    }
+}
+
+function hoverCheck() {
+  var hover = $(':hover');
+  hover = hover.last();
+  console.log(hover);
+}
 // Base Functions
 function playClick1() {
   var clickSound = document.getElementById('clickSound');
@@ -298,32 +313,11 @@ function saveName() {
   // console.log("Input value:", inputValue);
 }
 
-// Buttons
-function changeColor() {
-  playClick1();
-  //Gets random number from 0-255
-  red = Math.floor(Math.random() * 256);
-  green = Math.floor(Math.random() * 256);
-  blue = Math.floor(Math.random() * 256);
-  //Inputs random numbers
-  ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-  redrawShowcase();
-}
-
-function changeSize() {
-  playClick1();
-  //Random linesize between 1-25
-  lineSize = Math.ceil(Math.random() * 25);
-  //Applies the change
-  ctx.lineWidth = lineSize;
-  redrawShowcase();
-}
-
 //Zoom stuff
 function zoomInButton() {
   playClick1();
   scale *= 1.5;
-}
+} 
 
 function zoomOutButton() {
   playClick1();
@@ -365,7 +359,7 @@ function updateBrushState(brushName) {
   points -= brushAttributes[brushName].points;
   updatePointsDisplay(points);
   brushAttributes[brushName].locked = false;
-  document.getElementById(brushName).className = 'button';
+  document.getElementById(brushName).className = 'button-brush';
 }
 
 
@@ -398,7 +392,7 @@ function rollDice() {
 function diceBrush(brushName) {
   if (brushAttributes[brushName].locked) {
     brushAttributes[brushName].locked = false;
-    document.getElementById(brushName).className = 'button'
+    document.getElementById(brushName).className = 'button-brush'
   } else {
     // If not locked, add points
     points += 150;

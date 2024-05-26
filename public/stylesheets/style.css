@@ -207,22 +207,28 @@ body {
   box-sizing: border-box;
 }
 
-hover-image {
+.hover-image {
     transition: transform 1s ease;
     display: flex;
     justify-content: space-between; /* Distribute items equally */
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    object-position: 50% 0%;
 }
 
 .hover-image:hover {
-    transform: translateY(-50px);
+    transform: translateY(-20px);
     cursor: pointer;
-    transition: transform 0.5s ease;
+    transition: transform 0.4s ease;
 }
 
-.button {
-    border: none;
-    background: none;
-    user-select: none;
+.button-brush {
+  width: 70px;
+  height: 70px;
+  border: none;
+  background: none;
+  user-select: none;
 }
 
 .locked {
@@ -262,5 +268,17 @@ hover-image {
     top: 80px; /* Adjust as needed */
     right: 20px; /* Adjust as needed */
     z-index: 3;
+}
+#scrollBrushes {
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  background-color: brown;
+  width: 80%;
+  height: 80%;
+  overflow: auto;
+  z-index: 5;
+  border-radius: 2%;
+  display: none;
 }
 
