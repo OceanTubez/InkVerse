@@ -94,6 +94,20 @@ body {
 
 }
 
+#brushData {
+  color: black;
+  background-color: white;
+  width: 10%;
+  height: 50px;
+  padding: 2px 2px;
+  font-size: 16px;
+  position: absolute;
+  display: none;
+  z-index: 6;
+  pointer-events: none;
+  white-space: pre;
+}
+
 #username {
   position: fixed;
   bottom: 20px; /* Adjust position as needed */
