@@ -6,8 +6,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   refresh();
   startTimerAndPoints();
   updatePointsDisplay();
-  diceSetup();
-  updatePointsDisplay();
 });
 
 const canvas = document.getElementById('drawCanvas');
@@ -40,6 +38,7 @@ let vectorX = 0;
 let vectorY = 0;
 let maxDice = 0;
 let stampPan, stampRefresh, stampLoad;
+const brushState = document.getElementById('scrollBrushes'); //Not the best name but I couldn't think of something better.
 
 let brushAttributes = {
   "bigBlack": {
@@ -48,6 +47,7 @@ let brushAttributes = {
     weight: 1,
     "locked": false,
     points: 0,
+    image: 1,
   },
 
   "bigGreen": {
@@ -56,6 +56,7 @@ let brushAttributes = {
     weight: 2,
     "locked": true,
     points: 1,
+    image: 4,
   },
 
   "bigLightBlue": {
@@ -64,6 +65,7 @@ let brushAttributes = {
     weight: 3,
     "locked": true,
     points: 1,
+    image: 5,
   },
 
   "bigOrange": {
@@ -72,6 +74,7 @@ let brushAttributes = {
     weight: 4,
     "locked": true,
     points: 2,
+    image: 6,
   },
 
   "bigRed": {
@@ -80,6 +83,7 @@ let brushAttributes = {
     weight: 5,
     "locked": true,
     points: 3,
+    image: 7,
   },
 
   "bigBrown": {
@@ -88,6 +92,7 @@ let brushAttributes = {
     weight: 6,
     "locked": true,
     points: 4,
+    image: 2,
   },
 
   "bigDarkBlue": {
@@ -96,6 +101,7 @@ let brushAttributes = {
     weight: 7,
     "locked": true,
     points: 5,
+    image: 3,
   }
 };
 
@@ -153,10 +159,11 @@ displayCanvas.addEventListener('touchmove', function (e) {
       socket.emit('mouseMovement', { MouseX, mouseY, userName })
     }
   }
+  hoverCheck();
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
-
+brushState.addEventListener('mousemove', hoverCheck);
 
 // Start listening to resize events and draw canvas.
 
@@ -167,7 +174,7 @@ function initialize() {
   // Draw canvas border for the first time.
   resizeCanvas();
   // Initialize brush states
-  initializeBrushStates();
+  initializeBrushes();
 }
 // Runs each time the DOM window resize event fires.
 // Resets the canvas dimensions to match window,
@@ -189,19 +196,28 @@ function setSocket() {
   }
 }
 
-function diceSetup() {
+function initializeBrushes() {
   Object.entries(brushAttributes).forEach(([key, value]) => {
-    maxDice += value.weight;
-  })
-}
-
-function initializeBrushStates() {
-  Object.entries(brushAttributes).forEach(([key, value]) => {
-    if (value.locked) {
-      document.getElementById(key).className = 'button locked'
-    } else {
-      document.getElementById(key).className = 'button'
+    var newBrush = document.createElement("button");
+    newBrush.id = key;
+    newBrush.onclick = function () {
+      changeBrush(key);
     }
+    if (value.locked) {
+      newBrush.className = 'button-brush locked'
+    } else {
+      newBrush.className = 'button-brush'
+    }
+
+    var img = document.createElement("img");
+    img.src = "/images/brush" + value.image + ".png";
+    img.className = "hover-image";
+    img.alt = "Brushes";
+    newBrush.appendChild(img);
+
+    brushState.appendChild(newBrush);
+
+    maxDice += value.weight;
   })
 }
 
@@ -268,6 +284,44 @@ function stopDrawingOrPanning() {
   panSlide()
 }
 
+function backpack() {
+  if (document.getElementById("scrollBrushes").style.display == 'none')
+    {
+      document.getElementById("scrollBrushes").style.display = 'block';
+      document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackOpen.png)';
+    } else {
+      document.getElementById("scrollBrushes").style.display = 'none';
+      document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackClose.png)';
+    }
+}
+
+function hoverCheck() {
+  var hover = document.querySelector('.hover-image:hover');
+  if (hover == null)
+    {
+      redrawShowcase();
+      return;
+    }
+  hover = hover.parentElement.id;
+  var data = brushAttributes[hover];
+  var rgb = data.rgb;
+  //Yucky. Please find another solution if possible.
+  var saveRed = red;
+  var saveGreen = green;
+  var saveBlue = blue;
+  var saveSize = lineSize;
+
+  red = rgb[0];
+  green = rgb[1];
+  blue = rgb[2];
+  lineSize = data.size;
+  redrawShowcase()
+
+  red = saveRed;
+  blue = saveBlue;
+  green = saveGreen;
+  lineSize = saveSize;
+}
 // Base Functions
 function playClick1() {
   var clickSound = document.getElementById('clickSound');
@@ -298,32 +352,11 @@ function saveName() {
   // console.log("Input value:", inputValue);
 }
 
-// Buttons
-function changeColor() {
-  playClick1();
-  //Gets random number from 0-255
-  red = Math.floor(Math.random() * 256);
-  green = Math.floor(Math.random() * 256);
-  blue = Math.floor(Math.random() * 256);
-  //Inputs random numbers
-  ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-  redrawShowcase();
-}
-
-function changeSize() {
-  playClick1();
-  //Random linesize between 1-25
-  lineSize = Math.ceil(Math.random() * 25);
-  //Applies the change
-  ctx.lineWidth = lineSize;
-  redrawShowcase();
-}
-
 //Zoom stuff
 function zoomInButton() {
   playClick1();
   scale *= 1.5;
-}
+} 
 
 function zoomOutButton() {
   playClick1();
@@ -365,7 +398,7 @@ function updateBrushState(brushName) {
   points -= brushAttributes[brushName].points;
   updatePointsDisplay(points);
   brushAttributes[brushName].locked = false;
-  document.getElementById(brushName).className = 'button';
+  document.getElementById(brushName).className = 'button-brush';
 }
 
 
@@ -398,7 +431,7 @@ function rollDice() {
 function diceBrush(brushName) {
   if (brushAttributes[brushName].locked) {
     brushAttributes[brushName].locked = false;
-    document.getElementById(brushName).className = 'button'
+    document.getElementById(brushName).className = 'button-brush'
   } else {
     // If not locked, add points
     points += 150;
