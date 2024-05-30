@@ -23,14 +23,14 @@ body {
 }
 
 #Loading {
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  z-index: 999;
-  left: 0;
-  top: 0;
-  position: fixed;
-  word-wrap: break-word;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    position: fixed;
+    word-wrap: break-word;
 }
 
 #LoadingText {
@@ -38,7 +38,7 @@ body {
   vertical-align: center;
   color: white;
   font-size: 75px;
-  z-index: 99;
+  z-index: 9999;
 
 }
 
@@ -191,7 +191,7 @@ body {
 }
 
     .dropdown-container.active {
-        transform: translateX(-50%) translateY(100%);
+        transform: translateX(-50%);
         display: block;
         color: #9994B2;
     }
@@ -211,6 +211,29 @@ body {
         box-sizing: border-box;
         color: #5E618C;
     }
+
+.tutorial {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    background-color: #C2B5D6;
+    color: #C2B5D6;
+    border-radius: 55px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    display: none;
+    font-size: 17px;
+    z-index: 20;
+}
+
+.tutorial {
+    transform: translateX(-50%) translateY(100%);
+    display: block;
+    color: black;
+}
+
 
 hover-image {
     transition: transform 1s ease;
