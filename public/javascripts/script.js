@@ -139,6 +139,7 @@ displayCanvas.addEventListener('mousedown', function (e) {
 displayCanvas.addEventListener('pointermove', function (e) {
   if (userName) {
     var events = e.getCoalescedEvents();
+    document.getElementById("brushData").style.display = "none"
     if (isDrawing) {
       for (const event of events) {
         draw(event.offsetX / scale + screenOffsetX, event.offsetY / scale + screenOffsetY);
@@ -166,6 +167,7 @@ displayCanvas.addEventListener('touchstart', function (e) {
 });
 displayCanvas.addEventListener('touchmove', function (e) {
   if (userName) {
+    document.getElementById("brushData").style.display = "none"
     if (isDrawing) {
       draw(e.targetTouches[0].pageX / scale + screenOffsetX, e.targetTouches[0].pageY / scale + screenOffsetY)
     } else if (isPanning) {
@@ -181,7 +183,9 @@ displayCanvas.addEventListener('touchmove', function (e) {
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
-brushState.addEventListener('mousemove', hoverCheck(e.offsetX, e.offsetY));
+brushState.addEventListener('mousemove', function(e) {
+  hoverCheck(e.clientX, e.clientY) }
+);
 
 // Start listening to resize events and draw canvas.
 
@@ -319,7 +323,7 @@ function hoverCheck(X, Y) {
   var hover = document.querySelector('.hover-image:hover');
   if (hover == null)
     {
-
+      document.getElementById("brushData").style.display = "none";
       redrawShowcase();
       return;
     }
@@ -343,8 +347,10 @@ function hoverCheck(X, Y) {
   green = saveGreen;
   lineSize = saveSize;
   
-  document.getElementById("brushData").textContent = hover + "\n\n Point cost:" + data.points;
-  document.getElementById("brushData")
+  document.getElementById("brushData").textContent = hover + "\r\nPoint cost:" + data.points;
+  document.getElementById("brushData").style.top = (Y - 50) + "px";
+  document.getElementById("brushData").style.left = X + "px";
+  document.getElementById("brushData").style.display = "block";
 }
 // Base Functions
 function playClick1() {
@@ -441,12 +447,12 @@ function gachaRoll(diceNumber) {
 //gacha system
 
 function rollDice() {
-  if (points < 300) {
+  if (points < 100) {
     return;
   }
   
   // Subtract points
-  points -= 300;
+  points -= 100;
   gachaRoll(Math.ceil(Math.random() * maxDice)); //Rolls a random number between 1 and maxdice
   // const brush_name = getBrushName(diceNumber);
   updatePointsDisplay();
@@ -458,7 +464,7 @@ function diceBrush(brushName) {
     document.getElementById(brushName).className = 'button-brush'
   } else {
     // If not locked, add points
-    points += 150;
+    points += 75;
   }
 }
 

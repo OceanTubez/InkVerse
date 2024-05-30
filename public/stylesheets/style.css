@@ -95,8 +95,17 @@ body {
 }
 
 #brushData {
+  color: black;
+  background-color: white;
   width: 10%;
-  height: 40px;
+  height: 50px;
+  padding: 2px 2px;
+  font-size: 16px;
+  position: absolute;
+  display: none;
+  z-index: 6;
+  pointer-events: none;
+  white-space: pre;
 }
 
 #username {
