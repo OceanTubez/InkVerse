@@ -94,6 +94,11 @@ body {
 
 }
 
+#brushData {
+  width: 10%;
+  height: 40px;
+}
+
 #username {
   position: fixed;
   bottom: 20px; /* Adjust position as needed */

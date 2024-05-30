@@ -41,16 +41,34 @@ let stampPan, stampRefresh, stampLoad;
 const brushState = document.getElementById('scrollBrushes'); //Not the best name but I couldn't think of something better.
 
 let brushAttributes = {
-  "bigBlack": {
-    size: 24,
+  "Small Black": {
+    size: 1,
     rgb: [0, 0, 0],
-    weight: 1,
+    weight: 0,
     "locked": false,
     points: 0,
     image: 1,
   },
 
-  "bigGreen": {
+  "Medium Black": {
+    size: 5,
+    rgb: [0, 0, 0],
+    weight: 0,
+    "locked": false,
+    points: 0,
+    image: 1,
+  },
+
+  "Big Black": {
+    size: 25,
+    rgb: [0, 0, 0],
+    weight: 0,
+    "locked": false,
+    points: 0,
+    image: 1,
+  },
+
+  "Big Green": {
     size: 24,
     rgb: [0, 139, 0],
     weight: 2,
@@ -59,7 +77,7 @@ let brushAttributes = {
     image: 4,
   },
 
-  "bigLightBlue": {
+  "Big Light Blue": {
     size: 15,
     rgb: [173, 216, 230],
     weight: 3,
@@ -68,7 +86,7 @@ let brushAttributes = {
     image: 5,
   },
 
-  "bigOrange": {
+  "Big Orange": {
     size: 18,
     rgb: [255, 0, 177],
     weight: 4,
@@ -77,7 +95,7 @@ let brushAttributes = {
     image: 6,
   },
 
-  "bigRed": {
+  "Big Red": {
     size: 27,
     rgb: [178, 34, 34],
     weight: 5,
@@ -86,7 +104,7 @@ let brushAttributes = {
     image: 7,
   },
 
-  "bigBrown": {
+  "Big Brown": {
     size: 47,
     rgb: [139, 69, 19],
     weight: 6,
@@ -95,7 +113,7 @@ let brushAttributes = {
     image: 2,
   },
 
-  "bigDarkBlue": {
+  "Big Dark Blue": {
     size: 25,
     rgb: [0, 139, 0],
     weight: 7,
@@ -159,11 +177,11 @@ displayCanvas.addEventListener('touchmove', function (e) {
       socket.emit('mouseMovement', { MouseX, mouseY, userName })
     }
   }
-  hoverCheck();
+  hoverCheck(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
-brushState.addEventListener('mousemove', hoverCheck);
+brushState.addEventListener('mousemove', hoverCheck(e.offsetX, e.offsetY));
 
 // Start listening to resize events and draw canvas.
 
@@ -191,8 +209,10 @@ function setSocket() {
     socket = io('localhost:3000');
   } else if (onServer == 1) {
     socket = io('54.39.97.208');
-  } else {
+  } else if (onServer == 2) {
     socket = io('inkverse.qxcg.net');
+  } else {
+    socket = io('inkverse.cc');
   }
 }
 
@@ -295,10 +315,11 @@ function backpack() {
     }
 }
 
-function hoverCheck() {
+function hoverCheck(X, Y) {
   var hover = document.querySelector('.hover-image:hover');
   if (hover == null)
     {
+
       redrawShowcase();
       return;
     }
@@ -321,6 +342,9 @@ function hoverCheck() {
   blue = saveBlue;
   green = saveGreen;
   lineSize = saveSize;
+  
+  document.getElementById("brushData").textContent = hover + "\n\n Point cost:" + data.points;
+  document.getElementById("brushData")
 }
 // Base Functions
 function playClick1() {
