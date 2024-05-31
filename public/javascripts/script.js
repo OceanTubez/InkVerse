@@ -356,7 +356,7 @@ function hoverCheck(X, Y) {
   green = saveGreen;
   lineSize = saveSize;
   
-  document.getElementById("brushData").textContent = hover + "\r\nPoint cost:" + data.points;
+  document.getElementById("brushData").textContent = hover + "\r\nPoint cost: " + data.points;
   document.getElementById("brushData").style.top = (Y - 50) + "px";
   document.getElementById("brushData").style.left = X + "px";
   document.getElementById("brushData").style.display = "block";
