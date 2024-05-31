@@ -42,85 +42,71 @@ body {
 
 }
 
-#changeColor {
-
-    position: fixed;
-    bottom: 130px; /* Adjust as needed */
-    left: 90%; /* Position horizontally at the middle */
-    transform: translateX(-50%);
-    background-color: #0d8797;
-    color: #fff;
-    border-radius: 20px;
-    width: 12%;
-    height: 17%;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-
-}
-
-#changeSize {
-
-    position: fixed;
-    bottom: 90px; /* Adjust as needed */
-    left: 90%; /* Position horizontally at the middle */
-    transform: translateX(-50%);
-    background-color: #0d8797;
-    color: #fff;
-    width: 12%;
-    height: 17%;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-
-}
-
 #zoomInButton {
   position: fixed;
-  bottom: 130px; /* Adjust as needed */
-  left: 78%; /* Position horizontally at the middle */
+  bottom: 5cqb; /* Adjust as needed */
+  left: 85%; /* Position horizontally at the middle */
   transform: translateX(-50%);
   background-color: #dc7e7e;
   color: #fff;
   width: 6%;
-  height: 17%;
+  height: 5%;
   border-radius: 20px;
   border: none;
   cursor: pointer;
   user-select: none;
+  z-index: 4;
 }
 
 #zoomOutButton {
   position: fixed;
-  bottom: 90px; /* Adjust as needed */
-  left: 78%; /* Position horizontally at the middle */
+  bottom: 0%; /* Adjust as needed */
+  left: 85%; /* Position horizontally at the middle */
   transform: translateX(-50%);
   background-color: #a3a9ea;
   color: #fff;
   width: 6%;
-  height: 17%;
+  height: 5%;
   border-radius: 20px;
   border: none;
   cursor: pointer;
   user-select: none;
+  z-index: 4;
 }
 
 
-#ribbon {
+#backpack {
     position: fixed;
     bottom: -10%; /* Adjust position as needed */
     left: 50%;
     transform: translateX(-50%);
     color: #C2B5D6;
     background-color: #C2B5D6;
+    background-image: url("/images/backpackClose.png"); /* Set the image as background */
+    background-repeat: no-repeat;
+    background-size: contain;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
     border-radius: 55px; /* Ensure rounded edges */
-    width: 49%; /* Adjust width automatically */
+    width: 10%; /* Adjust width automatically */
     height: 20%; /* Adjust height automa=\tically */
     z-index: 99; /* Ensure the ribbon is above other content */
+
+}
+
+#brushData {
+  color: black;
+  background-color: white;
+  width: 10%;
+  height: 50px;
+  padding: 2px 2px;
+  font-size: 16px;
+  position: absolute;
+  display: none;
+  z-index: 6;
+  pointer-events: none;
+  white-space: pre;
 }
 
 #username {
@@ -235,22 +221,28 @@ body {
 }
 
 
-hover-image {
+.hover-image {
     transition: transform 1s ease;
     display: flex;
     justify-content: space-between; /* Distribute items equally */
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    object-position: 50% 0%;
 }
 
 .hover-image:hover {
-    transform: translateY(-50px);
+    transform: translateY(-20px);
     cursor: pointer;
-    transition: transform 1s ease;
+    transition: transform 0.4s ease;
 }
 
-.button {
-    border: none;
-    background: none;
-    user-select: none;
+.button-brush {
+  width: 70px;
+  height: 70px;
+  border: none;
+  background: none;
+  user-select: none;
 }
 
 .locked {
@@ -292,5 +284,17 @@ hover-image {
     right: 20px; /* Adjust as needed */
     z-index: 3;
     color: #9994B2;
+}
+#scrollBrushes {
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  background-color: brown;
+  width: 80%;
+  height: 80%;
+  overflow: auto;
+  z-index: 5;
+  border-radius: 2%;
+  display: none;
 }
 

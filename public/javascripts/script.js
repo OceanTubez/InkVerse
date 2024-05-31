@@ -6,8 +6,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   refresh();
   startTimerAndPoints();
   updatePointsDisplay();
-  diceSetup();
-  updatePointsDisplay();
 });
 
 const canvas = document.getElementById('drawCanvas');
@@ -40,62 +38,88 @@ let vectorX = 0;
 let vectorY = 0;
 let maxDice = 0;
 let stampPan, stampRefresh, stampLoad;
+const brushState = document.getElementById('scrollBrushes'); //Not the best name but I couldn't think of something better.
 
 let brushAttributes = {
-  "bigBlack": {
-    size: 24,
+  "Small Black": {
+    size: 1,
     rgb: [0, 0, 0],
-    weight: 1,
+    weight: 0,
     "locked": false,
     points: 0,
+    image: 1,
   },
 
-  "bigGreen": {
+  "Medium Black": {
+    size: 5,
+    rgb: [0, 0, 0],
+    weight: 0,
+    "locked": false,
+    points: 0,
+    image: 1,
+  },
+
+  "Big Black": {
+    size: 25,
+    rgb: [0, 0, 0],
+    weight: 0,
+    "locked": false,
+    points: 0,
+    image: 1,
+  },
+
+  "Big Green": {
     size: 24,
     rgb: [0, 139, 0],
     weight: 2,
     "locked": true,
     points: 1,
+    image: 4,
   },
 
-  "bigLightBlue": {
+  "Big Light Blue": {
     size: 15,
     rgb: [173, 216, 230],
     weight: 3,
     "locked": true,
     points: 1,
+    image: 5,
   },
 
-  "bigOrange": {
+  "Big Orange": {
     size: 18,
     rgb: [255, 0, 177],
     weight: 4,
     "locked": true,
     points: 2,
+    image: 6,
   },
 
-  "bigRed": {
+  "Big Red": {
     size: 27,
     rgb: [178, 34, 34],
     weight: 5,
     "locked": true,
     points: 3,
+    image: 7,
   },
 
-  "bigBrown": {
+  "Big Brown": {
     size: 47,
     rgb: [139, 69, 19],
     weight: 6,
     "locked": true,
     points: 4,
+    image: 2,
   },
 
-  "bigDarkBlue": {
+  "Big Dark Blue": {
     size: 25,
     rgb: [0, 139, 0],
     weight: 7,
     "locked": true,
     points: 5,
+    image: 3,
   }
 };
 
@@ -115,6 +139,7 @@ displayCanvas.addEventListener('mousedown', function (e) {
 displayCanvas.addEventListener('pointermove', function (e) {
   if (userName) {
     var events = e.getCoalescedEvents();
+    document.getElementById("brushData").style.display = "none"
     if (isDrawing) {
       for (const event of events) {
         draw(event.offsetX / scale + screenOffsetX, event.offsetY / scale + screenOffsetY);
@@ -142,6 +167,7 @@ displayCanvas.addEventListener('touchstart', function (e) {
 });
 displayCanvas.addEventListener('touchmove', function (e) {
   if (userName) {
+    document.getElementById("brushData").style.display = "none"
     if (isDrawing) {
       draw(e.targetTouches[0].pageX / scale + screenOffsetX, e.targetTouches[0].pageY / scale + screenOffsetY)
     } else if (isPanning) {
@@ -153,10 +179,13 @@ displayCanvas.addEventListener('touchmove', function (e) {
       socket.emit('mouseMovement', { MouseX, mouseY, userName })
     }
   }
+  hoverCheck(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
-
+brushState.addEventListener('mousemove', function(e) {
+  hoverCheck(e.clientX, e.clientY) }
+);
 
 // Start listening to resize events and draw canvas.
 
@@ -167,7 +196,7 @@ function initialize() {
   // Draw canvas border for the first time.
   resizeCanvas();
   // Initialize brush states
-  initializeBrushStates();
+  initializeBrushes();
 }
 // Runs each time the DOM window resize event fires.
 // Resets the canvas dimensions to match window,
@@ -184,24 +213,35 @@ function setSocket() {
     socket = io('localhost:3000');
   } else if (onServer == 1) {
     socket = io('54.39.97.208');
-  } else {
+  } else if (onServer == 2) {
     socket = io('inkverse.qxcg.net');
+  } else {
+    socket = io('inkverse.cc');
   }
 }
 
-function diceSetup() {
+function initializeBrushes() {
   Object.entries(brushAttributes).forEach(([key, value]) => {
-    maxDice += value.weight;
-  })
-}
-
-function initializeBrushStates() {
-  Object.entries(brushAttributes).forEach(([key, value]) => {
-    if (value.locked) {
-      document.getElementById(key).className = 'button locked'
-    } else {
-      document.getElementById(key).className = 'button'
+    var newBrush = document.createElement("button");
+    newBrush.id = key;
+    newBrush.onclick = function () {
+      changeBrush(key);
     }
+    if (value.locked) {
+      newBrush.className = 'button-brush locked'
+    } else {
+      newBrush.className = 'button-brush'
+    }
+
+    var img = document.createElement("img");
+    img.src = "/images/brush" + value.image + ".png";
+    img.className = "hover-image";
+    img.alt = "Brushes";
+    newBrush.appendChild(img);
+
+    brushState.appendChild(newBrush);
+
+    maxDice += value.weight;
   })
 }
 
@@ -268,6 +308,50 @@ function stopDrawingOrPanning() {
   panSlide()
 }
 
+function backpack() {
+  if (document.getElementById("scrollBrushes").style.display == 'none')
+    {
+      document.getElementById("scrollBrushes").style.display = 'block';
+      document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackOpen.png)';
+    } else {
+      document.getElementById("scrollBrushes").style.display = 'none';
+      document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackClose.png)';
+    }
+}
+
+function hoverCheck(X, Y) {
+  var hover = document.querySelector('.hover-image:hover');
+  if (hover == null)
+    {
+      document.getElementById("brushData").style.display = "none";
+      redrawShowcase();
+      return;
+    }
+  hover = hover.parentElement.id;
+  var data = brushAttributes[hover];
+  var rgb = data.rgb;
+  //Yucky. Please find another solution if possible.
+  var saveRed = red;
+  var saveGreen = green;
+  var saveBlue = blue;
+  var saveSize = lineSize;
+
+  red = rgb[0];
+  green = rgb[1];
+  blue = rgb[2];
+  lineSize = data.size;
+  redrawShowcase()
+
+  red = saveRed;
+  blue = saveBlue;
+  green = saveGreen;
+  lineSize = saveSize;
+  
+  document.getElementById("brushData").textContent = hover + "\r\nPoint cost:" + data.points;
+  document.getElementById("brushData").style.top = (Y - 50) + "px";
+  document.getElementById("brushData").style.left = X + "px";
+  document.getElementById("brushData").style.display = "block";
+}
 // Base Functions
 function playClick1() {
   var clickSound = document.getElementById('clickSound');
@@ -298,32 +382,11 @@ function saveName() {
   // console.log("Input value:", inputValue);
 }
 
-// Buttons
-function changeColor() {
-  playClick1();
-  //Gets random number from 0-255
-  red = Math.floor(Math.random() * 256);
-  green = Math.floor(Math.random() * 256);
-  blue = Math.floor(Math.random() * 256);
-  //Inputs random numbers
-  ctx.strokeStyle = "rgb(" + red + "," + green + "," + blue + ")";
-  redrawShowcase();
-}
-
-function changeSize() {
-  playClick1();
-  //Random linesize between 1-25
-  lineSize = Math.ceil(Math.random() * 25);
-  //Applies the change
-  ctx.lineWidth = lineSize;
-  redrawShowcase();
-}
-
 //Zoom stuff
 function zoomInButton() {
   playClick1();
   scale *= 1.5;
-}
+} 
 
 function zoomOutButton() {
   playClick1();
@@ -365,7 +428,7 @@ function updateBrushState(brushName) {
   points -= brushAttributes[brushName].points;
   updatePointsDisplay(points);
   brushAttributes[brushName].locked = false;
-  document.getElementById(brushName).className = 'button';
+  document.getElementById(brushName).className = 'button-brush';
 }
 
 
@@ -384,12 +447,12 @@ function gachaRoll(diceNumber) {
 //gacha system
 
 function rollDice() {
-  if (points < 300) {
+  if (points < 100) {
     return;
   }
   
   // Subtract points
-  points -= 300;
+  points -= 100;
   gachaRoll(Math.ceil(Math.random() * maxDice)); //Rolls a random number between 1 and maxdice
   // const brush_name = getBrushName(diceNumber);
   updatePointsDisplay();
@@ -398,10 +461,10 @@ function rollDice() {
 function diceBrush(brushName) {
   if (brushAttributes[brushName].locked) {
     brushAttributes[brushName].locked = false;
-    document.getElementById(brushName).className = 'button'
+    document.getElementById(brushName).className = 'button-brush'
   } else {
     // If not locked, add points
-    points += 150;
+    points += 75;
   }
 }
 

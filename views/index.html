@@ -3,96 +3,59 @@
 <html>
 <head>
     <title>InkVerse: Client V1.13</title>
-    <link rel="icon" type="image/x-icon" href="/images/IMG_0219.png">
+    <link rel="icon" type="image/x-icon" href="/images/ico.png">
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
-<body>
-
-    <div id="Loading">
-        <div id="LoadingText">Loading</div>
-    </div>
-    <canvas id="displayCanvas"></canvas>
-    <canvas id="drawCanvas"></canvas>
-    <canvas id="showcase" , height="50" , width="50"></canvas>
-    <audio id="clickSound" href="/audio/UiClick.mp3"></audio>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript" src="/javascripts/common/browserDisplay.js"></script>
-    <script type="text/javascript" src="/javascripts/common/canvas.js"></script>
-    <script type="text/javascript" src="/javascripts/common/server.js"></script>
-    <script type="text/javascript" src="/javascripts/script.js"></script>
-    <div class="tutorial" id="tutorial">
-        <h2>Tutorial:</h2>
-        <p>Click + Drag to draw</p>
-        <p>2 fingers to zoom + pan</p>
-        <p>or Ctrl+Drag to pan</p>
-        <p>Earn Points as time passes</p>
-        <p>Use points to Roll</p>
-        <p>or</p>
-        <p> Use points to Directly unlock brushes</p>
+    <body>
+        
+        <div id="Loading">
+            <div id="LoadingText">Loading</div>
+        </div>
+        <canvas id="displayCanvas"></canvas>
+        <canvas id="drawCanvas"></canvas>
+        <canvas id="showcase", height="50", width="50"></canvas>
+        <audio id="clickSound" href="/audio/UiClick.mp3"></audio>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <div class="tutorial" id="tutorial">
+          <h2>Tutorial:</h2>
+          <p>Click + drag to draw</p>
+          <p>2 fingers to zoom + pan</p>
+          <p>or ctrl+drag to pan</p>
+          <p>Earn points as time passes</p>
+          <p>Use points to roll</p>
+          <p>or</p>
+          <p>Use points to directly unlock brushes</p>
 
         <button id="X" onClick="toggleDropdown()">Done</button>
-    </div>
-    <div class="dropdown-container" id="dropdownContainer">
+        </div>
+        <div class="dropdown-container" id="dropdownContainer">
 
-        <img src="/images/IMG_0234.png" id="dropimage">
-        <input type="text" id="nameInput" placeholder="Enter your name">
-        <button id="nameButton" onClick="toggleDropdown()">Draw!</button>
-    </div>
-    <div id="timer">00:00:00</div>
-    <div id="points">0 Points</div> <!-- Element to display points -->
-    <button class="gacha" id="gacha" onClick="rollDice()">click to roll</button>
+            <img src="/images/logo.png" id="dropimage">
+            <input type="text" id="nameInput" placeholder="Enter your name">
+            <button id="nameButton" onClick="toggleDropdown()">Draw!</button>
+        </div>
 
-    <div class="ribbon" id="ribbon">
-        <!--BLACK -->
-        <button class="button" id="bigBlack" onClick="changeBrush('bigBlack')">
-            <img class="hover-image" src="/images/black.png" alt="brushes">
-            <!-- Lock icon on top of the thing-->
-        </button>
-        <!-- green-->
-        <button class="button" id="bigGreen" onClick="changeBrush('bigGreen')">
-            <img class="hover-image" src="/images/green.png" alt="brushes">
-        </button>
-        <!-- blue-->
-        <button class="button" id="bigLightBlue" onClick="changeBrush('bigLightBlue')">
-            <img class="hover-image" src="/images/lightblue.png" alt="brushes">
-        </button>
-        <!-- orange-->
-        <button class="button" id="bigOrange" onClick="changeBrush('bigOrange')">
-            <img class="hover-image" src="/images/red.png" alt="brushes">
-        </button>
+        <div id="timer">00:00:00</div>
+        <div id="points">0 Points</div> <!-- Element to display points -->
+        <button class="gacha" id="gacha" onClick="rollDice()" >click to roll</button>
 
-        <!-- Red-->
-        <button class="button" id="bigRed" onClick="changeBrush('bigRed')">
-            <img class="hover-image" src="/images/orange.png" alt="brushes">
-        </button>
-
-        <!-- brown-->
-        <button class="button" id="bigBrown" onClick="changeBrush('bigBrown')">
-            <img class="hover-image" src="/images/brown.png" alt="brushes">
-        </button>
-
-        <!-- Dark Blue -->
-        <button class="button" id="bigDarkBlue" onClick="changeBrush('bigDarkBlue')">
-            <img class="hover-image" src="/images/darkblue.png" alt="brushes">
-        </button>
-
-
-
-
-
-        <!-- Color and Size changers-->
-        <button id="changeColor" onClick="changeColor()">Change Color</button>
-        <button id="changeSize" onClick="changeSize()">Change Size</button>
-
-
+        <div id="scrollBrushes"></div>
+        <div id="brushData"></div>
+        <button id="backpack" onClick="backpack()"></button>
+        
         <!-- ZOOM Buttons-->
         <button id="zoomInButton" onClick="zoomInButton()">+</button>
         <button id="zoomOutButton" onClick="zoomOutButton()">-</button>
-    </div>
-    <div id="footer-text">InkVerse: Local Server</div>
-    <div id="username"></div>
-    <div id="pen-text">Pen: </div>
-    <div id="rectangle"></div>
 
-</body>
+        <div id="footer-text">InkVerse: Local Server</div>
+        <div id="username"></div>
+        <div id="pen-text">Pen: </div>
+        <div id="rectangle"></div>
+
+        <script type="text/javascript" src="/javascripts/common/browserDisplay.js"></script>
+        <script type="text/javascript" src="/javascripts/common/canvas.js"></script>
+        <script type="text/javascript" src="/javascripts/common/server.js"></script>
+        <script type="text/javascript" src="/javascripts/script.js"></script>
+        
+    </body>
 </html>
