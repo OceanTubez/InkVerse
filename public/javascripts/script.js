@@ -397,6 +397,10 @@ function zoomOutButton() {
   }
 }
 
+function deleteTutorial() {
+  document.getElementById('tutorial').remove();
+}
+
 //Brush functions
 
 function changeBrush(brushName) {

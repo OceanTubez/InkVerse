@@ -16,7 +16,7 @@
         <canvas id="showcase", height="50", width="50"></canvas>
         <audio id="clickSound" href="/audio/UiClick.mp3"></audio>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <div class="tutorial" id="tutorial">
+        <div id="tutorial">
           <h2>Tutorial:</h2>
           <p>Click + drag to draw</p>
           <p>2 fingers to zoom + pan</p>
@@ -26,7 +26,7 @@
           <p>or</p>
           <p>Use points to directly unlock brushes</p>
 
-        <button id="X" onClick="toggleDropdown()">Done</button>
+        <button onClick="deleteTutorial()">Done</button>
         </div>
         <div class="dropdown-container" id="dropdownContainer">
 
