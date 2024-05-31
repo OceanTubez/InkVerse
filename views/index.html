@@ -25,11 +25,14 @@
 
         <div id="timer">00:00:00</div>
         <div id="points">0 Points</div> <!-- Element to display points -->
-        <button class="gacha" id="gacha" onClick="rollDice()" >click to roll</button>
+        <button id="rollButton" onClick="rollDice()" >click to roll</button>
 
         <div id="scrollBrushes"></div>
         <div id="brushData"></div>
         <button id="backpack" onClick="backpack()"></button>
+        <div id="gacha" style="visibility: hidden;"> 
+            <div id="gachaLine"></div>
+        </div>
         
         <!-- ZOOM Buttons-->
         <button id="zoomInButton" onClick="zoomInButton()">+</button>

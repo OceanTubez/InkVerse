@@ -37,8 +37,12 @@ let lineSize = 1;
 let vectorX = 0;
 let vectorY = 0;
 let maxDice = 0;
-let stampPan, stampRefresh, stampLoad;
+let rollsLeft = 0;
+let stampPan, stampRefresh, stampLoad, gachaStamp;
+let speed = 1;
+let speedChange = 0;
 const brushState = document.getElementById('scrollBrushes'); //Not the best name but I couldn't think of something better.
+const gachaElement = document.getElementById('gacha');
 
 let brushAttributes = {
   "Small Black": {
@@ -71,7 +75,7 @@ let brushAttributes = {
   "Big Green": {
     size: 24,
     rgb: [0, 139, 0],
-    weight: 2,
+    weight: 1,
     "locked": true,
     points: 1,
     image: 4,
@@ -183,8 +187,9 @@ displayCanvas.addEventListener('touchmove', function (e) {
 });
 displayCanvas.addEventListener('touchend', stopDrawingOrPanning);
 displayCanvas.addEventListener('touchcancel', stopDrawingOrPanning);
-brushState.addEventListener('mousemove', function(e) {
-  hoverCheck(e.clientX, e.clientY) }
+brushState.addEventListener('mousemove', function (e) {
+  hoverCheck(e.clientX, e.clientY)
+}
 );
 
 // Start listening to resize events and draw canvas.
@@ -213,8 +218,6 @@ function setSocket() {
     socket = io('localhost:3000');
   } else if (onServer == 1) {
     socket = io('54.39.97.208');
-  } else if (onServer == 2) {
-    socket = io('inkverse.qxcg.net');
   } else {
     socket = io('inkverse.cc');
   }
@@ -309,24 +312,22 @@ function stopDrawingOrPanning() {
 }
 
 function backpack() {
-  if (document.getElementById("scrollBrushes").style.display == 'none')
-    {
-      document.getElementById("scrollBrushes").style.display = 'block';
-      document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackOpen.png)';
-    } else {
-      document.getElementById("scrollBrushes").style.display = 'none';
-      document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackClose.png)';
-    }
+  if (document.getElementById("scrollBrushes").style.display == 'none') {
+    document.getElementById("scrollBrushes").style.display = 'block';
+    document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackOpen.png)';
+  } else {
+    document.getElementById("scrollBrushes").style.display = 'none';
+    document.getElementById("backpack").style.backgroundImage = 'url(/images/backpackClose.png)';
+  }
 }
 
 function hoverCheck(X, Y) {
   var hover = document.querySelector('.hover-image:hover');
-  if (hover == null)
-    {
-      document.getElementById("brushData").style.display = "none";
-      redrawShowcase();
-      return;
-    }
+  if (hover == null) {
+    document.getElementById("brushData").style.display = "none";
+    redrawShowcase();
+    return;
+  }
   hover = hover.parentElement.id;
   var data = brushAttributes[hover];
   var rgb = data.rgb;
@@ -346,7 +347,7 @@ function hoverCheck(X, Y) {
   blue = saveBlue;
   green = saveGreen;
   lineSize = saveSize;
-  
+
   document.getElementById("brushData").textContent = hover + "\r\nPoint cost:" + data.points;
   document.getElementById("brushData").style.top = (Y - 50) + "px";
   document.getElementById("brushData").style.left = X + "px";
@@ -386,7 +387,7 @@ function saveName() {
 function zoomInButton() {
   playClick1();
   scale *= 1.5;
-} 
+}
 
 function zoomOutButton() {
   playClick1();
@@ -433,15 +434,16 @@ function updateBrushState(brushName) {
 
 
 //finds the brush associated with gacha
-function gachaRoll(diceNumber) {
+function gachaRoll(diceNumber, data) {
   let counter = 0;
   Object.entries(brushAttributes).forEach(([key, value]) => {
     counter += value.weight;
     if (counter >= diceNumber) //Only activates on one dice. 
-      {
-        diceBrush(key);
-        counter = -9999999; //Please find a better solution lol.
-      }
+    {
+
+      diceBrush(key, data);
+      counter = -9999999; //Please find a better solution lol.
+    }
   })
 }
 //gacha system
@@ -450,22 +452,59 @@ function rollDice() {
   if (points < 100) {
     return;
   }
-  
+
   // Subtract points
+  rollsLeft = -19;
   points -= 100;
-  gachaRoll(Math.ceil(Math.random() * maxDice)); //Rolls a random number between 1 and maxdice
+  gachaElement.style.visibility = 'visible';
+  gachaElement.style.maxHeight = '150px'
+  speed = 1;
+  speedChange = 0;
+  gachaRoll(Math.ceil(Math.random() * maxDice), false)
+  gachaing();
+  //Rolls a random number between 1 and maxdice
   // const brush_name = getBrushName(diceNumber);
   updatePointsDisplay();
 }
 
-function diceBrush(brushName) {
-  if (brushAttributes[brushName].locked) {
-    brushAttributes[brushName].locked = false;
-    document.getElementById(brushName).className = 'button-brush'
-  } else {
-    // If not locked, add points
-    points += 75;
+function diceBrush(brushName, data) {
+  let value = brushAttributes[brushName];
+  weight = value.weight;
+
+  if (data) {
+    if (value.locked) {
+      value.locked = false;
+      document.getElementById(brushName).className = 'button-brush';
+    } else {
+      // If not locked, add points
+      points += 75;
+    }
   }
+
+  var gachaEl = document.createElement('div');
+  gachaEl.className = 'gachaSquare';
+  gachaEl.textContent = brushName;
+  if (weight == 1) {
+    gachaEl.style.backgroundColor = 'yellow';
+  } else if (weight < 6) {
+    gachaEl.style.backgroundColor = 'purple';
+  } else if (weight < 21) {
+    gachaEl.style.backgroundColor = 'blue';
+  } else if (weight < 101) {
+    gachaEl.style.backgroundColor = 'green';
+  } else {
+    gachaEl.style.backgroundColor = 'white';
+  }
+
+  gachaEl.style.left = "800px";
+  var gachaElImg = document.createElement('img');
+
+  gachaElImg.src = "/images/brush" + value.image + ".png";
+  gachaElImg.className = "gachaImg";
+  gachaElImg.alt = "GachaImg";
+
+  gachaEl.appendChild(gachaElImg);
+  gachaElement.appendChild(gachaEl);
 }
 
 function redrawShowcase() {
@@ -695,6 +734,76 @@ function panSlide(time) {
     }
     //Loads images and makes a new animation frame.
     requestAnimationFrame(panSlide);
+  }
+}
+
+function gachaing(time) {
+
+  if (!gachaStamp) {
+    gachaStamp = time;
+  }
+
+  let delta = (time - gachaStamp) / 1000; //Finds delta
+  gachaStamp = time;
+  if (!delta || delta > 1) {
+    requestAnimationFrame(gachaing)
+    return;
+  }
+  
+
+  var gachaElements = document.getElementsByClassName("gachaSquare");
+  let a = gachaElements[0]
+  let left = parseInt(a.style.left.replace("px", ""));
+
+  for (let i = 0; i < gachaElements.length; i++) {
+    let gacha = gachaElements[i];
+
+    if (i == 0) {
+      gacha.style.left = left - (600 * delta * speed) + 'px';
+    } else {
+      left+=150;
+      gacha.style.left = left + 'px';
+    }
+
+    if (left + (600 * delta * speed) >= 650 && left < 650) {
+      if (rollsLeft == 0) {
+        gachaRoll(Math.ceil(Math.random() * maxDice), true);
+        console.log("b");
+        speedChange = (416.5-(left/20))/1000
+        console.log(speedChange);
+        console.log(420-(left/20))
+      } else {
+        gachaRoll(Math.ceil(Math.random() * maxDice), false);
+      }
+      rollsLeft++;
+    }
+
+    if (left < -150) {
+      gacha.remove();
+    }
+  }
+
+  speed -= speedChange*delta;
+  if (speed < 0) {
+    speedChange = 0;
+    speed = 0;
+    
+  }
+
+  if (speed != 0) {
+    requestAnimationFrame(gachaing);
+  } else {
+
+    gachaElement.style.visibility = 'hidden';
+    gachaElement.style.maxHeight = '0px'
+
+    gachaElements = document.getElementsByClassName("gachaSquare")
+    for (let i = gachaElements.length - 1; i >= 0; i--) {
+      a = gachaElements[i]
+      a.remove(); 
+    }
+
+    gachaStamp = null;
   }
 }
 
