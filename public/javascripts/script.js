@@ -37,7 +37,7 @@ let lineSize = 1;
 let vectorX = 0;
 let vectorY = 0;
 let maxDice = 0;
-let stampPan, stampRefresh, stampLoad, gachaStamp;
+let stampPan, stampRefresh, stampLoad, gachaStamp, gachaState;
 let speed = 1;
 let speedChange = 0;
 let spawnGacha = 0;
@@ -398,6 +398,11 @@ function zoomOutButton() {
   }
 }
 
+function closeGachaObtained() {
+  document.getElementById("gachaObtained").style.display = "none"
+  document.getElementById("dudGachaObtained").style.display = "none"
+}
+
 //Brush functions
 
 function changeBrush(brushName) {
@@ -437,6 +442,18 @@ function updateBrushState(brushName) {
 
 function rollDice() {
   //Checks point count
+  if (gachaState == 1) {
+    var gachaElements = document.getElementsByClassName("gachaSquare");
+
+    for (let i = gachaElements.length - 1; i >= 0; i--) {
+      let gacha = gachaElements[i];
+      //Removes the element
+      gacha.remove();
+    }
+    gachaRoll(screenWidth * 0.3 - 75);
+    speed = -0.1
+    return;
+  }
   if (points < 100) {
     return;
   }
@@ -448,12 +465,15 @@ function rollDice() {
   gachaElement.style.maxHeight = '150px'
   //Initiliazes gacha values
   speed = 2;
+  gachaState = 1;
   speedChange = 0;
   spawnGacha = 0;
   //Spawns elements to fill the wheel
-  for (let i = 0; i < Math.ceil(screenWidth*0.6)+3; i++) {
+  for (let i = 0; i < Math.ceil(screenWidth * 0.6) + 3; i++) {
     gachaRoll(-250)
   }
+
+  document.getElementById("rollButton").textContent = "skip!"
   //Starts the wheel spinning
   gachaing();
   //Rolls a random number between 1 and maxdice
@@ -753,7 +773,7 @@ function gachaing(time) {
     requestAnimationFrame(gachaing)
     return;
   }
-  
+
   //Initiliazes variable
   var gachaElements = document.getElementsByClassName("gachaSquare");
   let a = gachaElements[0]
@@ -767,39 +787,42 @@ function gachaing(time) {
     if (i == 0) {
       gacha.style.left = left - (600 * delta * speed) + 'px'; //Front end is the only one that moves
     } else {
-      left+=150; //Other just follow along
+      left += 150; //Other just follow along
       gacha.style.left = left + 'px';
     }
     //Deletes when offscreen (Technically this is two screens away, but this hides some artifacting)
     if (left < -300) {
-      left+=150;
+      left += 150;
       i--;
       gacha.remove();
     }
   }
   //Adds another element when necessary
   if (spawnGacha > 150) {
-    spawnGacha-=150;
+    spawnGacha -= 150;
     gachaRoll(800)
   }
   //The speed of the wheel. Sloows down over time.
-  speed -= speedChange*delta;
+  speed -= speedChange * delta;
   speedChange += 0.007;
   if (speed < 0) {
+    document.getElementById("rollButton").textContent = "roll for a new brush!"
     //Hides wheel
     gachaElement.style.visibility = 'hidden';
     gachaElement.style.maxHeight = '0px'
     //Initializes new values
     gachaElements = document.getElementsByClassName("gachaSquare")
 
-    a = gachaElements[gachaElements.length - 1]
+    gachaState = 0;
+
+    a = gachaElements[gachaElements.length - 1];
     left = parseInt(a.style.left.replace("px", ""));
 
     for (let i = gachaElements.length - 1; i >= 0; i--) {
       let gacha = gachaElements[i];
-      //Finds what needs to be given
-      if (left <= screenWidth*0.3 && left + 150 > screenWidth*0.3) {
-        let value = brushAttributes[gacha.textContent]
+      //Finds the location
+      if (left <= screenWidth * 0.3 && left + 150 > screenWidth * 0.3) {
+        let value = brushAttributes[gacha.textContent];
         if (value.locked) {
           value.locked = false;
           document.getElementById(gacha.textContent).className = 'button-brush';
@@ -807,11 +830,14 @@ function gachaing(time) {
           // If not locked, add points
           points += 75;
           updatePointsDisplay();
+          document.getElementById("dudGachaObtained").style.display = "block";
         }
-      } 
-
-      //{{{Code for: Spawn in a "You got something" box goes here}}}
-
+        //Fixes images for the img.
+        document.getElementById("imgGachaObtained").src = "/images/brush" + value.image + ".png";
+        document.getElementById("textGachaObtained").textContent = gacha.textContent + " brush";
+        document.getElementById("gachaObtained").style.display = "block";
+      }
+      //updates location
       left -= 150;
       //Removes the element
       gacha.remove();
@@ -820,7 +846,6 @@ function gachaing(time) {
     return;
   }
 
-  requestAnimationFrame(gachaing)
-
+  requestAnimationFrame(gachaing);
 }
 
