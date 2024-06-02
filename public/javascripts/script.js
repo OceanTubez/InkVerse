@@ -37,10 +37,10 @@ let lineSize = 1;
 let vectorX = 0;
 let vectorY = 0;
 let maxDice = 0;
-let rollsLeft = 0;
 let stampPan, stampRefresh, stampLoad, gachaStamp;
 let speed = 1;
 let speedChange = 0;
+let spawnGacha = 0;
 const brushState = document.getElementById('scrollBrushes'); //Not the best name but I couldn't think of something better.
 const gachaElement = document.getElementById('gacha');
 
@@ -433,57 +433,60 @@ function updateBrushState(brushName) {
 }
 
 
-//finds the brush associated with gacha
-function gachaRoll(diceNumber, data) {
-  let counter = 0;
-  Object.entries(brushAttributes).forEach(([key, value]) => {
-    counter += value.weight;
-    if (counter >= diceNumber) //Only activates on one dice. 
-    {
-
-      diceBrush(key, data);
-      counter = -9999999; //Please find a better solution lol.
-    }
-  })
-}
 //gacha system
 
 function rollDice() {
+  //Checks point count
   if (points < 100) {
     return;
   }
 
   // Subtract points
-  rollsLeft = -19;
   points -= 100;
+  //Makes the wheel appear
   gachaElement.style.visibility = 'visible';
   gachaElement.style.maxHeight = '150px'
-  speed = 1;
+  //Initiliazes gacha values
+  speed = 2;
   speedChange = 0;
-  gachaRoll(Math.ceil(Math.random() * maxDice), false)
+  spawnGacha = 0;
+  //Spawns elements to fill the wheel
+  for (let i = 0; i < Math.ceil(screenWidth*0.6)+3; i++) {
+    gachaRoll(-250)
+  }
+  //Starts the wheel spinning
   gachaing();
   //Rolls a random number between 1 and maxdice
-  // const brush_name = getBrushName(diceNumber);
   updatePointsDisplay();
 }
 
-function diceBrush(brushName, data) {
+//finds the brush associated with gacha
+function gachaRoll(left) {
+
+  let diceNumber = Math.ceil(Math.random() * maxDice)
+  let counter = 0;
+
+  Object.entries(brushAttributes).forEach(([key, value]) => {
+
+    counter += value.weight;
+
+    if (counter >= diceNumber) //Only activates on one dice. 
+    {
+      diceBrush(key, left);
+      counter = -9999999; //Please find a better solution lol.
+    }
+  })
+}
+
+function diceBrush(brushName, left) {
+
   let value = brushAttributes[brushName];
   weight = value.weight;
-
-  if (data) {
-    if (value.locked) {
-      value.locked = false;
-      document.getElementById(brushName).className = 'button-brush';
-    } else {
-      // If not locked, add points
-      points += 75;
-    }
-  }
 
   var gachaEl = document.createElement('div');
   gachaEl.className = 'gachaSquare';
   gachaEl.textContent = brushName;
+
   if (weight == 1) {
     gachaEl.style.backgroundColor = 'yellow';
   } else if (weight < 6) {
@@ -496,7 +499,7 @@ function diceBrush(brushName, data) {
     gachaEl.style.backgroundColor = 'white';
   }
 
-  gachaEl.style.left = "800px";
+  gachaEl.style.left = left + "px";
   var gachaElImg = document.createElement('img');
 
   gachaElImg.src = "/images/brush" + value.image + ".png";
@@ -738,72 +741,86 @@ function panSlide(time) {
 }
 
 function gachaing(time) {
-
+  //Loads gachastamp if unavailable
   if (!gachaStamp) {
     gachaStamp = time;
   }
 
   let delta = (time - gachaStamp) / 1000; //Finds delta
-  gachaStamp = time;
+  gachaStamp = time; //Fives stamp
+  //Retries if delta is too high or unavailable
   if (!delta || delta > 1) {
     requestAnimationFrame(gachaing)
     return;
   }
   
-
+  //Initiliazes variable
   var gachaElements = document.getElementsByClassName("gachaSquare");
   let a = gachaElements[0]
   let left = parseInt(a.style.left.replace("px", ""));
 
+  spawnGacha += left - (600 * delta * speed)
+  //rolls the wheel
   for (let i = 0; i < gachaElements.length; i++) {
     let gacha = gachaElements[i];
 
     if (i == 0) {
-      gacha.style.left = left - (600 * delta * speed) + 'px';
+      gacha.style.left = left - (600 * delta * speed) + 'px'; //Front end is the only one that moves
     } else {
-      left+=150;
+      left+=150; //Other just follow along
       gacha.style.left = left + 'px';
     }
-
-    if (left + (600 * delta * speed) >= 650 && left < 650) {
-      if (rollsLeft == 0) {
-        gachaRoll(Math.ceil(Math.random() * maxDice), true);
-        console.log("b");
-        speedChange = (416.5-(left/20))/1000
-        console.log(speedChange);
-        console.log(420-(left/20))
-      } else {
-        gachaRoll(Math.ceil(Math.random() * maxDice), false);
-      }
-      rollsLeft++;
-    }
-
-    if (left < -150) {
+    //Deletes when offscreen (Technically this is two screens away, but this hides some artifacting)
+    if (left < -300) {
+      left+=150;
+      i--;
       gacha.remove();
     }
   }
-
-  speed -= speedChange*delta;
-  if (speed < 0) {
-    speedChange = 0;
-    speed = 0;
-    
+  //Adds another element when necessary
+  if (spawnGacha > 150) {
+    spawnGacha-=150;
+    gachaRoll(800)
   }
-
-  if (speed != 0) {
-    requestAnimationFrame(gachaing);
-  } else {
-
+  //The speed of the wheel. Sloows down over time.
+  speed -= speedChange*delta;
+  speedChange += 0.007;
+  if (speed < 0) {
+    //Hides wheel
     gachaElement.style.visibility = 'hidden';
     gachaElement.style.maxHeight = '0px'
-
+    //Initializes new values
     gachaElements = document.getElementsByClassName("gachaSquare")
+
+    a = gachaElements[gachaElements.length - 1]
+    left = parseInt(a.style.left.replace("px", ""));
+
     for (let i = gachaElements.length - 1; i >= 0; i--) {
-      a = gachaElements[i]
-      a.remove(); 
+      let gacha = gachaElements[i];
+      //Finds what needs to be given
+      if (left <= screenWidth*0.3 && left + 150 > screenWidth*0.3) {
+        let value = brushAttributes[gacha.textContent]
+        if (value.locked) {
+          value.locked = false;
+          document.getElementById(gacha.textContent).className = 'button-brush';
+        } else {
+          // If not locked, add points
+          points += 75;
+          updatePointsDisplay();
+        }
+      } 
+
+      //{{{Code for: Spawn in a "You got something" box goes here}}}
+
+      left -= 150;
+      //Removes the element
+      gacha.remove();
     }
 
-    gachaStamp = null;
+    return;
   }
+
+  requestAnimationFrame(gachaing)
+
 }
 
