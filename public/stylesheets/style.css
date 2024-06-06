@@ -37,7 +37,7 @@ body {
   vertical-align: center;
   color: white;
   font-size: 75px;
-  z-index: 1;
+  z-index: 9999;
 
 }
 
@@ -84,11 +84,12 @@ body {
   /* Adjust position as needed */
   left: 50%;
   transform: translateX(-50%);
+  color: #C2B5D6;
+  background-color: #C2B5D6;
   background-image: url("/images/backpackClose.png");
   /* Set the image as background */
   background-repeat: no-repeat;
   background-size: contain;
-  color: white;
   padding: 10px 20px;
   font-size: 16px;
   font-weight: bold;
@@ -188,6 +189,7 @@ body {
   color: black;
   background-color: white;
   width: 10%;
+  min-width: 100px;
   height: 50px;
   padding: 2px 2px;
   font-size: 16px;
@@ -225,12 +227,13 @@ body {
   /* Adjust font size as needed */
   z-index: 4;
   /* Ensure the text is above other content */
+  color: #000000;
 }
 
 #rectangle {
   width: 30%;
   height: 10%;
-  background: rgb(152, 151, 151);
+  background: #9994B2;
   opacity: 0.9;
   position: fixed;
   bottom: 0%;
@@ -246,6 +249,7 @@ body {
 
 #showcase {
   position: fixed;
+  color: #9994B2;
   bottom: 4%;
   left: 95%;
   z-index: 4;
@@ -263,28 +267,31 @@ body {
 
 .dropdown-container {
   position: fixed;
-  top: 0;
+  top: 10%;
   left: 50%;
-  background-color: #f9f9f9;
+  background-color: #C2B5D6;
+  color: #C2B5D6;
+  border-radius: 55px;
   border: 1px solid #ccc;
   padding: 20px;
   z-index: 1000;
   transition: transform 0.3s ease-in-out;
   display: none;
   font-size: 17px;
-  width: 33%;
 }
 
 .dropdown-container.active {
-  transform: translateX(-50%) translateY(100%);
+  transform: translateX(-50%);
   display: block;
+  color: #9994B2;
 }
 
 .dropdown-container img {
   max-width: 100px;
-  height: auto;
+  height: 200%;
   display: block;
   margin: 0 auto 20px;
+  color: #9994B2;
 }
 
 .dropdown-container input[type="text"] {
@@ -292,6 +299,25 @@ body {
   padding: 10px;
   margin-bottom: 10px;
   box-sizing: border-box;
+  color: #5E618C;
+}
+
+#tutorial {
+  text-align: center;
+  position: absolute;
+  bottom: 70%;
+  left: 50%;
+  background-color: #C2B5D6;
+  border-radius: 55px;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+  font-size: 17px;
+  z-index: 20;
+  transform: translateX(-50%) translateY(100%);
+  display: block;
+  color: black;
 }
 
 .hover-image {
@@ -332,7 +358,7 @@ body {
   /* Adjust as needed */
   background-color: rgba(0, 0, 0, 0.5);
   /* Semi-transparent background */
-  color: white;
+  color: #000000;
   padding: 5px 10px;
   border-radius: 5px;
   font-family: Arial, sans-serif;
@@ -361,19 +387,24 @@ body {
 }
 
 #rollButton {
+  color: #000000;
+}
+
+.gacha {
   position: fixed;
   top: 80px;
   /* Adjust as needed */
   right: 20px;
   /* Adjust as needed */
   z-index: 3;
+  color: #000000;
 }
 
 #scrollBrushes {
   position: fixed;
   top: 10%;
   left: 10%;
-  background-color: brown;
+  background-color: #9994B2;
   width: 80%;
   height: 80%;
   overflow: auto;

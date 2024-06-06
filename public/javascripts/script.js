@@ -72,62 +72,71 @@ let brushAttributes = {
     image: 1,
   },
 
+  "Eraser": {
+    size: 5,
+    rgb: [255, 255, 255],
+    weight: 0,
+    "locked": false,
+    points: 0,
+    image: 3,
+  },
+
   "Big Green": {
-    size: 24,
+    size: 25,
     rgb: [0, 139, 0],
-    weight: 1,
+    weight: 25,
     "locked": true,
-    points: 1,
+    points: 250,
     image: 4,
   },
 
   "Big Light Blue": {
-    size: 15,
+    size: 25,
     rgb: [173, 216, 230],
-    weight: 3,
+    weight: 25,
     "locked": true,
-    points: 1,
+    points: 250,
     image: 5,
   },
 
   "Big Orange": {
-    size: 18,
+    size: 25,
     rgb: [255, 0, 177],
-    weight: 4,
+    weight: 25,
     "locked": true,
-    points: 2,
+    points: 250,
     image: 6,
   },
 
   "Big Red": {
-    size: 27,
+    size: 25,
     rgb: [178, 34, 34],
-    weight: 5,
+    weight: 25,
     "locked": true,
-    points: 3,
+    points: 250,
     image: 7,
   },
 
   "Big Brown": {
-    size: 47,
+    size: 25,
     rgb: [139, 69, 19],
-    weight: 6,
+    weight: 25,
     "locked": true,
-    points: 4,
+    points: 250,
     image: 2,
   },
 
   "Big Dark Blue": {
     size: 25,
-    rgb: [0, 139, 0],
-    weight: 7,
+    rgb: [30, 39, 230],
+    weight: 25,
     "locked": true,
-    points: 5,
+    points: 250,
     image: 3,
   }
 };
 
-let points = 10099; //Set this to zero for release.
+let points = 0; //Set this to zero for release.
 
 let panSpeedX = 0;
 let panSpeedY = 0;
@@ -349,6 +358,7 @@ function hoverCheck(X, Y) {
   lineSize = saveSize;
 
   document.getElementById("brushData").textContent = hover + "\r\nPoint cost:" + data.points;
+  
   document.getElementById("brushData").style.top = (Y - 50) + "px";
   document.getElementById("brushData").style.left = X + "px";
   document.getElementById("brushData").style.display = "block";
@@ -401,6 +411,9 @@ function zoomOutButton() {
 function closeGachaObtained() {
   document.getElementById("gachaObtained").style.display = "none"
   document.getElementById("dudGachaObtained").style.display = "none"
+
+function deleteTutorial() {
+  document.getElementById('tutorial').remove();
 }
 
 //Brush functions
