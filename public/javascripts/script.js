@@ -199,6 +199,11 @@ brushState.addEventListener('mousemove', function (e) {
   hoverCheck(e.clientX, e.clientY)
 }
 );
+document.getElementById("nameInput").addEventListener('keydown', function (e) {
+  if (e.key == "Enter") {
+    toggleDropdown();
+  }
+})
 
 // Start listening to resize events and draw canvas.
 
