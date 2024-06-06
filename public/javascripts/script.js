@@ -411,7 +411,7 @@ function zoomOutButton() {
 function closeGachaObtained() {
   document.getElementById("gachaObtained").style.display = "none"
   document.getElementById("dudGachaObtained").style.display = "none"
-
+}
 function deleteTutorial() {
   document.getElementById('tutorial').remove();
 }
@@ -822,7 +822,7 @@ function gachaing(time) {
   speed -= speedChange * delta;
   speedChange += 0.4*delta;
   if (speed < 0) {
-    document.getElementById("rollButton").textContent = "roll for a new brush!"
+    document.getElementById("rollButton").textContent = "roll for a new brush! (100 points)"
     //Hides wheel
     gachaElement.style.visibility = 'hidden';
     gachaElement.style.maxHeight = '0px'
@@ -864,4 +864,3 @@ function gachaing(time) {
 
   requestAnimationFrame(gachaing);
 }
-

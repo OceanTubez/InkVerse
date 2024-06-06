@@ -388,16 +388,12 @@ body {
 
 #rollButton {
   color: #000000;
-}
-
-.gacha {
   position: fixed;
   top: 80px;
   /* Adjust as needed */
   right: 20px;
   /* Adjust as needed */
   z-index: 3;
-  color: #000000;
 }
 
 #scrollBrushes {
