@@ -442,7 +442,10 @@ function updateBrushState(brushName) {
 
 function rollDice() {
   //Checks point count
-  if (gachaState == 1) {
+  if (points < 100 || gachaState == 1) {
+    return;
+  }
+  if (gachaState == 2) {
     var gachaElements = document.getElementsByClassName("gachaSquare");
 
     for (let i = gachaElements.length - 1; i >= 0; i--) {
@@ -454,12 +457,11 @@ function rollDice() {
     speed = -0.1
     return;
   }
-  if (points < 100) {
-    return;
-  }
+  
 
   // Subtract points
   points -= 100;
+  closeGachaObtained();
   //Makes the wheel appear
   gachaElement.style.visibility = 'visible';
   gachaElement.style.maxHeight = '150px'
@@ -773,6 +775,7 @@ function gachaing(time) {
     requestAnimationFrame(gachaing)
     return;
   }
+  gachaState = 2;
 
   //Initiliazes variable
   var gachaElements = document.getElementsByClassName("gachaSquare");
@@ -804,7 +807,7 @@ function gachaing(time) {
   }
   //The speed of the wheel. Sloows down over time.
   speed -= speedChange * delta;
-  speedChange += 0.007;
+  speedChange += 0.4*delta;
   if (speed < 0) {
     document.getElementById("rollButton").textContent = "roll for a new brush!"
     //Hides wheel
