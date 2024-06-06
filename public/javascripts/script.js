@@ -70,6 +70,15 @@ let brushAttributes = {
     points: 0,
     image: 1,
   },
+  
+  "MEGA Black": {
+    size: 50,
+    rgb: [0,0,0],
+    weight: 1,
+    "locked": true,
+    points: 2000,
+    image: 1,
+  },
 
   "Eraser": {
     size: 5,
@@ -77,6 +86,123 @@ let brushAttributes = {
     weight: 0,
     "locked": false,
     points: 0,
+    image: 3,
+  },
+
+  "Small Dark Blue": {
+    size: 1,
+    rgb: [30, 39, 230],
+    weight: 10,
+    "locked": true,
+    points: 500,
+    image: 3,
+  },
+
+  "Small Green": {
+    size: 1,
+    rgb: [0, 139, 0],
+    weight: 10,
+    "locked": true,
+    points: 500,
+    image: 4,
+  },
+
+  "Small Light Blue": {
+    size: 1,
+    rgb: [173, 216, 230],
+    weight: 10,
+    "locked": true,
+    points: 500,
+    image: 5,
+  },
+
+  "Small Orange": {
+    size: 1,
+    rgb: [255, 165, 0],
+    weight: 10,
+    "locked": true,
+    points: 500,
+    image: 6,
+  },
+
+  "Small Red": {
+    size: 1,
+    rgb: [178, 34, 34],
+    weight: 10,
+    "locked": true,
+    points: 500,
+    image: 7,
+  },
+
+  "Small Brown": {
+    size: 1,
+    rgb: [139, 69, 19],
+    weight: 10,
+    "locked": true,
+    points: 500,
+    image: 2,
+  },
+
+  "Medium Dark Blue": {
+    size: 5,
+    rgb: [30, 39, 230],
+    weight: 50,
+    "locked": true,
+    points: 150,
+    image: 3,
+  },
+
+  "Medium Green": {
+    size: 5,
+    rgb: [0, 139, 0],
+    weight: 50,
+    "locked": true,
+    points: 150,
+    image: 4,
+  },
+
+  "Medium Light Blue": {
+    size: 5,
+    rgb: [173, 216, 230],
+    weight: 50,
+    "locked": true,
+    points: 150,
+    image: 5,
+  },
+
+  "Medium Orange": {
+    size: 5,
+    rgb: [255, 165, 0],
+    weight: 50,
+    "locked": true,
+    points: 150,
+    image: 6,
+  },
+
+  "Medium Red": {
+    size: 5,
+    rgb: [178, 34, 34],
+    weight: 50,
+    "locked": true,
+    points: 150,
+    image: 7,
+  },
+
+  "Medium Brown": {
+    size: 5,
+    rgb: [139, 69, 19],
+    weight: 50,
+    "locked": true,
+    points: 150,
+    image: 2,
+  },
+
+  "Medium Dark Blue": {
+    size: 5,
+    rgb: [30, 39, 230],
+    weight: 50,
+    "locked": true,
+    points: 150,
     image: 3,
   },
 
@@ -100,7 +226,7 @@ let brushAttributes = {
 
   "Big Orange": {
     size: 25,
-    rgb: [255, 0, 177],
+    rgb: [255, 165, 0],
     weight: 25,
     "locked": true,
     points: 250,
@@ -516,7 +642,7 @@ function diceBrush(brushName, left) {
     gachaEl.style.backgroundColor = 'purple';
   } else if (weight < 21) {
     gachaEl.style.backgroundColor = 'blue';
-  } else if (weight < 101) {
+  } else if (weight < 49) {
     gachaEl.style.backgroundColor = 'green';
   } else {
     gachaEl.style.backgroundColor = 'white';
@@ -619,7 +745,7 @@ function startTimerAndPoints() {
       }
       // Add points every 60 seconds
       if (minutes % 1 === 0 && seconds === 0) {
-        points += 50;
+        points += 500;
         updatePointsDisplay();
       }
     }
