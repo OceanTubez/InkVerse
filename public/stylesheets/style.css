@@ -99,9 +99,90 @@ body {
   /* Adjust width automatically */
   height: 20%;
   /* Adjust height automa=\tically */
-  z-index: 99;
+  z-index: 4;
   /* Ensure the ribbon is above other content */
 
+}
+
+#gacha {
+  position: absolute;
+  width: 60%;
+  height: 150px;
+  left: 20%;
+  top: 40%;
+  background-color: white;
+  z-index: 7;
+  min-width: 600px;
+  overflow: hidden;
+  }
+
+#gachaLine {
+  height: 100%;
+  width: 1%;
+  z-index: 2;
+  background-color: red;
+  left: 49.5%;
+  top: 0%;
+  position: relative;
+}
+
+.gachaSquare {
+  width: 150px;
+  height: 150px;
+  min-width: 150px;
+  text-align: center;
+  color: black;
+  position: absolute;
+  bottom: 0px;
+  border: 2px solid black;
+}
+
+.gachaImg {
+  position: absolute;
+  left: 40px;
+  top: 40px;
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  object-position: 50% 0%;
+}
+
+#gachaObtained {
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  min-height: 200px;
+  left: 40%;
+  top: 40%;
+  background-color: white;
+  text-align: center;
+  color: black;
+  z-index: 8;
+  border: 4px solid black;
+}
+
+#gachaObtainedButton {
+  position: absolute;
+  text-align: center;
+  width: 10%;
+  top: 85%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#imgGachaObtained {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  object-position: 50% 0%;
+}
+
+#textGachaObtained {
+  position:relative
 }
 
 #brushData {
@@ -184,7 +265,7 @@ body {
   z-index: 4;
 }
 
-.dropdown-container {
+#dropdownContainer {
   position: fixed;
   top: 10%;
   left: 50%;
@@ -197,15 +278,12 @@ body {
   transition: transform 0.3s ease-in-out;
   display: none;
   font-size: 17px;
-}
-
-.dropdown-container.active {
-  transform: translateX(-50%);
   display: block;
-  color: #9994B2;
+  transform: translateX(-50%);
 }
 
-.dropdown-container img {
+
+#dropdownContainer img {
   max-width: 100px;
   height: 200%;
   display: block;
@@ -213,7 +291,7 @@ body {
   color: #9994B2;
 }
 
-.dropdown-container input[type="text"] {
+#dropdownContainer input[type="text"] {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -303,17 +381,16 @@ body {
   border-radius: 5px;
   /* Add border radius */
   z-index: 3;
-  color: #000000;
 }
 
-.gacha {
+#rollButton {
+  color: #000000;
   position: fixed;
   top: 80px;
   /* Adjust as needed */
   right: 20px;
   /* Adjust as needed */
   z-index: 3;
-  color: #000000;
 }
 
 #scrollBrushes {
