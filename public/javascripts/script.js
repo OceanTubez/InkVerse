@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-  toggleDropdown();
   initialize();
   redrawShowcase();
   loadingScreen();
@@ -358,7 +357,7 @@ function hoverCheck(X, Y) {
   lineSize = saveSize;
 
   document.getElementById("brushData").textContent = hover + "\r\nPoint cost:" + data.points;
-  
+
   document.getElementById("brushData").style.top = (Y - 50) + "px";
   document.getElementById("brushData").style.left = X + "px";
   document.getElementById("brushData").style.display = "block";
@@ -370,27 +369,11 @@ function playClick1() {
 }
 
 function toggleDropdown() {
-  var dropdown = document.getElementById("dropdownContainer");
-  dropdown.classList.toggle("active");
-
-  saveName();
-}
-
-function saveName() {
-
   var inputValue = document.getElementById("nameInput").value;
 
-  if (inputValue == "") {
-
-    return;
-
+  if (inputValue != "") {
+    socket.emit('sentNameData', inputValue);
   }
-  //WRITE CODE HERE TO SANITIZE
-
-  socket.emit('sentNameData', inputValue);
-
-  // You can store the input value in a variable or do other processing here
-  // console.log("Input value:", inputValue);
 }
 
 //Zoom stuff
@@ -470,7 +453,7 @@ function rollDice() {
     speed = -0.1
     return;
   }
-  
+
 
   // Subtract points
   points -= 100;
@@ -687,6 +670,7 @@ socket.on('nameConfirmed', (data) => {
   var usernameDisplay = document.getElementById("username");
 
   if (data.b == true) {
+    document.getElementById("dropdownContainer").style.display = "none";
     usernameDisplay.textContent = data.name;
     userName = data.name;
   } else {
@@ -820,7 +804,7 @@ function gachaing(time) {
   }
   //The speed of the wheel. Sloows down over time.
   speed -= speedChange * delta;
-  speedChange += 0.4*delta;
+  speedChange += 0.4 * delta;
   if (speed < 0) {
     document.getElementById("rollButton").textContent = "roll for a new brush! (100 points)"
     //Hides wheel

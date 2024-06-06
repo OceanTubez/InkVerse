@@ -265,7 +265,7 @@ body {
   z-index: 4;
 }
 
-.dropdown-container {
+#dropdownContainer {
   position: fixed;
   top: 10%;
   left: 50%;
@@ -278,15 +278,12 @@ body {
   transition: transform 0.3s ease-in-out;
   display: none;
   font-size: 17px;
-}
-
-.dropdown-container.active {
-  transform: translateX(-50%);
   display: block;
-  color: #9994B2;
+  transform: translateX(-50%);
 }
 
-.dropdown-container img {
+
+#dropdownContainer img {
   max-width: 100px;
   height: 200%;
   display: block;
@@ -294,7 +291,7 @@ body {
   color: #9994B2;
 }
 
-.dropdown-container input[type="text"] {
+#dropdownContainer input[type="text"] {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
